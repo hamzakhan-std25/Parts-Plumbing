@@ -1,5 +1,5 @@
 
-import { client } from "../lib/graphql";
+import { client } from "../../lib/graphql"
 import { gql } from "graphql-request";
 import Link from "next/link";
 

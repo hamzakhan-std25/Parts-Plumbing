@@ -1,4 +1,4 @@
-import { client } from "@/app/lib/graphql";
+import { client } from "@/lib/graphql";
 import { gql } from "graphql-request";
 
 const GET_PRODUCT = gql`
