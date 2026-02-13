@@ -1,67 +1,51 @@
+import { client } from "@/lib/graphql";
+import {
+  GET_PRODUCTS,
+  GET_FILTERED_PRODUCTS,
+} from "@/lib/queries";
+import ProductGrid from "@/components/product/ProductGrid";
 
-import { client } from "../../lib/graphql"
-import { gql } from "graphql-request";
-import Link from "next/link";
+export default async function ProductsPage({ searchParams }) {
+  const material = searchParams?.material;
 
-const GET_PRODUCTS = gql`
-  query {
-    products(first: 20) {
-      nodes {
-        id
-        name
-        slug
-        image {
-          sourceUrl
-        }
-      }
-    }
-  }
-`;
-
-const whatsappNumber = "03359183182";
-
-function generateWhatsAppLink(productName) {
-  const message = `Hi, I'm interested in ${productName}`;
-  return `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(message)}`;
-}
+  const data = material
+    ? await client.request(GET_FILTERED_PRODUCTS, {
+        material,
+      })
+    : await client.request(GET_PRODUCTS);
 
 
-export default async function ProductsPage() {
-  const data = await client.request(GET_PRODUCTS);
-  const whatsappNumber = "1234567890";
-
-
+    // console.log("DATA" ,data.products.nodes)
 
   return (
-    <div className="grid grid-cols-2 md:grid-cols-4 gap-6 p-6">
-      {data.products.nodes.map((product) => (
-        <div 
-        className="border p-4 hover:shadow-lg transition flex flex-col justify-center items-center"
-        key={product.id}
-        >
-          <Link
-            
-            href={`/products/${product.slug}`}
-          >
-            <img
-              src={product.image?.sourceUrl}
-              alt={product.name}
-              className="w-full h-40 object-contain"
-            />
-            <h2 className="mt-2 font-semibold text-center">{product.name}</h2>
-          </Link>
-          <a
-            href={generateWhatsAppLink(product.name)}
-            target="_blank"
-            className="bg-green-600 text-white px-4 py-2 inline-block mt-6 "
-          >
-            Order on WhatsApp
-          </a>
-        </div>
-
-      ))}
-
-
+    <div className="p-8">
+      <ProductGrid products={data.products.nodes} />
     </div>
   );
 }
+
+
+
+
+// ------------------------------------------
+// import Header from "@/components/layout/Header";
+// import Container from "@/components/layout/Container";
+// import ProductGrid from "@/components/product/ProductGrid";
+
+// // This would normally fetch real products
+// const dummyProducts = [
+//   { id: 1, name: "Alpha PPR Pipe", slug: "alpha-ppr-pipe", price: "₨ 345/m" },
+//   { id: 2, name: "Master PVC Pipe", slug: "master-pvc-pipe", price: "₨ 280/m" },
+// ];
+
+// export default function ProductsPage() {
+//   return (
+//     <>
+//       <Header />
+//       <Container className="py-8">
+//         <h1 className="text-2xl font-bold mb-6">All Products</h1>
+//         <ProductGrid products={dummyProducts} />
+//       </Container>
+//     </>
+//   );
+// }

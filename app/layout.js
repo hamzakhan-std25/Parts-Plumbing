@@ -27,3 +27,27 @@ export default function RootLayout({ children }) {
     </html>
   );
 }
+
+
+
+
+// ------------------------------------
+
+
+// import "./globals.css";
+// import { Inter } from "next/font/google";
+
+// const inter = Inter({ subsets: ["latin"] });
+
+// export const metadata = {
+//   title: "KPK PLUMBING",
+//   description: "Your trusted plumbing supplier in Khyber Pakhtunkhwa",
+// };
+
+// export default function RootLayout({ children }) {
+//   return (
+//     <html lang="en">
+//       <body className={inter.className}>{children}</body>
+//     </html>
+//   );
+// }
