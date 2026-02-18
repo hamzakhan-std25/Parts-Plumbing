@@ -8,14 +8,14 @@ export default function Description({ htmlContent }) {
   return (
     <div>
       <div
-        className={`prose prose-sm text-gray-600 ${
+        className={`prose prose-sm text-gray-300 ${
           !isExpanded ? "line-clamp-3" : ""
         }`}
         dangerouslySetInnerHTML={{ __html: htmlContent }}
       />
       <button
         onClick={() => setIsExpanded(!isExpanded)}
-        className="text-blue-600 hover:underline text-sm font-medium mt-2"
+        className="bg-yellow-300 p-2 block  rounded-xl cursor-pointer transition-all float-end text-black text-sm font-medium mt-2"
       >
         {isExpanded ? "Read Less" : "Read More"}
       </button>
