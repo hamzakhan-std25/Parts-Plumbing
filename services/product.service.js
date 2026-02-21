@@ -24,15 +24,21 @@ export async function getProducts(first, after = null) {
 
 
 
-export async function getFilteredProducts({ categoryIn, brandIn, minPrice, maxPrice }) {
+export async function getFilteredProducts({
+  categoryIn = [],
+  brandIn = [],
+  minPrice,
+  maxPrice,
+  search,  
+  }) {
   const data = await fetchGraphQL(GET_FILTERED_PRODUCTS, {
     categoryIn,
     brandIn,
     minPrice,
-    maxPrice
+    maxPrice,
+    search
   });
-  // console.log("filter product calling ....")
+  // console.log("filters :", { categoryIn, brandIn, minPrice, maxPrice, search })
 
-  console.log("categoruIn :", categoryIn, "brandIn :", brandIn, "minPrice :", minPrice, "maxPrice :",maxPrice)
   return data?.products || { nodes: [] }; // ← returns products object
 }

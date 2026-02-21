@@ -1,7 +1,5 @@
-
-// -------------------------------
 import { redirect } from "next/navigation";
 
-export default function HomePage() {
-  redirect("/products");
+export default function RootPage() {
+  redirect("/home");
 }

@@ -1,45 +1,7 @@
-// import Header from "@/components/layout/Header";
-// import Container from "@/components/layout/Container";
-// import client from "@/lib/graphql";
-// import {
-//   GET_PRODUCTS,
-//   GET_FILTERED_PRODUCTS,
-// } from "@/lib/queries";
-// import ProductGrid from "@/components/product/ProductGrid";
-
-// export default async function ProductsPage({ searchParams }) {
-//   // Unwrapping the promise
-//   const filters = await searchParams;
-
-//   // Now you can access properties safely
-//   const material = filters?.material;
-
-//   const data = material
-//     ? await client.request(GET_FILTERED_PRODUCTS, {
-//       material,
-//     })
-//     : await client.request(GET_PRODUCTS);
-
-
-//   // console.log("DATA" ,data.products.nodes)
-
-//   return (
-//     <>
-//       <Header />
-//       <Container className="py-8">
-//         <h1 className="text-2xl font-bold mb-6">All Products</h1>
-//         <ProductGrid products={data.products.nodes} />
-//       </Container>
-//     </>
-//   );
-// }
-
-
-
-// ---------------------------
 
 
 import Container from "@/components/layout/Container";
+import { ViewTransition } from 'react';
 import ProductGrid from "@/components/product/ProductGrid";
 import FilterSidebar from "@/components/filters/FilterSidebar";
 import { getProducts, getFilteredProducts } from "@/services/product.service";
@@ -57,20 +19,21 @@ export default async function ProductsPage({ searchParams }) {
   const brands = toArray(filters?.brand);
   const minPrice = filters?.minPrice ? Number(filters.minPrice) : null;
   const maxPrice = filters?.maxPrice ? Number(filters.maxPrice) : null;
+  const search = filters?.search || null;
+
 
   const hasFilters =
     categories.length > 0 ||
     brands.length > 0 ||
     minPrice !== null ||
-    maxPrice !== null;
+    maxPrice !== null ||
+    search !== null;
 
   let products = [];
 
-  // console.log("filetes :", filters)
-  // console.log("hasfilter is :", hasFilters)
 
   const data = !hasFilters ? await getProducts(10)
-  : await getFilteredProducts({ categoryIn: categories, brandIn: brands, minPrice, maxPrice });
+    : await getFilteredProducts({ categoryIn: categories, brandIn: brands, minPrice, maxPrice, search });
   products = data?.nodes || [];
 
 
@@ -79,7 +42,7 @@ export default async function ProductsPage({ searchParams }) {
 
 
   return (
-    <>
+    <ViewTransition>
 
       <Container className="py-8 ">
         {/* Breadcrumbs */}
@@ -89,7 +52,7 @@ export default async function ProductsPage({ searchParams }) {
               <a href="/" className="hover:text-gray-900">Home</a>
             </li>
             <li className="mx-2">/</li>
-            <li className="text-gray-400 font-medium"> { hasFilters ? 'Products': 'Products'  }</li>
+            <li className="text-gray-400 font-medium"> {hasFilters ? 'Products' : 'Products'}</li>
           </ul>
         </nav>
 
@@ -101,15 +64,15 @@ export default async function ProductsPage({ searchParams }) {
 
           {/* Main Content */}
           <div className="flex-1">
-            <h1 className="text-2xl text-white font-bold mb-6 "> { hasFilters ? 'Filtered Products': 'All Products'  }</h1>
+            <h1 className="text-2xl text-white font-bold mb-6 "> {hasFilters ? 'Filtered Products' : 'All Products'}</h1>
             {products.length > 0 ? (
-              <ProductGrid products={products} /> 
+              <ProductGrid products={products} />
             ) : (
               <p className="text-gray-500">No products found.</p>
             )}
           </div>
         </div>
       </Container>
-    </>
+    </ViewTransition>
   );
 }

@@ -12,7 +12,7 @@ export function generateWhatsAppLink(product, variant) {
 Hi, I'm interested in:
 
 Product: ${product.name}
-Price: ${variant.price}
+Price: ${parseInt(variant.price.replace(/[^0-9]/g, ''), 10)}
 
 ${attributesText}
 `;
