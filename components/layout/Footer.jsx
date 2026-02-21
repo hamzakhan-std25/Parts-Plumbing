@@ -114,10 +114,10 @@ export default function Footer() {
         <div className="container mx-auto px-4 py-5 flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-slate-600">
           <p>© {new Date().getFullYear()} Habib Store. All rights reserved.</p>
           <div className="flex items-center gap-4">
-            <Link href="/privacy" className="hover:text-slate-400 transition-colors">
+            <Link href="/privacy-policy" className="hover:text-slate-400 transition-colors">
               Privacy Policy
             </Link>
-            <Link href="/terms" className="hover:text-slate-400 transition-colors">
+            <Link href="/terms-conditions" className="hover:text-slate-400 transition-colors">
               Terms &amp; Conditions
             </Link>
           </div>

@@ -69,7 +69,7 @@ export default function SearchOverlay({ isOpen, onClose }) {
           >
             <div className="container mx-auto px-4 py-6">
               {/* Search Form */}
-              <form onSubmit={submitSearch} className="relative">
+              <form onSubmit={(e) => submitSearch(e, onClose)}  className="relative">
                 <input
                   ref={inputRef}
                   type="text"

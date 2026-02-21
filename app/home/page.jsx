@@ -120,7 +120,7 @@ export default async function HomePage() {
         <div className="absolute top-20 left-10 w-72 h-72 bg-blue-600/20 rounded-full blur-3xl" />
         <div className="absolute bottom-20 right-10 w-96 h-96 bg-cyan-500/10 rounded-full blur-3xl" />
 
-        <div className="relative z-10 container mx-auto px-4 text-center">
+        <div className="relative z-10 container mx-auto px-4 text-center sm:mt-0 mt-4">
           <span className="inline-block bg-blue-600/20 border border-blue-500/30 text-blue-300 text-sm font-medium px-4 py-1.5 rounded-full mb-6">
             🏆 Trusted Plumbing Supplier in KPK
           </span>
@@ -350,7 +350,7 @@ export default async function HomePage() {
               delivered straight to your inbox.
             </p>
 
-            <form className="flex flex-col sm:flex-row gap-3 max-w-md mx-auto mb-8">
+            <form className="flex flex-col sm:flex-row gap-3 max-w-md mx-auto mb-8" >
               <input
                 type="email"
                 placeholder="Enter your email address"

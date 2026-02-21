@@ -1,66 +1,48 @@
 // hooks/useSearch.js
 import { useState, useEffect, useCallback } from 'react';
 import { useRouter } from 'next/navigation';
-import debounce from 'lodash.debounce'; // or use a simple setTimeout
+import debounce from 'lodash.debounce';
+import { useAllProducts } from './useAllProducts';
 
 export function useSearch() {
-  const [query, setQuery] = useState('');
-  const [suggestions, setSuggestions] = useState([]);
-  const [isLoading, setIsLoading] = useState(false);
-  const router = useRouter();
+    const [query, setQuery] = useState('');
+    const [suggestions, setSuggestions] = useState([]);
+    const { products, loading: productsLoading } = useAllProducts();
+    const router = useRouter();
 
-  // Fetch suggestions from your GraphQL endpoint
-  const fetchSuggestions = useCallback(
-    debounce(async (searchTerm) => {
-      if (searchTerm.length < 2) {
-        setSuggestions([]);
-        return;
-      }
-      setIsLoading(true);
-      try {
-        // Replace with your actual GraphQL query
-        const res = await fetch('https://live-parts-plumbing.pantheonsite.io/graphql', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            query: `
-              query SearchSuggestions($search: String!) {
-                products(where: { search: $search }, first: 5) {
-                  nodes { name slug }
-                }
-              }
-            `,
-            variables: { search: searchTerm },
-          }),
-        });
-        const json = await res.json();
-        setSuggestions(json.data?.products?.nodes || []);
-      } catch (error) {
-        console.error('Search suggestion error:', error);
-      } finally {
-        setIsLoading(false);
-      }
-    }, 300),
-    []
-  );
+    useEffect(() => {
+        if (query.length < 2 || productsLoading) {
+            setSuggestions([]);
+            return;
+        }
 
-  useEffect(() => {
-    fetchSuggestions(query);
-  }, [query, fetchSuggestions]);
+        const words = query.toLowerCase().split(/\s+/).filter(w => w.length > 0);
+        const filtered = products.filter(product =>
+            words.every(word => product.name.toLowerCase().includes(word))
+        );
+        setSuggestions(filtered.slice(0, 5)); // show top 5
+    }, [query, products, productsLoading]);
 
-  const submitSearch = (e) => {
-    e?.preventDefault();
-    if (query.trim()) {
-      router.push(`/products?search=${encodeURIComponent(query)}`);
-      // Optionally close overlay
-    }
-  };
+    const submitSearch = (e, closeMenu) => {
+        e?.preventDefault();
+        if (query.trim()) {
+            router.push(`/products?search=${encodeURIComponent(query)}`);
+            setQuery('');
+            // Optionally clear suggestions after search
+            setSuggestions([]);
+            // Optionally, you could also trigger a global event or state update here if needed
+            // ✅ Call the passed function if it exists
+            if (typeof closeMenu === 'function') {
+                closeMenu();
+            }
+        }
+    };
 
-  return {
-    query,
-    setQuery,
-    suggestions,
-    isLoading,
-    submitSearch,
-  };
+    return {
+        query,
+        setQuery,
+        suggestions,
+        isLoading: productsLoading,
+        submitSearch,
+    };
 }
