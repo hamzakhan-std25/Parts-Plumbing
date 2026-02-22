@@ -98,7 +98,7 @@ export default function Header() {
 
             {/* 2. Added 'group' and 'relative' classes */}
             <a
-              href="https://wa.me"
+              href="https://wa.me/+923359283182"
               target="_blank"
               rel="noopener noreferrer"
               className="group relative p-2 bg-green-500 hover:bg-green-600 text-white rounded-full transition"
