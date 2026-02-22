@@ -84,18 +84,30 @@ export default function Header() {
 
           {/* Icons & Mobile Toggle */}
           <div className="flex items-center gap-4">
+            {/* 1. Added 'group' and 'relative' classes */}
             <button
               onClick={() => setIsSearchOpen(true)}
-              className="p-2 hover:bg-gray-100 rounded-full transition"
+              className="group relative p-2 hover:bg-gray-100 rounded-full transition"
               aria-label="Open search"
             >
               <Search size={20} />
+              <span className="absolute right-12 bg-white text-gray-800 text-sm p-4 font-semibold rounded-lg shadow-md opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none border border-gray-100">
+                Search products and categories!
+              </span>
             </button>
+
+            {/* 2. Added 'group' and 'relative' classes */}
             <a
-              href="tel:+923359183182"
-              className="p-2 hover:bg-gray-100 rounded-full transition"
+              href="https://wa.me"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="group relative p-2 bg-green-500 hover:bg-green-600 text-white rounded-full transition"
+              aria-label="Chat on WhatsApp"
             >
               <Phone size={22} />
+              <span className="absolute right-12 bg-white text-gray-800 text-sm p-4 font-semibold rounded-lg shadow-md opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none border border-gray-100">
+                Need help? Chat with us!
+              </span>
             </a>
 
             {/* Hamburger Button (Mobile Only) */}
