@@ -9,8 +9,8 @@ import AIChatButton from "@/components/chat/AIChatButton";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata = {
-  title: "Habib Store",
-  description: "Your trusted plumbing store in swabi",
+  title: "Hassan Sanitory Store",
+  description: "Your trusted sanitary store at 3ff3 + c5v, darra bus stop, swabiRd, Shahmansoor",
 };
 
 export default function RootLayout({ children }) {

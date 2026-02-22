@@ -10,7 +10,7 @@ export default function PrivacyPolicy() {
 
         <div className="prose prose-lg max-w-4xl text-gray-200 space-y-6">
           <p>
-            At <strong>KPK PLUMBING</strong>, we value your privacy and are committed to protecting your personal data. 
+            At <strong>Hassan Sanitary Store</strong>, we value your privacy and are committed to protecting your personal data. 
             This privacy policy explains how we collect, use, disclose, and safeguard your information when you visit our website 
             and purchase our products. Please read it carefully.
           </p>

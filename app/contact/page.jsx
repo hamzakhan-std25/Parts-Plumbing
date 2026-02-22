@@ -15,15 +15,19 @@ import {
   CheckCircle,
 } from "lucide-react";
 
+// Replace with your actual API key
+const apiKey = "YOUR_GOOGLE_MAPS_API_KEY";
+
+
 // ─── Static Data ─────────────────────────────────────────────────────────────
 
 const CONTACT_INFO = [
   {
     icon: MessageCircle,
     label: "WhatsApp",
-    value: "+92 311 8688410",
+    value: "+92 335 9183182",
     sub: "Chat with us instantly",
-    href: "https://wa.me/923118688410?text=Hi%2C%20I%20need%20help%20with%20a%20plumbing%20product",
+    href: "https://wa.me/923359183182?text=Hi%2C%20I%20need%20help%20with%20a%20sanitary%20product",
     color: "text-green-400",
     bg: "bg-green-400/10",
     border: "border-green-500/20",
@@ -43,9 +47,9 @@ const CONTACT_INFO = [
   {
     icon: Mail,
     label: "Email",
-    value: "info@habibstore.pk",
+    value: "info@hassanstore.pk",
     sub: "We reply within 24 hours",
-    href: "mailto:info@habibstore.pk",
+    href: "mailto:info@hassanstore.pk",
     color: "text-purple-400",
     bg: "bg-purple-400/10",
     border: "border-purple-500/20",
@@ -54,9 +58,9 @@ const CONTACT_INFO = [
   {
     icon: MapPin,
     label: "Address",
-    value: "Shop #5, Saddar Road, Swabi, KPK",
+    value: "Hassan Sanitary Store, Darra Bus Stop, Swabi Rd, Shahmansoor",
     sub: "Visit our showroom",
-    href: "https://maps.google.com/?q=Saddar+Road+Swabi+KPK",
+    href: "https://maps.google.com/?q=3ff3+c5v+darra+bus+stop+swabiRd+Shahmansoor",
     color: "text-orange-400",
     bg: "bg-orange-400/10",
     border: "border-orange-500/20",
@@ -135,7 +139,7 @@ function ContactForm() {
           Thank you for reaching out. We'll get back to you within 24 hours.
         </p>
         <a
-          href="https://wa.me/923118688410?text=Hi%2C%20I%20just%20sent%20a%20contact%20form%20message"
+          href="https://wa.me/923359183182?text=Hi%2C%20I%20just%20sent%20a%20contact%20form%20message"
           target="_blank"
           rel="noopener noreferrer"
           className="inline-flex items-center gap-2 bg-green-600 hover:bg-green-500 text-white font-semibold px-6 py-3 rounded-xl transition-all hover:scale-105 mt-2"
@@ -379,6 +383,9 @@ export default function ContactPage() {
                   loading="lazy"
                   referrerPolicy="no-referrer-when-downgrade"
                 />
+                {/* <MapComponent apiKey={apiKey} />   // use when you have a real API key and want to show a custom map with marker
+                     */}
+                     
               </div>
 
               {/* WhatsApp Quick CTA */}
@@ -393,7 +400,7 @@ export default function ContactPage() {
                   </p>
                 </div>
                 <a
-                  href="https://wa.me/923118688410?text=Hi%2C%20I%20need%20help%20with%20a%20plumbing%20product"
+                  href="https://wa.me/923359183182?text=Hi%2C%20I%20need%20help%20with%20a%20sanitary%20product"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="inline-flex items-center gap-2 bg-green-600 hover:bg-green-500 text-white font-semibold px-5 py-3 rounded-xl transition-all hover:scale-105 whitespace-nowrap text-sm flex-shrink-0"
@@ -425,7 +432,7 @@ export default function ContactPage() {
           <div className="text-center mt-10">
             <p className="text-slate-400 text-sm mb-4">Still have questions?</p>
             <a
-              href="https://wa.me/923118688410?text=Hi%2C%20I%20have%20a%20question%20about%20your%20products"
+              href="https://wa.me/923359183182?text=Hi%2C%20I%20have%20a%20question%20about%20your%20products"
               target="_blank"
               rel="noopener noreferrer"
               className="inline-flex items-center gap-2 bg-green-600 hover:bg-green-500 text-white font-semibold px-8 py-3 rounded-xl transition-all hover:scale-105"

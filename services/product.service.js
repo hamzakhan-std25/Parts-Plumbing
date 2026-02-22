@@ -4,7 +4,7 @@ import { GET_PRODUCTS, GET_FILTERED_PRODUCTS, GET_PRODUCT_BY_SLUG } from "@/lib/
 
 
 export async function getProductBySlug(slug) {
-  console.log("DEBUG: Sending slug to WP ->", slug);
+  // console.log("DEBUG: Sending slug to WP ->", slug);
 
   try {
     // The key here 'slug' must match the '$slug' in the query above

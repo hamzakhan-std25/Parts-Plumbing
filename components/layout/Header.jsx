@@ -62,7 +62,7 @@ export default function Header() {
             <Image
               className="rounded-full hover:scale-110 shadow-2xl transition-all w-auto"
               src="/icon.png"
-              alt="KPK PLUMBING Logo"
+              alt="Hassan Sanitary Logo"
               width={40}
               height={20}
               priority
@@ -163,7 +163,7 @@ export default function Header() {
           </nav>
 
           <div className="mt-auto pt-6 border-t">
-            <p className="text-xs text-gray-400">© 2024 KPK PLUMBING</p>
+            <p className="text-xs text-gray-400">© {new Date().getFullYear()} Hassan Sanitory Store</p>
           </div>
         </div>
       </aside>

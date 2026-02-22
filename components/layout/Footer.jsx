@@ -29,27 +29,26 @@ export default function Footer() {
             <Link href="/home" className="flex items-center gap-3 mb-4">
               <Image
                 src="/icon.png"
-                alt="Habib Store"
+                alt="Hassan Sanitory Store"
                 width={40}
                 height={40}
                 className="rounded-full"
               />
-              <span className="text-white font-bold text-lg">Habib Store</span>
+              <span className="text-white font-bold text-lg">Hassan Sanitory Store</span>
             </Link>
             <p className="text-sm leading-relaxed mb-6">
-              Your trusted plumbing supplier in KPK. Quality pipes, fittings &
-              sanitaryware delivered across Peshawar, Mardan, Swat &amp;
-              Abbottabad.
+              Your trusted sanitary store. Quality sanitary products &
+              plumbing supplies at 3FF3+C5C, Darra Bus Stop, Swabi Rd, Shahmansoor.
             </p>
             {/* Social / Contact quick links */}
             <div className="flex flex-col gap-2 text-sm">
               <a
-                href="https://wa.me/923118688410"
+                href="https://wa.me/923359183182"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="flex items-center gap-2 hover:text-green-400 transition-colors"
               >
-                <MessageCircle size={15} /> +92 311 8688410
+                <MessageCircle size={15} /> +92 335 9183182
               </a>
               <a
                 href="tel:+923359183182"
@@ -58,10 +57,10 @@ export default function Footer() {
                 <Phone size={15} /> +92 335 9183182
               </a>
               <a
-                href="mailto:info@habibstore.pk"
+                href="mailto:info@hassanstore.pk"
                 className="flex items-center gap-2 hover:text-purple-400 transition-colors"
               >
-                <Mail size={15} /> info@habibstore.pk
+                <Mail size={15} /> info@hassanstore.pk
               </a>
             </div>
           </div>
@@ -95,13 +94,13 @@ export default function Footer() {
             <div className="flex flex-col gap-3 text-sm">
               <div className="flex items-start gap-2">
                 <MapPin size={15} className="mt-0.5 flex-shrink-0 text-orange-400" />
-                <span>Shop #5, Saddar Road, Swabi, KPK, Pakistan</span>
+                <span>3FF3+C5V, Darra Bus Stop, Swabi Rd, Shahmansoor</span>
               </div>
               <div className="flex items-start gap-2">
                 <Clock size={15} className="mt-0.5 flex-shrink-0 text-cyan-400" />
                 <div>
-                  <p>Mon–Sat: 9:00 AM – 8:00 PM</p>
-                  <p className="text-slate-600">Sunday: Closed</p>
+                  <p>Sat-Thu: 9:00 AM – 8:00 PM</p>
+                  <p className="text-slate-600">Friday: Closed</p>
                 </div>
               </div>
             </div>
@@ -112,7 +111,7 @@ export default function Footer() {
       {/* Bottom bar */}
       <div className="border-t border-slate-800">
         <div className="container mx-auto px-4 py-5 flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-slate-600">
-          <p>© {new Date().getFullYear()} Habib Store. All rights reserved.</p>
+          <p>© {new Date().getFullYear()} Hassan Sanitory Store. All rights reserved.</p>
           <div className="flex items-center gap-4">
             <Link href="/privacy-policy" className="hover:text-slate-400 transition-colors">
               Privacy Policy

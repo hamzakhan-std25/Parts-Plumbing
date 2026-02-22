@@ -10,12 +10,12 @@ export default function TermsConditions() {
 
         <div className="prose prose-lg max-w-4xl text-gray-200 space-y-6">
           <p>
-            Welcome to <strong>KPK PLUMBING</strong>. By accessing our website or making a purchase, you agree to be bound by these Terms & Conditions. Please read them carefully.
+            Welcome to <strong>Hassan Sanitary Store</strong>. By accessing our website or making a purchase, you agree to be bound by these Terms & Conditions. Please read them carefully.
           </p>
 
           <h2 className="text-2xl font-semibold mt-8 mb-4">1. General</h2>
           <p>
-            KPK PLUMBING operates this website to provide plumbing products and related information to customers in Pakistan, especially Khyber Pakhtunkhwa (KPK). We reserve the right to modify these terms at any time without prior notice.
+            Hassan Sanitary Store operates this website to provide plumbing products and related information to customers in Pakistan, especially Khyber Pakhtunkhwa (KPK). We reserve the right to modify these terms at any time without prior notice.
           </p>
 
           <h2 className="text-2xl font-semibold mt-8 mb-4">2. Account Registration</h2>
@@ -64,12 +64,12 @@ export default function TermsConditions() {
 
           <h2 className="text-2xl font-semibold mt-8 mb-4">8. Limitation of Liability</h2>
           <p>
-            To the maximum extent permitted by law, KPK PLUMBING shall not be liable for any indirect, incidental, or consequential damages arising from the use of our products or website. Our total liability shall not exceed the amount paid for the product.
+            To the maximum extent permitted by law, Hassan Sanitary Store shall not be liable for any indirect, incidental, or consequential damages arising from the use of our products or website. Our total liability shall not exceed the amount paid for the product.
           </p>
 
           <h2 className="text-2xl font-semibold mt-8 mb-4">9. Intellectual Property</h2>
           <p>
-            All content on this site (text, images, logos, etc.) is the property of KPK PLUMBING or its licensors and is protected by copyright laws. You may not reproduce, distribute, or modify any content without written permission.
+            All content on this site (text, images, logos, etc.) is the property of Hassan Sanitary Store or its licensors and is protected by copyright laws. You may not reproduce, distribute, or modify any content without written permission.
           </p>
 
           <h2 className="text-2xl font-semibold mt-8 mb-4">10. Governing Law</h2>
