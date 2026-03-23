@@ -1,19 +1,23 @@
 import { NextResponse } from 'next/server';
 import axios from 'axios';
 
-const PINECONE_HOST = "https://plumbing-knowledge-oit34d7.svc.aped-4627-b74a.pinecone.io";
-const GEMINI_API_KEY = "AIzaSyCpBjMJ3l7iFv064b41wEPjQqYUETo_jSs"
-const PINECONE_API_KEY = "pcsk_uTg61_AQ9g8NkQwZ4vtwuMcev4cHYNARj57JgchorD3kb1VyyDQKPfjy2nXrdgiRcBn4j";
+const GEN_AI_URL = process.env.GEN_AI_URL
+const GEN_AI_API_KEY = process.env.GEN_AI_API_KEY
+const EMBEDDING_MODEL = process.env.EMBEDDING_MODEL 
+const EMBEDDING_MODEL_API_KEY = process.env.EMBEDDING_MODEL_API_KEY
+const EMBEDDING_DIMENSION = 768; // Ensure this matches your model's output
+const PINECONE_HOST = process.env.PINECONE_HOST
+const PINECONE_API_KEY = process.env.PINECONE_API_KEY;
 
 
 async function getEmbedding(text) {
-  const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-embedding-001:embedContent?key=${GEMINI_API_KEY}`;
+  const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-embedding-001:embedContent?key=${EMBEDDING_MODEL_API_KEY}`;
 
   const res = await axios.post(url, {
-    model: "models/gemini-embedding-001",
+    model: EMBEDDING_MODEL,
     content: { parts: [{ text }] },
     // This line is the fix!
-    outputDimensionality: 768
+    outputDimensionality: EMBEDDING_DIMENSION
   });
 
   return res.data.embedding.values;
@@ -29,15 +33,10 @@ export async function POST(req) {
   try {
     const { userQuestion, history } = await req.json();
     // console.log("User Question:", userQuestion);
-    console.log("Chat History:", history);
+    console.log("Chat History:", history.slice(-4));
 
     // 1. EMBED the user's question (Match your seeding dimension!)
     const queryVector = await getEmbedding(userQuestion);
-
-    // const queryVector = embedRes.data.embedding.values;
-
-    // console.log("------------------------------ query embadded :", queryVector)
-
 
     // 2. QUERY Pinecone via REST API (Bypassing SDK issues)
     const pineconeRes = await axios.post(`${PINECONE_HOST}/query`, {
@@ -51,16 +50,15 @@ export async function POST(req) {
     // 2. FILTER and JOIN the results
     // Only keep matches with a score > 0.5
     const relevantMatches = pineconeRes.data.matches.filter(match => match.score > 0.6);
+    
+    console.log("Relevant Matches:", relevantMatches.length);
+
+
 
     // Combine the text from all relevant matches into one string
     const retrievedContext = relevantMatches.length > 0
       ? relevantMatches.map(m => m.metadata.text).join("\n\n")
       : "No specific business policy found for this query.";
-
-    console.log(`Found ${relevantMatches.length} relevant context snippets.`);
-    console.log("relevantMatch : ", retrievedContext)
-
-
 
 
     // 1. Define your Static Context (or fetch from WordPress here)
@@ -69,11 +67,7 @@ export async function POST(req) {
                     1. Use this KNOWLEDGE to answer: "${retrievedContext}"
                     2. If the knowledge doesn't answer the user, suggest WhatsApp: https://wa.me/+923118688410
                     3. Be polite and concise.`;
-    // const systemPrompt = `You are the Al-Parts Plumbing Support Bot. 
-    // Use the following knowledge base to answer user questions about plumbing parts.RULES: 
-    //                 1. Use this KNOWLEDGE to answer: "${retrievedContext}"
-    //                 2. If the knowledge doesn't answer the user, suggest WhatsApp: https://wa.me/03118688410
-    //                 3. Be polite and concise.`;
+
 
     // 2. Build the messages array (System + History + New Question)
     const messages = [
@@ -83,11 +77,11 @@ export async function POST(req) {
     ];
 
     // 3. Call Groq
-    const response = await fetch("https://api.groq.com/openai/v1/chat/completions", {
+    const response = await fetch(GEN_AI_URL, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        "Authorization": `Bearer ${process.env.GROQ_API_KEY}`, // Keep key in .env
+        "Authorization": `Bearer ${GEN_AI_API_KEY}`, // Keep key in .env
       },
       body: JSON.stringify({
         model: "llama-3.3-70b-versatile", // Use a valid Groq model name
