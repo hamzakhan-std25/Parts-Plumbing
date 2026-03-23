@@ -15,6 +15,12 @@ export default function AIChatButton() {
   const inputRef = useRef(null);
   const messagesEndRef = useRef(null);
 
+
+
+
+
+
+
   // Check mobile viewport
   useEffect(() => {
     const checkMobile = () => setIsMobile(window.innerWidth < 768);
@@ -25,9 +31,14 @@ export default function AIChatButton() {
 
   // Focus input when panel opens
   useEffect(() => {
-    if (isOpen && inputRef.current) {
-      setTimeout(() => inputRef.current.focus(), 100);
-    }
+  if (isOpen) {
+    // Small timeout ensures the DOM is fully rendered before focusing
+    const timer = setTimeout(() => {
+      inputRef.current?.focus();
+    }, 100);
+    return () => clearTimeout(timer);
+  }
+
   }, [isOpen]);
 
   // Escape key to close
@@ -46,29 +57,62 @@ export default function AIChatButton() {
 
   const toggleChat = () => setIsOpen(!isOpen);
 
-  const handleSendMessage = () => {
+  const handleSendMessage = async () => {
     if (!inputValue.trim() || isLoading) return;
 
     const userMessage = {
       id: Date.now(),
       role: 'user',
-      text: inputValue.trim(),
+      content: inputValue.trim(),
     };
+
     setMessages((prev) => [...prev, userMessage]);
     setInputValue('');
     setIsLoading(true);
+    // console.log("Total messages :", messages);
 
-    // Simulate AI response delay
-    setTimeout(() => {
-      const aiMessage = {
-        id: Date.now() + 1,
-        role: 'ai',
-        text: "Can't answer now! I am under development.",
-      };
-      setMessages((prev) => [...prev, aiMessage]);
-      setIsLoading(false);
-    }, 800);
+
+
+    const historyForAI = messages
+      .slice(-6)
+      .map(({ role, content }) => ({ role, content }));
+
+    const res = await fetch("/api/chat", {
+      method: "POST",
+      body: JSON.stringify({
+        userQuestion: inputValue.trim(),
+        history: historyForAI, // Array of {role, content}
+      }),
+    });
+    const data = await res.json();
+    const assistantMessage = {
+      id: Date.now(),
+      role: 'assistant',
+      content: data.content,
+    };
+    setMessages((prev) => [...prev, assistantMessage]);
+    setIsLoading(false);
+
+    // AUTO-FOCUS BACK TO INPUT
+    inputRef.current?.focus();
+
+    // console.log("AI Response:", data.content);
+    // Add data.content to your UI state
+
   };
+
+
+  // // Simulate AI response delay
+  // setTimeout(() => {
+  //   const aiMessage = {
+  //     id: Date.now() + 1,
+  //     role: 'ai',
+  //     text: "Can't answer now! I am under development.",
+  //   };
+  //   setMessages((prev) => [...prev, aiMessage]);
+  //   setIsLoading(false);
+  // }, 800);
+  // };
 
   const handleKeyPress = (e) => {
     if (e.key === 'Enter' && !e.shiftKey) {
@@ -242,11 +286,11 @@ export default function AIChatButton() {
                     )}
                     <div
                       className={`max-w-[80%] px-4 py-2 rounded-lg ${message.role === 'user'
-                          ? 'bg-blue-600 text-white'
-                          : 'bg-gray-100 text-gray-800'
+                        ? 'bg-blue-600 text-white'
+                        : 'bg-gray-100 text-gray-800'
                         }`}
                     >
-                      <p className="text-sm whitespace-pre-wrap">{message.text}</p>
+                      <p className="text-sm whitespace-pre-wrap">{message.content}</p>
                     </div>
                   </div>
                 ))
@@ -273,8 +317,8 @@ export default function AIChatButton() {
                   onClick={handleSendMessage}
                   disabled={!inputValue.trim() || isLoading}
                   className={`p-2 rounded-lg transition-colors cursor-pointer focus:outline-none focus:ring-2 focus:ring-blue-300 ${inputValue.trim() && !isLoading
-                      ? 'bg-blue-600 text-white hover:bg-blue-700'
-                      : 'bg-gray-200 text-gray-400 cursor-not-allowed'
+                    ? 'bg-blue-600 text-white hover:bg-blue-700'
+                    : 'bg-gray-200 text-gray-400 cursor-not-allowed'
                     }`}
                   aria-label="Send Message"
                 >
