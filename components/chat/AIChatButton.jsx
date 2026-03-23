@@ -3,6 +3,8 @@
 import { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Bot, Sparkles, RefreshCw, X, Send } from 'lucide-react';
+import ReactMarkdown from 'react-markdown';
+import ChatMessage from './ChatMessage';
 
 export default function AIChatButton() {
   const [isOpen, setIsOpen] = useState(false);
@@ -31,13 +33,13 @@ export default function AIChatButton() {
 
   // Focus input when panel opens
   useEffect(() => {
-  if (isOpen) {
-    // Small timeout ensures the DOM is fully rendered before focusing
-    const timer = setTimeout(() => {
-      inputRef.current?.focus();
-    }, 100);
-    return () => clearTimeout(timer);
-  }
+    if (isOpen) {
+      // Small timeout ensures the DOM is fully rendered before focusing
+      const timer = setTimeout(() => {
+        inputRef.current?.focus();
+      }, 100);
+      return () => clearTimeout(timer);
+    }
 
   }, [isOpen]);
 
@@ -57,62 +59,60 @@ export default function AIChatButton() {
 
   const toggleChat = () => setIsOpen(!isOpen);
 
-  const handleSendMessage = async () => {
-    if (!inputValue.trim() || isLoading) return;
+  const handleSendMessage = async (question) => {
+
+    // Determine the actual message content
+    const messageContent = question?.trim() || inputValue.trim();
+    if (!messageContent || isLoading) return;
+
+    console.log("question is : ", messageContent)
 
     const userMessage = {
       id: Date.now(),
       role: 'user',
-      content: inputValue.trim(),
+      content: messageContent,
     };
 
     setMessages((prev) => [...prev, userMessage]);
     setInputValue('');
     setIsLoading(true);
-    // console.log("Total messages :", messages);
-
-
 
     const historyForAI = messages
       .slice(-6)
       .map(({ role, content }) => ({ role, content }));
 
-    const res = await fetch("/api/chat", {
-      method: "POST",
-      body: JSON.stringify({
-        userQuestion: inputValue.trim(),
-        history: historyForAI, // Array of {role, content}
-      }),
-    });
-    const data = await res.json();
-    const assistantMessage = {
-      id: Date.now(),
-      role: 'assistant',
-      content: data.content,
-    };
-    setMessages((prev) => [...prev, assistantMessage]);
-    setIsLoading(false);
-
-    // AUTO-FOCUS BACK TO INPUT
-    inputRef.current?.focus();
-
-    // console.log("AI Response:", data.content);
-    // Add data.content to your UI state
+    try {
+      const res = await fetch("/api/chat", {
+        method: "POST",
+        body: JSON.stringify({
+          userQuestion: inputValue.trim(),
+          history: historyForAI, // Array of {role, content}
+        }),
+      });
+      const data = await res.json();
+      const assistantMessage = {
+        id: Date.now(),
+        role: 'assistant',
+        content: data.content,
+      };
+      setMessages((prev) => [...prev, assistantMessage]);
+    } catch (error) {
+      console.error('Chat error:', error);
+      // Optionally show an error toast or message
+      // const errorMessage = {
+      //   id: Date.now(),
+      //   role: 'assistant',
+      //   content: 'Sorry, something went wrong. Please try again.',
+      // };
+      // setMessages((prev) => [...prev, errorMessage]);
+    }  finally {
+      setIsLoading(false);
+      // Restore focus to input
+      inputRef.current?.focus();
+    }
 
   };
 
-
-  // // Simulate AI response delay
-  // setTimeout(() => {
-  //   const aiMessage = {
-  //     id: Date.now() + 1,
-  //     role: 'ai',
-  //     text: "Can't answer now! I am under development.",
-  //   };
-  //   setMessages((prev) => [...prev, aiMessage]);
-  //   setIsLoading(false);
-  // }, 800);
-  // };
 
   const handleKeyPress = (e) => {
     if (e.key === 'Enter' && !e.shiftKey) {
@@ -168,6 +168,15 @@ export default function AIChatButton() {
   const containerClasses = isOpen && isMobile
     ? 'fixed inset-0 z-50'
     : 'fixed bottom-6 right-6 z-50';
+
+
+  // Define your common questions (labels only)
+  const SUGGESTIONS = [
+    { label: "📦 Track Order", query: "How can I track my order?" },
+    { label: "🛡️ Warranty", query: "What is the warranty on electronics?" },
+    { label: "🔄 Returns", query: "Can I return an item after 14 days?" },
+    { label: "📜 Privacy", query: "How do you handle my personal data?" },
+  ];
 
   return (
     <div className={containerClasses}>
@@ -263,38 +272,54 @@ export default function AIChatButton() {
             {/* Chat Area */}
             <div className="flex-1 overflow-y-auto p-4 space-y-4 bg-gray-50">
               {messages.length === 0 ? (
-                // Welcome message
-                <div className="flex flex-col items-center justify-center h-full text-center space-y-3">
-                  <div className="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center">
-                    <Bot size={32} className="text-blue-600" />
+
+                <div className="flex flex-col items-center justify-center h-full text-center">
+                  {/* Optional greeting */}
+                  <div className="p-4 bg-blue-50 rounded-full mb-4 animate-bounce">
+                    <Bot size={40} className="text-blue-600" />
                   </div>
-                  <p className="text-gray-600 text-sm">
-                    Hi! I'm your AI Assistant.<br />
-                    Ask me about plumbing parts!
+                  <h3 className="text-lg font-bold text-gray-800 mb-1">Al-Saqar Assistant</h3>
+                  <p className="text-sm text-gray-500 mb-8 px-10">
+                    Hi! How can I help with your plumbing needs?
                   </p>
-                </div>
-              ) : (
-                messages.map((message) => (
-                  <div
-                    key={message.id}
-                    className={`flex ${message.role === 'user' ? 'justify-end' : 'justify-start'}`}
-                  >
-                    {message.role === 'ai' && (
-                      <div className="w-8 h-8 bg-blue-600 rounded-full flex items-center justify-center mr-2 shrink-0">
-                        <Sparkles size={16} className="text-white" />
-                      </div>
-                    )}
-                    <div
-                      className={`max-w-[80%] px-4 py-2 rounded-lg ${message.role === 'user'
-                        ? 'bg-blue-600 text-white'
-                        : 'bg-gray-100 text-gray-800'
-                        }`}
-                    >
-                      <p className="text-sm whitespace-pre-wrap">{message.content}</p>
-                    </div>
+
+                  {/* INLINE SUGGESTIONS */}
+                  <div className="flex flex-wrap justify-center gap-2 px-4">
+                    {SUGGESTIONS.map((item, index) => (
+                      <button
+                        key={index}
+                        onClick={() => handleSendMessage(item.query)}
+                        className="px-4 py-2 text-sm font-medium text-blue-700 bg-blue-50 rounded-full hover:bg-blue-100 transition-colors"
+                      >
+                        {item.label}
+                      </button>
+                    ))}
                   </div>
-                ))
-              )}
+                </div>
+              )
+
+
+
+
+                // -------------------------
+                // (
+                // // Welcome message
+                // <div className="flex flex-col items-center justify-center h-full text-center space-y-3">
+                //   <div className="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center">
+                //     <Bot size={32} className="text-blue-600" />
+                //   </div>
+                //   <p className="text-gray-600 text-sm">
+                //     Hi! I'm your AI Assistant.<br />
+                //     Ask me about plumbing parts!
+                //   </p>
+                // </div>
+                // )
+                : (
+                  messages.map((msg) => (
+                    <ChatMessage key={msg.id} message={msg} />
+                    // <ChatMessage key={msg.id} message={msg} showWhatsApp={msg.role === 'assistant' && msg.content.includes
+                  ))
+                )}
               {/* Typing indicator */}
               {isLoading && <TypingIndicator />}
               <div ref={messagesEndRef} />

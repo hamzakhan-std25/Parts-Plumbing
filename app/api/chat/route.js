@@ -3,7 +3,7 @@ import axios from 'axios';
 
 const GEN_AI_URL = process.env.GEN_AI_URL
 const GEN_AI_API_KEY = process.env.GEN_AI_API_KEY
-const EMBEDDING_MODEL = process.env.EMBEDDING_MODEL 
+const EMBEDDING_MODEL = process.env.EMBEDDING_MODEL
 const EMBEDDING_MODEL_API_KEY = process.env.EMBEDDING_MODEL_API_KEY
 const EMBEDDING_DIMENSION = 768; // Ensure this matches your model's output
 const PINECONE_HOST = process.env.PINECONE_HOST
@@ -32,7 +32,7 @@ export async function POST(req) {
 
   try {
     const { userQuestion, history } = await req.json();
-    // console.log("User Question:", userQuestion);
+    console.log("User Question:", userQuestion);
     console.log("Chat History:", history.slice(-4));
 
     // 1. EMBED the user's question (Match your seeding dimension!)
@@ -50,22 +50,24 @@ export async function POST(req) {
     // 2. FILTER and JOIN the results
     // Only keep matches with a score > 0.5
     const relevantMatches = pineconeRes.data.matches.filter(match => match.score > 0.6);
-    
-    console.log("Relevant Matches:", relevantMatches.length);
 
+    console.log("Relevant findings:", relevantMatches.length);
+    console.log("Relevant documents:", relevantMatches);
 
-
-    // Combine the text from all relevant matches into one string
     const retrievedContext = relevantMatches.length > 0
-      ? relevantMatches.map(m => m.metadata.text).join("\n\n")
-      : "No specific business policy found for this query.";
-
+      ? relevantMatches.map(m => {
+        // We combine the text and the URL into a single "fact" for the AI
+        const text = m.metadata.text;
+        const url = m.metadata.url || "";
+        return `CONTENT: ${text}\nSOURCE URL: ${url}`;
+      }).join("\n\n---\n\n")
+      : "No relevant information found in the knowledge base.";
 
     // 1. Define your Static Context (or fetch from WordPress here)
     const systemPrompt = `You are the Al-Saqar Plumbing Support Bot.
                     RULES: 
                     1. Use this KNOWLEDGE to answer: "${retrievedContext}"
-                    2. If the knowledge doesn't answer the user, suggest WhatsApp: https://wa.me/+923118688410
+                    2. If the knowledge doesn't answer the user, suggest WhatsApp contact.
                     3. Be polite and concise.`;
 
 
