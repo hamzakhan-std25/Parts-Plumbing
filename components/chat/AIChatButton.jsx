@@ -59,57 +59,48 @@ export default function AIChatButton() {
 
   const toggleChat = () => setIsOpen(!isOpen);
 
-  const handleSendMessage = async (question) => {
+  const handleSendMessage = async ( question ) => {
+    const finalQuestion = question || inputValue.trim();
 
-    // Determine the actual message content
-    const messageContent = question?.trim() || inputValue.trim();
-    if (!messageContent || isLoading) return;
+    console.log("final question :", finalQuestion);
 
-    console.log("question is : ", messageContent)
+    if (!finalQuestion || isLoading) return;
 
     const userMessage = {
       id: Date.now(),
       role: 'user',
-      content: messageContent,
+      content: finalQuestion,
     };
 
     setMessages((prev) => [...prev, userMessage]);
     setInputValue('');
     setIsLoading(true);
+    // console.log("Total messages :", messages);
+
+
 
     const historyForAI = messages
       .slice(-6)
       .map(({ role, content }) => ({ role, content }));
 
-    try {
-      const res = await fetch("/api/chat", {
-        method: "POST",
-        body: JSON.stringify({
-          userQuestion: inputValue.trim(),
-          history: historyForAI, // Array of {role, content}
-        }),
-      });
-      const data = await res.json();
-      const assistantMessage = {
-        id: Date.now(),
-        role: 'assistant',
-        content: data.content,
-      };
-      setMessages((prev) => [...prev, assistantMessage]);
-    } catch (error) {
-      console.error('Chat error:', error);
-      // Optionally show an error toast or message
-      // const errorMessage = {
-      //   id: Date.now(),
-      //   role: 'assistant',
-      //   content: 'Sorry, something went wrong. Please try again.',
-      // };
-      // setMessages((prev) => [...prev, errorMessage]);
-    }  finally {
-      setIsLoading(false);
-      // Restore focus to input
-      inputRef.current?.focus();
-    }
+    const res = await fetch("/api/chat", {
+      method: "POST",
+      body: JSON.stringify({
+        userQuestion: finalQuestion,
+        history: historyForAI, // Array of {role, content}
+      }),
+    });
+    const data = await res.json();
+    const assistantMessage = {
+      id: Date.now(),
+      role: 'assistant',
+      content: data.content,
+    };
+    setMessages((prev) => [...prev, assistantMessage]);
+    setIsLoading(false);
+
+    // AUTO-FOCUS BACK TO INPUT
+    inputRef.current?.focus();
 
   };
 
@@ -172,7 +163,7 @@ export default function AIChatButton() {
 
   // Define your common questions (labels only)
   const SUGGESTIONS = [
-    { label: "📦 Track Order", query: "How can I track my order?" },
+    { label: "📦 Track Order", query: "How can I track my plumbing order?" },
     { label: "🛡️ Warranty", query: "What is the warranty on electronics?" },
     { label: "🔄 Returns", query: "Can I return an item after 14 days?" },
     { label: "📜 Privacy", query: "How do you handle my personal data?" },
