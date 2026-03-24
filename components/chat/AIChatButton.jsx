@@ -59,10 +59,17 @@ export default function AIChatButton() {
 
   const toggleChat = () => setIsOpen(!isOpen);
 
-  const handleSendMessage = async ( question ) => {
-    const finalQuestion = question || inputValue.trim();
+  const handleSendMessage = async (question) => {
+    // const finalQuestion = question || inputValue.trim();
 
-    console.log("final question :", finalQuestion);
+    // console.log("final question :", finalQuestion);
+
+    // 1. Check if 'question' is an object (like a Click Event) and ignore it
+    const textFromButton = typeof question === 'string' ? question : null;
+
+    const finalQuestion = textFromButton || inputValue.trim();
+
+    console.log("final question:", finalQuestion);
 
     if (!finalQuestion || isLoading) return;
 
