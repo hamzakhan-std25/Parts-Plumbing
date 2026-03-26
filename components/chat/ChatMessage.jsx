@@ -1,8 +1,8 @@
 import ReactMarkdown from 'react-markdown';
-import { Sparkles, MessageCircle, ExternalLink } from 'lucide-react';
+import { Sparkles, MessageCircle, ExternalLink, ThumbsUp, ThumbsDown } from 'lucide-react';
 import remarkGfm from 'remark-gfm';
 
-const ChatMessage = ({ message }) => {
+const ChatMessage = ({ message, onFeedback }) => {
   const isBot = message.role === 'ai' || message.role === 'assistant';
   const isUser = message.role === 'user';
 
@@ -65,6 +65,35 @@ const ChatMessage = ({ message }) => {
             <MessageCircle size={16} />
             Contact on WhatsApp
           </a>
+        )}
+        
+        {isBot && (
+          <div className="mt-2 flex items-center gap-2">
+            <button
+              type="button"
+              onClick={() => onFeedback?.(message.id, 'like')}
+              className={`inline-flex items-center justify-center rounded-md p-1.5 transition-colors ${message.feedback === 'like'
+                  ? 'text-green-600 bg-green-50'
+                  : 'text-gray-400 hover:text-gray-600 hover:bg-gray-100'
+                }`}
+              aria-label="Like response"
+              title="Like"
+            >
+              <ThumbsUp size={14} />
+            </button>
+            <button
+              type="button"
+              onClick={() => onFeedback?.(message.id, 'dislike')}
+              className={`inline-flex items-center justify-center rounded-md p-1.5 transition-colors ${message.feedback === 'dislike'
+                  ? 'text-red-600 bg-red-50'
+                  : 'text-gray-400 hover:text-gray-600 hover:bg-gray-100'
+                }`}
+              aria-label="Dislike response"
+              title="Dislike"
+            >
+              <ThumbsDown size={14} />
+            </button>
+          </div>
         )}
       </div>
     </div>

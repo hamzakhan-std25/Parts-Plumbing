@@ -3,12 +3,19 @@
 import { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Bot, Sparkles, RefreshCw, X, Send } from 'lucide-react';
-import ReactMarkdown from 'react-markdown';
 import ChatMessage from './ChatMessage';
+
+const uuidv4 = () => {
+  if (typeof crypto !== 'undefined' && crypto.randomUUID) {
+    return crypto.randomUUID();
+  }
+  return `${Date.now()}-${Math.random().toString(16).slice(2)}`;
+};
 
 export default function AIChatButton() {
   const [isOpen, setIsOpen] = useState(false);
   const [messages, setMessages] = useState([]);
+  const [conversationId, setConversationId] = useState(() => uuidv4());
   const [inputValue, setInputValue] = useState('');
   const [isMobile, setIsMobile] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
@@ -16,12 +23,6 @@ export default function AIChatButton() {
 
   const inputRef = useRef(null);
   const messagesEndRef = useRef(null);
-
-
-
-
-
-
 
   // Check mobile viewport
   useEffect(() => {
@@ -57,12 +58,49 @@ export default function AIChatButton() {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   }, [messages]);
 
+  const resetConversation = () => {
+    setMessages([]);
+    setConversationId(uuidv4());
+    setShowConfirm(false);
+  };
+
   const toggleChat = () => setIsOpen(!isOpen);
 
-  const handleSendMessage = async (question) => {
-    // const finalQuestion = question || inputValue.trim();
+  const handleFeedback = async (messageId, type) => {
 
-    // console.log("final question :", finalQuestion);
+    // 1. Optimistically update local UI state
+    setMessages((prev) =>
+      prev.map((message) =>
+        message.id === messageId
+          ? { ...message, feedback: type }
+          : message
+      )
+    );
+
+
+
+    console.log('Feedback captured', {
+      conversationId,
+      messageId,
+      feedback: type,
+    });
+
+    // // 2. Sync with database
+    try {
+      await fetch(`/api/conversations/${conversationId}/messages/${messageId}/feedback`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ feedback: type }),
+      });
+    } catch (err) {
+      console.error("Feedback failed to save", err);
+      // Optionally: Rollback local state if API fails
+    }
+
+
+  };
+
+  const handleSendMessage = async (question) => {
 
     // 1. Check if 'question' is an object (like a Click Event) and ignore it
     const textFromButton = typeof question === 'string' ? question : null;
@@ -74,18 +112,18 @@ export default function AIChatButton() {
     if (!finalQuestion || isLoading) return;
 
     const userMessage = {
-      id: Date.now(),
+      id: uuidv4(),
       role: 'user',
       content: finalQuestion,
+      feedback: null,
+      conversationId,
     };
 
     setMessages((prev) => [...prev, userMessage]);
     setInputValue('');
     setIsLoading(true);
-    // console.log("Total messages :", messages);
 
-
-
+    // Build system prompt with retrieval context
     const historyForAI = messages
       .slice(-6)
       .map(({ role, content }) => ({ role, content }));
@@ -93,15 +131,22 @@ export default function AIChatButton() {
     const res = await fetch("/api/chat", {
       method: "POST",
       body: JSON.stringify({
+        conversationId,
         userQuestion: finalQuestion,
-        history: historyForAI, // Array of {role, content}
+        history: historyForAI,
+        // aiMessageId: userMessage.id, // Array of {role, content}
       }),
     });
     const data = await res.json();
+    
+    console.log("data uploaded:", data.id , data.content);
+
     const assistantMessage = {
-      id: Date.now(),
+      id: data.id,
       role: 'assistant',
       content: data.content,
+      feedback: null,
+      conversationId,
     };
     setMessages((prev) => [...prev, assistantMessage]);
     setIsLoading(false);
@@ -123,13 +168,12 @@ export default function AIChatButton() {
     if (messages.length > 0) {
       setShowConfirm(true); // Show inline confirmation
     } else {
-      setMessages([]);
+      resetConversation();
     }
   };
 
   const confirmNewChat = () => {
-    setMessages([]);
-    setShowConfirm(false);
+    resetConversation();
   };
 
   const cancelNewChat = () => {
@@ -314,7 +358,7 @@ export default function AIChatButton() {
                 // )
                 : (
                   messages.map((msg) => (
-                    <ChatMessage key={msg.id} message={msg} />
+                    <ChatMessage key={msg.id} message={msg} onFeedback={handleFeedback} />
                     // <ChatMessage key={msg.id} message={msg} showWhatsApp={msg.role === 'assistant' && msg.content.includes
                   ))
                 )}

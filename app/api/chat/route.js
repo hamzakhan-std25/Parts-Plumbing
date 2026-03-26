@@ -33,9 +33,10 @@ export async function POST(req) {
 
 
   try {
-    const { userQuestion, history } = await req.json();
+    const { userQuestion, history, conversationId } = await req.json();
     console.log("User Question:", userQuestion);
-    console.log("Chat History:", history.slice(-4));
+    console.log("Chat History:", history.slice(-5).length); // Log last 5 messages for context
+    console.log("Conversation ID:", conversationId);
 
     // 1. EMBED the user's question (Match your seeding dimension!)
     const queryVector = await getEmbedding(userQuestion);
@@ -43,7 +44,7 @@ export async function POST(req) {
     // 2. QUERY Pinecone via REST API (Bypassing SDK issues)
     const pineconeRes = await axios.post(`${PINECONE_HOST}/query`, {
       vector: queryVector,
-      topK: 3,
+      topK: 5,
       includeMetadata: true
     }, {
       headers: { 'Api-Key': PINECONE_API_KEY }
@@ -51,10 +52,21 @@ export async function POST(req) {
 
     // 2. FILTER and JOIN the results
     // Only keep matches with a score > 0.5
-    const relevantMatches = pineconeRes.data.matches.filter(match => match.score > 0.6);
+    const relevantMatches = pineconeRes.data.matches.filter(match => match.score > 0.4);
+    // Format retrievedDocs for storage
+    const retrievedDocs = relevantMatches.map(doc => ({
+      id: doc.id,
+      score: doc.score,
+      text: doc.metadata.text,
+      source: doc.metadata.source || null,
+    }));
 
-    console.log("Relevant findings:", relevantMatches.length);
-    console.log("Relevant documents:", relevantMatches);
+
+    // console.log("Relevant findings:", relevantMatches.length);
+    // console.log("Relevant documents:", relevantMatches);
+    console.log("Relevant_document findings:", retrievedDocs.length);
+    // console.log("Relevant documents:", retrievedDocs);
+
 
     const retrievedContext = relevantMatches.length > 0
       ? relevantMatches.map(m => {
@@ -66,7 +78,7 @@ export async function POST(req) {
       : "No relevant information found in the knowledge base.";
 
     // 1. Define your Static Context (or fetch from WordPress here)
-    const systemPrompt = `You are the Al-Saqar Plumbing Support Bot.
+    const systemPrompt = `You are the Parts Plumbing Support Bot.
                     RULES: 
                     1. Use this KNOWLEDGE to answer: "${retrievedContext}"
                     2. If the knowledge doesn't answer the user, suggest WhatsApp contact.
@@ -97,25 +109,34 @@ export async function POST(req) {
 
     const data = await response.json();
 
+    // console.log("AI response :", data);
+    // console.log("AI response object: :", data?.choices?.[0]?.message);
+
     const assistantMessage = data?.choices?.[0]?.message || { role: 'assistant', content: '' };
-    const assistantResponseText = assistantMessage?.content || '';
-    const responseTime = Date.now() - requestStartTime;
-    const tokensUsed = data?.usage?.total_tokens ?? null;
+    const answer = assistantMessage?.content || '';
+    const responseTimeMs = Date.now() - requestStartTime;
+    const totalTokens = data?.usage?.total_tokens ?? null;
+    const model = data?.model || 'unknown';
+    const costUsd = (totalTokens / 1000) * 0.0001; // Example: $0.0001 per 1K tokens (adjust to Groq's actual pricing)
 
     const metricResult = await logChatMetric(
+      conversationId,
       userQuestion,
-      assistantResponseText,
-      relevantMatches,
-      responseTime,
-      tokensUsed,
-      'groq-llama-3'
+      answer,
+      retrievedDocs,
+      responseTimeMs,
+      totalTokens,
+      costUsd,
+      model
     );
 
     if (!metricResult.success) {
       console.warn('Metric logging failed:', metricResult.error);
+    } else {
+      console.log('Metric logged successfully!');
     }
-
-    return NextResponse.json(assistantMessage);
+    
+    return NextResponse.json({id: metricResult.data[0].id, ...assistantMessage});
 
   } catch (error) {
     return NextResponse.json({ error: "Failed to fetch" }, { status: 500 });

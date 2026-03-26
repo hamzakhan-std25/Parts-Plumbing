@@ -1,27 +1,19 @@
 import { supabase } from '@/lib/supabase';
 
-/**
- * Logs chat metrics to the chatbot_logs table
- * @param {string} query - The user's query/question
- * @param {string} response - The AI assistant's response
- * @param {object} retrieved_docs - Retrieved documents as JSON
- * @param {number} response_time - Response time in milliseconds
- * @param {number} tokens_used - Total tokens used for the request
- * @param {string} model - The AI model used (e.g., "gpt-4", "gpt-3.5-turbo")
- * @returns {Promise<object>} The inserted record or error object
- */
 export async function logChatMetric(
-  query,
-  response,
-  retrieved_docs,
-  response_time,
-  tokens_used,
+  conversationId,
+  userQuestion,
+  answer,
+  retrievedDocs,
+  responseTimeMs,
+  totalTokens,
+  costUsd,
   model
 ) {
   try {
     // Validate required parameters
-    if (!query || !response || !model) {
-      console.warn('logChatMetric: Missing required parameters (query, response, or model)');
+    if (!userQuestion || !answer || !model) {
+      console.warn('logChatMetric: Missing required parameters (userQuestion, answer, or model)');
       return {
         success: false,
         error: 'Missing required parameters',
@@ -29,21 +21,29 @@ export async function logChatMetric(
     }
 
     // Ensure retrieved_docs is properly formatted as JSON
-    const docsData = typeof retrieved_docs === 'string' 
-      ? JSON.parse(retrieved_docs) 
-      : retrieved_docs || null;
+    const docsData = typeof retrievedDocs === 'string'
+      ? JSON.parse(retrievedDocs)
+      : retrievedDocs || null;
 
     const { data, error } = await supabase
       .from('chatbot_logs')
       .insert([
         {
-          query,
-          response,
-          retrieved_docs: docsData,
-          response_time: response_time || null,
-          tokens_used: tokens_used || null,
-          model,
-          created_at: new Date().toISOString(),
+          conversation_id: conversationId,
+          user_query: userQuestion,
+          ai_response: answer,
+          retrieved_docs: retrievedDocs,
+          response_time_ms: responseTimeMs,
+          total_tokens: totalTokens,
+          cost_usd: costUsd,
+          model: model,
+          // The following fields are left NULL for now (will be filled later by evaluation)
+          retrieval_precision: null,
+          answer_correctness_score: null,
+          answer_groundedness: null,
+          hallucination_flag: null,
+          user_feedback: null,
+          feedback_comment: null,
         },
       ])
       .select();
