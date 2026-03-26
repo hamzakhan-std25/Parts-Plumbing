@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server';
 import axios from 'axios';
+import { logChatMetric } from '@/utils/logger';
 
 const GEN_AI_URL = process.env.GEN_AI_URL
 const GEN_AI_API_KEY = process.env.GEN_AI_API_KEY
@@ -26,6 +27,7 @@ async function getEmbedding(text) {
 
 
 export async function POST(req) {
+  const requestStartTime = Date.now();
 
   console.log("Received request at /api/chat");
 
@@ -94,7 +96,26 @@ export async function POST(req) {
     });
 
     const data = await response.json();
-    return NextResponse.json(data.choices[0].message);
+
+    const assistantMessage = data?.choices?.[0]?.message || { role: 'assistant', content: '' };
+    const assistantResponseText = assistantMessage?.content || '';
+    const responseTime = Date.now() - requestStartTime;
+    const tokensUsed = data?.usage?.total_tokens ?? null;
+
+    const metricResult = await logChatMetric(
+      userQuestion,
+      assistantResponseText,
+      relevantMatches,
+      responseTime,
+      tokensUsed,
+      'groq-llama-3'
+    );
+
+    if (!metricResult.success) {
+      console.warn('Metric logging failed:', metricResult.error);
+    }
+
+    return NextResponse.json(assistantMessage);
 
   } catch (error) {
     return NextResponse.json({ error: "Failed to fetch" }, { status: 500 });
