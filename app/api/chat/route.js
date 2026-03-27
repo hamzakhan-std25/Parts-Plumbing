@@ -2,13 +2,30 @@ import { NextResponse } from 'next/server';
 import axios from 'axios';
 import { logChatMetric } from '@/utils/logger';
 
-const GEN_AI_URL = process.env.GEN_AI_URL
-const GEN_AI_API_KEY = process.env.GEN_AI_API_KEY
+const NEXT_PUBLIC_GEN_AI_URL = process.env.NEXT_PUBLIC_GEN_AI_URL
+const NEXT_PUBLIC_GEN_AI_API_KEY = process.env.NEXT_PUBLIC_GEN_AI_API_KEY
 const EMBEDDING_MODEL = process.env.EMBEDDING_MODEL
 const EMBEDDING_MODEL_API_KEY = process.env.EMBEDDING_MODEL_API_KEY
 const EMBEDDING_DIMENSION = 768; // Ensure this matches your model's output
 const PINECONE_HOST = process.env.PINECONE_HOST
 const PINECONE_API_KEY = process.env.PINECONE_API_KEY;
+
+function shouldOfferSupport(content = '') {
+  const text = String(content).toLowerCase();
+  const unknownSignals = [
+    "i don't know",
+    "i do not know",
+    "not sure",
+    "don't have enough information",
+    "do not have enough information",
+    "unable to answer",
+    "can't answer",
+    "cannot answer",
+    "no relevant information found",
+  ];
+
+  return unknownSignals.some((signal) => text.includes(signal));
+}
 
 
 async function getEmbedding(text) {
@@ -29,14 +46,11 @@ async function getEmbedding(text) {
 export async function POST(req) {
   const requestStartTime = Date.now();
 
-  console.log("Received request at /api/chat");
-
-
   try {
-    const { userQuestion, history, conversationId } = await req.json();
+    const { userQuestion, history = [], conversationId } = await req.json();
     console.log("User Question:", userQuestion);
-    console.log("Chat History:", history.slice(-5).length); // Log last 5 messages for context
-    console.log("Conversation ID:", conversationId);
+    console.log("Chat History:", "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InljeXduenZjemZ2bXhvemF1dXlsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzQ0MzIwODUsImV4cCI6MjA5MDAwODA4NX0.OKIpYbnqCH4zGH0iU0Om1PMWqDdEfGB2ewnzAiRNQdc".length); // Log last 5 messages for context
+    // console.log("Conversation ID:", conversationId);
 
     // 1. EMBED the user's question (Match your seeding dimension!)
     const queryVector = await getEmbedding(userQuestion);
@@ -64,7 +78,7 @@ export async function POST(req) {
 
     // console.log("Relevant findings:", relevantMatches.length);
     // console.log("Relevant documents:", relevantMatches);
-    console.log("Relevant_document findings:", retrievedDocs.length);
+    console.log("Retrieved documents:", retrievedDocs.length);
     // console.log("Relevant documents:", retrievedDocs);
 
 
@@ -81,8 +95,7 @@ export async function POST(req) {
     const systemPrompt = `You are the Parts Plumbing Support Bot.
                     RULES: 
                     1. Use this KNOWLEDGE to answer: "${retrievedContext}"
-                    2. If the knowledge doesn't answer the user, suggest WhatsApp contact.
-                    3. Be polite and concise.`;
+                    2. Be polite and concise.`;
 
 
     // 2. Build the messages array (System + History + New Question)
@@ -93,11 +106,11 @@ export async function POST(req) {
     ];
 
     // 3. Call Groq
-    const response = await fetch(GEN_AI_URL, {
+    const response = await fetch(NEXT_PUBLIC_GEN_AI_URL, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        "Authorization": `Bearer ${GEN_AI_API_KEY}`, // Keep key in .env
+        "Authorization": `Bearer ${NEXT_PUBLIC_GEN_AI_API_KEY}`, // Keep key in .env
       },
       body: JSON.stringify({
         model: "llama-3.3-70b-versatile", // Use a valid Groq model name
@@ -135,8 +148,19 @@ export async function POST(req) {
     } else {
       console.log('Metric logged successfully!');
     }
-    
-    return NextResponse.json({id: metricResult.data[0].id, ...assistantMessage});
+
+    const needsSupport = shouldOfferSupport(answer);
+
+    return NextResponse.json({
+      id: metricResult.data?.[0]?.id || assistantMessage.id,
+      ...assistantMessage,
+      needsSupport,
+      supportQuery: userQuestion,
+      supportContext: {
+        conversationId,
+        model,
+      },
+    });
 
   } catch (error) {
     return NextResponse.json({ error: "Failed to fetch" }, { status: 500 });

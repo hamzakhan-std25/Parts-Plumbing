@@ -4,6 +4,9 @@ import { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Bot, Sparkles, RefreshCw, X, Send } from 'lucide-react';
 import ChatMessage from './ChatMessage';
+import SupportForm from './SupportForm';
+import { useDebouncedClick } from '@/hooks/useDebouncedClick';
+import { summarizeHistory } from '@/utils/ai-helpers';
 
 const uuidv4 = () => {
   if (typeof crypto !== 'undefined' && crypto.randomUUID) {
@@ -13,6 +16,9 @@ const uuidv4 = () => {
 };
 
 export default function AIChatButton() {
+  const SUMMARY_TRIGGER_LENGTH = 14;
+  const RECENT_HISTORY_KEEP_COUNT = 6;
+
   const [isOpen, setIsOpen] = useState(false);
   const [messages, setMessages] = useState([]);
   const [conversationId, setConversationId] = useState(() => uuidv4());
@@ -20,9 +26,15 @@ export default function AIChatButton() {
   const [isMobile, setIsMobile] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [showConfirm, setShowConfirm] = useState(false); // For new chat confirmation
+  const [showSupportForm, setShowSupportForm] = useState(false);
+  const [supportTargetMessageId, setSupportTargetMessageId] = useState(null);
+  const [hasShownWhatsApp, setHasShownWhatsApp] = useState(false);
+  const [chatHistory, setChatHistory] = useState([]);
+  const [lastSummary, setLastSummary] = useState(null);
 
   const inputRef = useRef(null);
   const messagesEndRef = useRef(null);
+  const supportFormTimeoutRef = useRef(null);
 
   // Check mobile viewport
   useEffect(() => {
@@ -44,6 +56,16 @@ export default function AIChatButton() {
 
   }, [isOpen]);
 
+  // Refocus input after AI response completes and input is enabled again.
+  useEffect(() => {
+    if (isOpen && !isLoading) {
+      const timer = setTimeout(() => {
+        inputRef.current?.focus();
+      }, 0);
+      return () => clearTimeout(timer);
+    }
+  }, [isOpen, isLoading]);
+
   // Escape key to close
   useEffect(() => {
     const handleEscape = (e) => {
@@ -59,9 +81,18 @@ export default function AIChatButton() {
   }, [messages]);
 
   const resetConversation = () => {
+    if (supportFormTimeoutRef.current) {
+      clearTimeout(supportFormTimeoutRef.current);
+      supportFormTimeoutRef.current = null;
+    }
     setMessages([]);
+    setChatHistory([]);
+    setLastSummary(null);
     setConversationId(uuidv4());
     setShowConfirm(false);
+    setShowSupportForm(false);
+    setSupportTargetMessageId(null);
+    setHasShownWhatsApp(false);
   };
 
   const toggleChat = () => setIsOpen(!isOpen);
@@ -76,6 +107,23 @@ export default function AIChatButton() {
           : message
       )
     );
+
+    if (supportFormTimeoutRef.current) {
+      clearTimeout(supportFormTimeoutRef.current);
+      supportFormTimeoutRef.current = null;
+    }
+
+    if (type === 'dislike') {
+      setSupportTargetMessageId(messageId);
+      setShowSupportForm(false);
+      supportFormTimeoutRef.current = setTimeout(() => {
+        setShowSupportForm(true);
+      }, 2000);
+
+      if (!hasShownWhatsApp) {
+        setHasShownWhatsApp(true);
+      }
+    }
 
 
 
@@ -100,6 +148,45 @@ export default function AIChatButton() {
 
   };
 
+  useEffect(() => {
+    return () => {
+      if (supportFormTimeoutRef.current) {
+        clearTimeout(supportFormTimeoutRef.current);
+      }
+    };
+  }, []);
+
+  const buildHistoryPayload = async (history, summary) => {
+    let nextSummary = summary;
+    let compactedRecentHistory = history;
+
+    if (history.length > SUMMARY_TRIGGER_LENGTH) {
+      const keepStartIndex = Math.max(history.length - RECENT_HISTORY_KEEP_COUNT, 0);
+      const olderHistory = history.slice(0, keepStartIndex);
+      compactedRecentHistory = history.slice(keepStartIndex);
+
+      const summaryInput = nextSummary ? [nextSummary, ...olderHistory] : olderHistory;
+      const summarizedHistory = await summarizeHistory(summaryInput);
+
+      if (Array.isArray(summarizedHistory) && summarizedHistory.length > 0) {
+        nextSummary = summarizedHistory[0];
+      } else {
+        // If summary fails, keep full history so context is not lost.
+        compactedRecentHistory = history;
+      }
+    }
+
+    const payload = nextSummary
+      ? [nextSummary, ...compactedRecentHistory]
+      : compactedRecentHistory;
+
+    return {
+      payload,
+      compactedRecentHistory,
+      nextSummary,
+    };
+  };
+
   const handleSendMessage = async (question) => {
 
     // 1. Check if 'question' is an object (like a Click Event) and ignore it
@@ -119,40 +206,79 @@ export default function AIChatButton() {
       conversationId,
     };
 
+    // Updates the full message objects for your UI
     setMessages((prev) => [...prev, userMessage]);
+
+
+    const {
+      payload: historyForApi,
+      compactedRecentHistory,
+      nextSummary,
+    } = await buildHistoryPayload(chatHistory, lastSummary);
+
+    if (nextSummary && nextSummary !== lastSummary) {
+      setLastSummary(nextSummary);
+    }
+
     setInputValue('');
     setIsLoading(true);
 
-    // Build system prompt with retrieval context
-    const historyForAI = messages
-      .slice(-6)
-      .map(({ role, content }) => ({ role, content }));
+    if (chatHistory.length > SUMMARY_TRIGGER_LENGTH) {
+      console.log('chatHistory length exceeded 14. Using summarized payload.', {
+        originalLength: chatHistory.length,
+        payloadLength: historyForApi.length,
+      });
+    }
 
-    const res = await fetch("/api/chat", {
-      method: "POST",
-      body: JSON.stringify({
-        conversationId,
-        userQuestion: finalQuestion,
-        history: historyForAI,
-        // aiMessageId: userMessage.id, // Array of {role, content}
-      }),
-    });
-    const data = await res.json();
+    console.log("---------------history for api :", historyForApi)
     
-    console.log("data uploaded:", data.id , data.content);
+    try {
+      const res = await fetch('/api/chat', {
+        method: 'POST',
+        body: JSON.stringify({
+          conversationId,
+          userQuestion: finalQuestion,
+          history: historyForApi,
+        }),
+      });
 
-    const assistantMessage = {
-      id: data.id,
-      role: 'assistant',
-      content: data.content,
-      feedback: null,
-      conversationId,
-    };
-    setMessages((prev) => [...prev, assistantMessage]);
-    setIsLoading(false);
+      if (!res.ok) {
+        throw new Error(`Chat request failed with status ${res.status}`);
+      }
 
-    // AUTO-FOCUS BACK TO INPUT
-    inputRef.current?.focus();
+      const data = await res.json();
+
+      const assistantMessage = {
+        id: data.id || uuidv4(),
+        role: 'assistant',
+        content: data.content || 'I could not generate a response right now. Please try again.',
+        feedback: null,
+        conversationId,
+      };
+      setMessages((prev) => [...prev, assistantMessage]);
+
+      const nextHistoryAfterAssistant = [
+        ...compactedRecentHistory,
+        { role: userMessage.role, content: userMessage.content },
+        { role: assistantMessage.role, content: assistantMessage.content },
+      ];
+
+      setChatHistory(nextHistoryAfterAssistant);
+    } catch (error) {
+      console.error('Failed to send chat message:', error);
+      setMessages((prev) => [
+        ...prev,
+        {
+          id: uuidv4(),
+          role: 'assistant',
+          content: 'Sorry, I ran into an issue while generating a response. Please try again.',
+          feedback: null,
+          conversationId,
+        },
+      ]);
+    } finally {
+      setIsLoading(false);
+    }
 
   };
 
@@ -160,7 +286,7 @@ export default function AIChatButton() {
   const handleKeyPress = (e) => {
     if (e.key === 'Enter' && !e.shiftKey) {
       e.preventDefault();
-      handleSendMessage();
+      debouncedSendMessage();
     }
   };
 
@@ -181,6 +307,18 @@ export default function AIChatButton() {
   };
 
   const handleClose = () => setIsOpen(false);
+
+  const debouncedToggleChat = useDebouncedClick(toggleChat, 250);
+  const debouncedNewChat = useDebouncedClick(handleNewChat, 300);
+  const debouncedCloseChat = useDebouncedClick(handleClose, 250);
+  const debouncedConfirmNewChat = useDebouncedClick(confirmNewChat, 300);
+  const debouncedCancelNewChat = useDebouncedClick(cancelNewChat, 250);
+  const debouncedSendMessage = useDebouncedClick((question) => {
+    handleSendMessage(question);
+  }, 400);
+  const debouncedFeedback = useDebouncedClick((messageId, type) => {
+    handleFeedback(messageId, type);
+  }, 400);
 
   // Typing indicator component
   const TypingIndicator = () => (
@@ -231,7 +369,7 @@ export default function AIChatButton() {
             initial="hidden"
             animate="visible"
             exit="exit"
-            onClick={toggleChat}
+            onClick={debouncedToggleChat}
             className="group relative w-14 h-14 bg-blue-600 text-white rounded-full flex items-center justify-center shadow-xl hover:bg-blue-700 hover:scale-110 transition-all duration-200 cursor-pointer focus:outline-none focus:ring-4 focus:ring-blue-300"
             aria-label="Open AI Chat"
           >
@@ -250,7 +388,7 @@ export default function AIChatButton() {
             initial="hidden"
             animate="visible"
             exit="exit"
-            className={`bg-white shadow-lg border border-gray-200 flex flex-col overflow-hidden ${isMobile ? 'w-full h-full rounded-none' : 'w-[360px] h-[70vh] rounded-xl'
+            className={`relative bg-white shadow-lg border border-gray-200 flex flex-col overflow-hidden ${isMobile ? 'w-full h-full rounded-none' : 'w-[360px] h-[70vh] rounded-xl'
               }`}
           >
             {/* Top Bar */}
@@ -263,7 +401,7 @@ export default function AIChatButton() {
               </div>
               <div className="flex items-center gap-2">
                 <button
-                  onClick={handleNewChat}
+                  onClick={debouncedNewChat}
                   className="p-2 rounded-lg hover:bg-gray-100 transition-colors cursor-pointer focus:outline-none focus:ring-2 focus:ring-blue-300"
                   aria-label="Start New Chat"
                   title="Start New Chat"
@@ -271,7 +409,7 @@ export default function AIChatButton() {
                   <RefreshCw size={20} className="text-gray-600" />
                 </button>
                 <button
-                  onClick={handleClose}
+                  onClick={debouncedCloseChat}
                   className="p-2 rounded-lg hover:bg-gray-100 transition-colors cursor-pointer focus:outline-none focus:ring-2 focus:ring-blue-300"
                   aria-label="Close Chat"
                   title="Close"
@@ -294,13 +432,13 @@ export default function AIChatButton() {
                     <span>Start a new chat? Current messages will be lost.</span>
                     <div className="flex gap-2">
                       <button
-                        onClick={confirmNewChat}
+                        onClick={debouncedConfirmNewChat}
                         className="px-3 py-1 bg-yellow-600 text-white rounded hover:bg-yellow-700 transition"
                       >
                         Confirm
                       </button>
                       <button
-                        onClick={cancelNewChat}
+                        onClick={debouncedCancelNewChat}
                         className="px-3 py-1 bg-gray-200 text-gray-800 rounded hover:bg-gray-300 transition"
                       >
                         Cancel
@@ -330,7 +468,7 @@ export default function AIChatButton() {
                     {SUGGESTIONS.map((item, index) => (
                       <button
                         key={index}
-                        onClick={() => handleSendMessage(item.query)}
+                        onClick={() => debouncedSendMessage(item.query)}
                         className="px-4 py-2 text-sm font-medium text-blue-700 bg-blue-50 rounded-full hover:bg-blue-100 transition-colors"
                       >
                         {item.label}
@@ -358,8 +496,13 @@ export default function AIChatButton() {
                 // )
                 : (
                   messages.map((msg) => (
-                    <ChatMessage key={msg.id} message={msg} onFeedback={handleFeedback} />
-                    // <ChatMessage key={msg.id} message={msg} showWhatsApp={msg.role === 'assistant' && msg.content.includes
+                    <div key={msg.id}>
+                      <ChatMessage
+                        message={msg}
+                        onFeedback={debouncedFeedback}
+                        showWhatsApp={hasShownWhatsApp && supportTargetMessageId === msg.id}
+                      />
+                    </div>
                   ))
                 )}
               {/* Typing indicator */}
@@ -381,7 +524,7 @@ export default function AIChatButton() {
                   disabled={isLoading}
                 />
                 <button
-                  onClick={handleSendMessage}
+                  onClick={debouncedSendMessage}
                   disabled={!inputValue.trim() || isLoading}
                   className={`p-2 rounded-lg transition-colors cursor-pointer focus:outline-none focus:ring-2 focus:ring-blue-300 ${inputValue.trim() && !isLoading
                     ? 'bg-blue-600 text-white hover:bg-blue-700'
@@ -393,6 +536,15 @@ export default function AIChatButton() {
                 </button>
               </div>
             </div>
+
+            <AnimatePresence>
+              {showSupportForm && supportTargetMessageId && (
+                <SupportForm
+                  messageId={supportTargetMessageId}
+                  onClose={() => setShowSupportForm(false)}
+                />
+              )}
+            </AnimatePresence>
           </motion.div>
         )}
       </AnimatePresence>

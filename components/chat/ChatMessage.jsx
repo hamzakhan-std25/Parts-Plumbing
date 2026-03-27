@@ -1,13 +1,15 @@
 import ReactMarkdown from 'react-markdown';
 import { Sparkles, MessageCircle, ExternalLink, ThumbsUp, ThumbsDown } from 'lucide-react';
 import remarkGfm from 'remark-gfm';
+import { useDebouncedClick } from '@/hooks/useDebouncedClick';
 
-const ChatMessage = ({ message, onFeedback }) => {
+const ChatMessage = ({ message, onFeedback, showWhatsApp = false }) => {
   const isBot = message.role === 'ai' || message.role === 'assistant';
   const isUser = message.role === 'user';
+  const debouncedLike = useDebouncedClick(() => onFeedback?.(message.id, 'like'), 350);
+  const debouncedDislike = useDebouncedClick(() => onFeedback?.(message.id, 'dislike'), 350);
 
-  // Logic: Only show WhatsApp button if the bot specifically mentions it
-  const showWhatsApp = isBot && message.content?.toLowerCase()?.includes('whatsapp');
+  const shouldShowWhatsApp = isBot && (showWhatsApp || message.content?.toLowerCase()?.includes('whatsapp'));
 
   return (
     <div className={`flex mb-6 ${isUser ? 'justify-end' : 'justify-start'} group animate-in fade-in slide-in-from-bottom-2`}>
@@ -55,7 +57,7 @@ const ChatMessage = ({ message, onFeedback }) => {
         </div>
 
         {/* WhatsApp Action Button */}
-        {showWhatsApp && (
+        {shouldShowWhatsApp && (
           <a
             href="https://wa.me/+923118688410" // Your pre-configured number
             target="_blank"
@@ -71,7 +73,7 @@ const ChatMessage = ({ message, onFeedback }) => {
           <div className="mt-2 flex items-center gap-2">
             <button
               type="button"
-              onClick={() => onFeedback?.(message.id, 'like')}
+              onClick={debouncedLike}
               className={`inline-flex items-center justify-center rounded-md p-1.5 transition-colors ${message.feedback === 'like'
                   ? 'text-green-600 bg-green-50'
                   : 'text-gray-400 hover:text-gray-600 hover:bg-gray-100'
@@ -83,7 +85,7 @@ const ChatMessage = ({ message, onFeedback }) => {
             </button>
             <button
               type="button"
-              onClick={() => onFeedback?.(message.id, 'dislike')}
+              onClick={debouncedDislike}
               className={`inline-flex items-center justify-center rounded-md p-1.5 transition-colors ${message.feedback === 'dislike'
                   ? 'text-red-600 bg-red-50'
                   : 'text-gray-400 hover:text-gray-600 hover:bg-gray-100'

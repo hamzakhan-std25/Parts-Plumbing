@@ -6,6 +6,7 @@ import SearchOverlay from '@/components/search/SearchOverlay';
 import Link from "next/link";
 import Image from "next/image";
 import { Menu, X, Phone, Search } from "lucide-react";
+import { useDebouncedClick } from "@/hooks/useDebouncedClick";
 
 export default function Header() {
 
@@ -43,6 +44,16 @@ export default function Header() {
     { name: "Categories", href: "/categories" },
     { name: "Contact", href: "/contact" },
   ];
+
+  const openSearch = () => setIsSearchOpen(true);
+  const openMenu = () => setIsMenuOpen(true);
+  const closeMenu = () => setIsMenuOpen(false);
+  const closeSearch = () => setIsSearchOpen(false);
+
+  const debouncedOpenSearch = useDebouncedClick(openSearch, 250);
+  const debouncedOpenMenu = useDebouncedClick(openMenu, 250);
+  const debouncedCloseMenu = useDebouncedClick(closeMenu, 250);
+  const debouncedCloseSearch = useDebouncedClick(closeSearch, 250);
 
   return (
     <>
@@ -86,7 +97,7 @@ export default function Header() {
           <div className="flex items-center gap-4">
             {/* 1. Added 'group' and 'relative' classes */}
             <button
-              onClick={() => setIsSearchOpen(true)}
+              onClick={debouncedOpenSearch}
               className="group relative p-2 hover:bg-gray-100 rounded-full transition"
               aria-label="Open search"
             >
@@ -113,7 +124,7 @@ export default function Header() {
             {/* Hamburger Button (Mobile Only) */}
             <button
               className="md:hidden p-2 hover:bg-gray-100 rounded-lg"
-              onClick={() => setIsMenuOpen(true)}
+              onClick={debouncedOpenMenu}
               aria-label="Open menu"
             >
               <Menu size={24} />
@@ -126,7 +137,7 @@ export default function Header() {
       <div
         className={`fixed inset-0 z-50 bg-black/50 transition-opacity duration-300 ${isMenuOpen ? "opacity-100 visible" : "opacity-0 invisible"
           }`}
-        onClick={() => setIsMenuOpen(false)}
+        onClick={debouncedCloseMenu}
       />
 
       {/* Mobile Drawer Menu */}
@@ -141,7 +152,7 @@ export default function Header() {
           <div className="flex items-center justify-between mb-8">
             <span className="font-bold text-lg">Menu</span>
             <button
-              onClick={() => setIsMenuOpen(false)}
+              onClick={debouncedCloseMenu}
               className="p-2 hover:bg-gray-100 rounded-full"
               aria-label="Close menu"
             >
@@ -155,7 +166,7 @@ export default function Header() {
                 key={link.name}
                 href={link.href}
                 className="text-lg font-semibold py-2 border-b border-gray-50 hover:text-blue-600"
-                onClick={() => setIsMenuOpen(false)}
+                onClick={debouncedCloseMenu}
               >
                 {link.name}
               </Link>
@@ -169,7 +180,7 @@ export default function Header() {
       </aside>
 
 
-      <SearchOverlay isOpen={isSearchOpen} onClose={() => setIsSearchOpen(false)} />
+      <SearchOverlay isOpen={isSearchOpen} onClose={debouncedCloseSearch} />
     </>
   );
 }

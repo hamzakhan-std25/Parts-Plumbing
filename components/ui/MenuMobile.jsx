@@ -1,10 +1,12 @@
 import { useState } from 'react';
 import { Menu, X } from 'lucide-react'; // Import the icons
+import { useDebouncedClick } from '@/hooks/useDebouncedClick';
 
 const MobileNavbar = () => {
   const [isOpen, setIsOpen] = useState(false);
 
   const toggleMenu = () => setIsOpen(!isOpen);
+  const debouncedToggleMenu = useDebouncedClick(toggleMenu, 250);
 
   return (
     <nav className="relative bg-white shadow-md p-4">
@@ -13,7 +15,7 @@ const MobileNavbar = () => {
 
         {/* Hamburger Icon - Only visible on mobile */}
         <button 
-          onClick={toggleMenu} 
+          onClick={debouncedToggleMenu} 
           className="md:hidden p-2 text-gray-600 hover:bg-gray-100 rounded-lg transition"
           aria-label="Toggle Menu"
         >
@@ -34,14 +36,14 @@ const MobileNavbar = () => {
         ${isOpen ? "translate-x-0" : "translate-x-full"}
       `}>
         <div className="p-6">
-          <button onClick={toggleMenu} className="mb-8 float-right">
+          <button onClick={debouncedToggleMenu} className="mb-8 float-right">
             <X size={32} />
           </button>
           
           <ul className="flex flex-col gap-8 text-2xl font-medium mt-16">
-            <li><a href="#" onClick={toggleMenu}>Home</a></li>
-            <li><a href="#" onClick={toggleMenu}>Products</a></li>
-            <li><a href="#" onClick={toggleMenu}>Contact</a></li>
+            <li><a href="#" onClick={debouncedToggleMenu}>Home</a></li>
+            <li><a href="#" onClick={debouncedToggleMenu}>Products</a></li>
+            <li><a href="#" onClick={debouncedToggleMenu}>Contact</a></li>
           </ul>
         </div>
       </div>

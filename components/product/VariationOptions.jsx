@@ -1,4 +1,5 @@
 import { extractAttributes } from "@/utils/variation.utils";
+import { useDebouncedClick } from "@/hooks/useDebouncedClick";
 
 export default function VariationOptions({
   variations,
@@ -6,6 +7,9 @@ export default function VariationOptions({
   setSelected,
 }) {
   const attributes = extractAttributes(variations);
+  const debouncedSelectOption = useDebouncedClick((attributeKey, value) => {
+    setSelected({ ...selected, [attributeKey]: value });
+  }, 250);
 
   return (
     <div className="mt-6 space-y-4">
@@ -23,9 +27,7 @@ export default function VariationOptions({
               return (
                 <button
                   key={value}
-                  onClick={() =>
-                    setSelected({ ...selected, [key]: value })
-                  }
+                  onClick={() => debouncedSelectOption(key, value)}
                   className={`px-4 py-2 rounded-full text-sm border transition
                     ${
                       isActive

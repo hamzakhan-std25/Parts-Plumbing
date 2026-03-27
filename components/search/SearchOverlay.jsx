@@ -7,11 +7,13 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { X, Search as SearchIcon, Loader2 } from 'lucide-react';
 import Link from 'next/link';
 import { useSearch } from '@/hooks/useSearch';
+import { useDebouncedClick } from '@/hooks/useDebouncedClick';
 
 export default function SearchOverlay({ isOpen, onClose }) {
   const overlayRef = useRef(null);
   const inputRef = useRef(null);
   const { query, setQuery, suggestions, isLoading, submitSearch } = useSearch();
+  const debouncedClose = useDebouncedClick(onClose, 250);
 
   // Focus input when overlay opens
   useEffect(() => {
@@ -55,7 +57,7 @@ export default function SearchOverlay({ isOpen, onClose }) {
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             className="fixed inset-0 bg-black/40 z-50"
-            onClick={onClose}
+            onClick={debouncedClose}
           />
 
           {/* Search Panel (slides from top) */}
@@ -84,7 +86,7 @@ export default function SearchOverlay({ isOpen, onClose }) {
                 )}
                 <button
                   type="button"
-                  onClick={onClose}
+                  onClick={debouncedClose}
                   className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600"
                 >
                   <X className="w-5 h-5" />
@@ -104,7 +106,7 @@ export default function SearchOverlay({ isOpen, onClose }) {
                       <li key={product.slug}>
                         <Link
                           href={`/products/${product.slug}`}
-                          onClick={onClose}
+                          onClick={debouncedClose}
                           className="block px-3 py-2 hover:bg-gray-100 rounded-lg transition"
                         >
                           {product.name}

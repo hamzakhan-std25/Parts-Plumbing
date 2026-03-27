@@ -3,6 +3,7 @@
 import { useState } from "react";
 import Link from "next/link";
 import Footer from "@/components/layout/Footer";
+import { useDebouncedClick } from "@/hooks/useDebouncedClick";
 import {
   MessageCircle,
   Phone,
@@ -258,10 +259,14 @@ function ContactForm() {
 
 function FAQItem({ q, a }) {
   const [open, setOpen] = useState(false);
+  const debouncedToggleFaq = useDebouncedClick(() => {
+    setOpen((prev) => !prev);
+  }, 250);
+
   return (
     <div className="border border-slate-700 rounded-xl overflow-hidden">
       <button
-        onClick={() => setOpen((o) => !o)}
+        onClick={debouncedToggleFaq}
         className="w-full flex items-center justify-between gap-4 px-6 py-4 text-left hover:bg-slate-800/60 transition-colors"
       >
         <span className="font-medium text-sm text-white">{q}</span>

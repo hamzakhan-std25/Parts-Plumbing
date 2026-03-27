@@ -8,6 +8,7 @@ import {
   formatAttributeName,
 } from "@/utils/variation.utils";
 import { WHATSAPP_NUMBER } from "@/constants/config";
+import { useDebouncedClick } from "@/hooks/useDebouncedClick";
 
 export default function VariationSelector({ variations, productName }) {
   const [selectedAttributes, setSelectedAttributes] = useState({});
@@ -52,6 +53,10 @@ export default function VariationSelector({ variations, productName }) {
     setSelectedAttributes((prev) => ({ ...prev, [attributeName]: value }));
   };
 
+  const debouncedAttributeChange = useDebouncedClick((attributeName, value) => {
+    handleAttributeChange(attributeName, value);
+  }, 250);
+
   const whatsappLink = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(
     `I'm interested in ${productName} - ${Object.entries(selectedAttributes)
       .map(([k, v]) => `${formatAttributeName(k)}: ${v}`)
@@ -76,7 +81,7 @@ export default function VariationSelector({ variations, productName }) {
                 return (
                   <button
                     key={option}
-                    onClick={() => handleAttributeChange(group.name, option)}
+                    onClick={() => debouncedAttributeChange(group.name, option)}
                     className={`px-4 py-2 rounded-full border text-sm flex items-center gap-1 transition
                       ${isSelected
                         ? "bg-blue-600 text-white border-blue-600"

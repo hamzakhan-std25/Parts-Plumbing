@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import { useDebouncedClick } from "@/hooks/useDebouncedClick";
 
 export default function FilterSidebar() {
   const router = useRouter();
@@ -47,13 +48,16 @@ export default function FilterSidebar() {
     router.push(`/products?${params.toString()}`);
   };
 
+  const debouncedToggleFilters = useDebouncedClick(toggleFilters, 250);
+  const debouncedApplyFilters = useDebouncedClick(applyFilters, 350);
+
   // Filter content (shared between desktop and mobile)
   const filterContent = (
     <div className="bg-white p-6  rounded-xl border border-gray-200">
       <div className="flex justify-between items-center mb-4 sm:hidden">
         <h3 className="font-semibold text-lg">Filters</h3>
         <button
-          onClick={toggleFilters}
+          onClick={debouncedToggleFilters}
           className="text-gray-500 hover:text-gray-700"
           aria-label="Close filters"
         >
@@ -124,7 +128,7 @@ export default function FilterSidebar() {
       </div>
 
       <button
-        onClick={applyFilters}
+        onClick={debouncedApplyFilters}
         className="w-full bg-blue-600 text-white py-2 rounded-lg hover:bg-blue-700 transition"
       >
         Apply Filters
@@ -141,7 +145,7 @@ export default function FilterSidebar() {
       <div className="lg:hidden">
         {/* Toggle button */}
         <button
-          onClick={toggleFilters}
+          onClick={debouncedToggleFilters}
           className="w-full flex items-center justify-between bg-white border border-gray-200 rounded-lg px-4 py-3 mb-4"
           aria-expanded={isOpen}
         >
