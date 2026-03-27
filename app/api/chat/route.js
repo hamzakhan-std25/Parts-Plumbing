@@ -95,7 +95,8 @@ export async function POST(req) {
     const systemPrompt = `You are the Parts Plumbing Support Bot.
                     RULES: 
                     1. Use this KNOWLEDGE to answer: "${retrievedContext}"
-                    2. Be polite and concise.`;
+                    2. If the answer is not in the KNOWLEDGE, say you don't know. Do not try to fabricate an answer. If you're unsure, suggest the user contact support on whatsapp.
+                    3. Be polite and concise.`;
 
 
     // 2. Build the messages array (System + History + New Question)
