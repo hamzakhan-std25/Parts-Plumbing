@@ -15,19 +15,21 @@ export default function ProductDetail({ product }) {
 
   return (
     <div className="max-w-5xl mx-auto p-6">
-
       <nav className="text-sm text-gray-500 mb-6">
         <ul className="flex flex-wrap items-center">
           <li>
-            <a href="/" className="hover:text-white
-            ">
+            <a
+              href="/"
+              className="hover:text-white
+            "
+            >
               Home
             </a>
           </li>
           <li className="mx-2">/</li>
           <li>
             <a href="/products" className="hover:text-white">
-            { product.productCategories.nodes[0].name}
+              {product.productCategories.nodes[0].name}
             </a>
           </li>
           <li className="mx-2">/</li>
@@ -36,7 +38,6 @@ export default function ProductDetail({ product }) {
       </nav>
 
       <div className="bg-[#1e293b] rounded-2xl overflow-hidden shadow-xl">
-
         {/* Image */}
         <img
           src={product.image?.sourceUrl || "/placeholder-product.png"}
@@ -45,11 +46,8 @@ export default function ProductDetail({ product }) {
         />
 
         <div className="p-6">
-
           {/* Title */}
-          <h1 className="text-2xl font-bold mb-3">
-            {product.name}
-          </h1>
+          <h1 className="text-2xl font-bold mb-3">{product.name}</h1>
 
           {/* Short Description
           <div
@@ -58,7 +56,6 @@ export default function ProductDetail({ product }) {
               __html: product.shortDescription,
             }}
           /> */}
-
 
           {/* Description with Read More */}
           <Description htmlContent={product.description} />
@@ -73,7 +70,7 @@ export default function ProductDetail({ product }) {
           {/* Price */}
           {matchedVariant && (
             <div className="text-2xl font-bold text-yellow-400 mt-4">
-              Rs : { parseInt(matchedVariant.price.replace(/[^0-9]/g, ''), 10) }
+              Rs : {parseInt(matchedVariant.price.replace(/[^0-9]/g, ""), 10)}
             </div>
           )}
 
@@ -93,7 +90,6 @@ export default function ProductDetail({ product }) {
               </button>
             </div>
           )}
-
         </div>
       </div>
     </div>

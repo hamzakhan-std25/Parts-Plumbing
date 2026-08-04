@@ -206,7 +206,9 @@ export default async function HomePage() {
                     <Icon size={32} className="text-blue-400" />
                   </div>
                   <h3 className="font-bold text-lg mb-2">{cat.name}</h3>
-                  <p className="text-slate-400 text-sm mb-4">{cat.description}</p>
+                  <p className="text-slate-400 text-sm mb-4">
+                    {cat.description}
+                  </p>
                   <span className="text-blue-400 text-sm font-medium flex items-center gap-1 group-hover:gap-2 transition-all">
                     View Products <ChevronRight size={14} />
                   </span>
@@ -272,12 +274,16 @@ export default async function HomePage() {
                   key={item.title}
                   className="bg-slate-800 border border-slate-700 rounded-2xl p-6 flex flex-col items-start gap-4"
                 >
-                  <div className={`w-12 h-12 ${item.bg} rounded-xl flex items-center justify-center`}>
+                  <div
+                    className={`w-12 h-12 ${item.bg} rounded-xl flex items-center justify-center`}
+                  >
                     <Icon size={24} className={item.color} />
                   </div>
                   <div>
                     <h3 className="font-bold text-base mb-1">{item.title}</h3>
-                    <p className="text-slate-400 text-sm leading-relaxed">{item.desc}</p>
+                    <p className="text-slate-400 text-sm leading-relaxed">
+                      {item.desc}
+                    </p>
                   </div>
                 </div>
               );
@@ -291,7 +297,9 @@ export default async function HomePage() {
         <div className="container mx-auto px-4">
           <div className="text-center mb-12">
             <h2 className="text-3xl font-bold mb-3">What Our Customers Say</h2>
-            <p className="text-slate-400">Real feedback from real customers across KPK</p>
+            <p className="text-slate-400">
+              Real feedback from real customers across KPK
+            </p>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
@@ -303,7 +311,11 @@ export default async function HomePage() {
                 {/* Stars */}
                 <div className="flex gap-1">
                   {Array.from({ length: t.rating }).map((_, i) => (
-                    <Star key={i} size={16} className="text-yellow-400 fill-yellow-400" />
+                    <Star
+                      key={i}
+                      size={16}
+                      className="text-yellow-400 fill-yellow-400"
+                    />
                   ))}
                 </div>
                 <p className="text-slate-300 text-sm leading-relaxed italic">
@@ -352,7 +364,7 @@ export default async function HomePage() {
               delivered straight to your inbox.
             </p>
 
-            <form className="flex flex-col sm:flex-row gap-3 max-w-md mx-auto mb-8" >
+            <form className="flex flex-col sm:flex-row gap-3 max-w-md mx-auto mb-8">
               <input
                 type="email"
                 placeholder="Enter your email address"
@@ -380,7 +392,6 @@ export default async function HomePage() {
           </div>
         </div>
       </section>
-
     </main>
   );
 }

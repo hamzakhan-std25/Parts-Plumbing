@@ -27,7 +27,13 @@ const CATEGORIES = [
     description:
       "Complete range of PPR, PVC, CPVC and GI pipes for residential, commercial and industrial plumbing systems.",
     productCount: 48,
-    subcategories: ["PPR Pipes", "PVC Pipes", "CPVC Pipes", "GI Pipes", "HDPE Pipes"],
+    subcategories: [
+      "PPR Pipes",
+      "PVC Pipes",
+      "CPVC Pipes",
+      "GI Pipes",
+      "HDPE Pipes",
+    ],
   },
   {
     name: "Fittings",
@@ -40,7 +46,14 @@ const CATEGORIES = [
     description:
       "Elbows, tees, reducers, couplings and unions in PPR, PVC and brass for leak-proof connections.",
     productCount: 72,
-    subcategories: ["Elbows", "Tees", "Couplings", "Reducers", "End Caps", "Unions"],
+    subcategories: [
+      "Elbows",
+      "Tees",
+      "Couplings",
+      "Reducers",
+      "End Caps",
+      "Unions",
+    ],
   },
   {
     name: "Valves",
@@ -53,7 +66,13 @@ const CATEGORIES = [
     description:
       "Ball valves, gate valves, check valves and pressure-reducing valves for precise flow control.",
     productCount: 35,
-    subcategories: ["Ball Valves", "Gate Valves", "Check Valves", "PRV", "Float Valves"],
+    subcategories: [
+      "Ball Valves",
+      "Gate Valves",
+      "Check Valves",
+      "PRV",
+      "Float Valves",
+    ],
   },
   {
     name: "Fixtures",
@@ -66,7 +85,13 @@ const CATEGORIES = [
     description:
       "Taps, mixers, showers, basins and sanitaryware from top brands for modern bathrooms and kitchens.",
     productCount: 60,
-    subcategories: ["Taps & Mixers", "Showers", "Basins", "Toilets", "Bathtubs"],
+    subcategories: [
+      "Taps & Mixers",
+      "Showers",
+      "Basins",
+      "Toilets",
+      "Bathtubs",
+    ],
   },
   {
     name: "Water Tanks",
@@ -92,7 +117,12 @@ const CATEGORIES = [
     description:
       "Electric and gas water heaters, geysers and solar water heating systems for every budget.",
     productCount: 18,
-    subcategories: ["Electric Geysers", "Gas Geysers", "Solar Heaters", "Instant Heaters"],
+    subcategories: [
+      "Electric Geysers",
+      "Gas Geysers",
+      "Solar Heaters",
+      "Instant Heaters",
+    ],
   },
   {
     name: "Pumps",
@@ -118,7 +148,12 @@ const CATEGORIES = [
     description:
       "Sediment filters, RO systems and UV purifiers to ensure clean, safe drinking water.",
     productCount: 22,
-    subcategories: ["Sediment Filters", "RO Systems", "UV Purifiers", "Filter Cartridges"],
+    subcategories: [
+      "Sediment Filters",
+      "RO Systems",
+      "UV Purifiers",
+      "Filter Cartridges",
+    ],
   },
 ];
 
@@ -139,7 +174,10 @@ export default function CategoriesPage() {
           <nav className="text-sm text-slate-400 mb-8">
             <ol className="flex items-center gap-2">
               <li>
-                <Link href="/home" className="hover:text-white transition-colors">
+                <Link
+                  href="/home"
+                  className="hover:text-white transition-colors"
+                >
                   Home
                 </Link>
               </li>
@@ -154,7 +192,9 @@ export default function CategoriesPage() {
                 <div className="w-10 h-10 bg-blue-600/20 rounded-xl flex items-center justify-center">
                   <LayoutGrid size={20} className="text-blue-400" />
                 </div>
-                <span className="text-blue-400 font-medium text-sm">All Categories</span>
+                <span className="text-blue-400 font-medium text-sm">
+                  All Categories
+                </span>
               </div>
               <h1 className="text-4xl sm:text-5xl font-extrabold mb-3">
                 Shop by Category
@@ -165,7 +205,9 @@ export default function CategoriesPage() {
               </p>
             </div>
             <div className="flex-shrink-0 bg-slate-800 border border-slate-700 rounded-2xl px-6 py-4 text-center">
-              <p className="text-3xl font-extrabold text-white">{totalProducts}+</p>
+              <p className="text-3xl font-extrabold text-white">
+                {totalProducts}+
+              </p>
               <p className="text-slate-400 text-sm mt-1">Products Available</p>
             </div>
           </div>
@@ -185,7 +227,9 @@ export default function CategoriesPage() {
                 >
                   {/* Icon + Count */}
                   <div className="flex items-start justify-between mb-5">
-                    <div className={`w-14 h-14 ${cat.iconBg} rounded-2xl flex items-center justify-center`}>
+                    <div
+                      className={`w-14 h-14 ${cat.iconBg} rounded-2xl flex items-center justify-center`}
+                    >
                       <Icon size={28} className={cat.iconColor} />
                     </div>
                     <span className="text-xs font-semibold text-slate-400 bg-slate-800/60 border border-slate-700 px-2.5 py-1 rounded-full">
@@ -233,7 +277,9 @@ export default function CategoriesPage() {
       {/* ── BOTTOM CTA ──────────────────────────────────────────────────── */}
       <section className="py-16 bg-slate-800/50">
         <div className="container mx-auto px-4 text-center">
-          <h2 className="text-2xl font-bold mb-3">Can't find what you're looking for?</h2>
+          <h2 className="text-2xl font-bold mb-3">
+            Can't find what you're looking for?
+          </h2>
           <p className="text-slate-400 mb-8 max-w-lg mx-auto">
             Our team can source any plumbing product for you. Get in touch and
             we'll help you find exactly what you need.
@@ -256,7 +302,6 @@ export default function CategoriesPage() {
           </div>
         </div>
       </section>
-
     </main>
   );
 }

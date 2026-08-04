@@ -1,4 +1,4 @@
-'use client';
+"use client";
 
 import Link from "next/link";
 
@@ -6,9 +6,12 @@ export default function Error({ error, reset }) {
   return (
     <main className="min-h-[60vh] flex items-center justify-center px-4 py-10">
       <div className="w-full max-w-lg rounded-2xl border border-red-400/30 bg-slate-900/80 p-8 text-center shadow-lg">
-        <h1 className="text-2xl font-bold text-white">Something went wrong while loading the shop</h1>
+        <h1 className="text-2xl font-bold text-white">
+          Something went wrong while loading the shop
+        </h1>
         <p className="mt-3 text-slate-300">
-          Please try again. If the issue continues, our team can help you from the contact page.
+          Please try again. If the issue continues, our team can help you from
+          the contact page.
         </p>
 
         <div className="mt-6 flex flex-wrap items-center justify-center gap-3">

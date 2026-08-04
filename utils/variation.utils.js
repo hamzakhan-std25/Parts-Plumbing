@@ -49,10 +49,7 @@
 //   });
 // }
 
-
-
 // ------------------------------------
-
 
 export function extractAttributes(variations) {
   const attributes = {};
@@ -77,13 +74,12 @@ export function extractAttributes(variations) {
 }
 
 export function findMatchingVariant(variations, selected) {
-
   // console.log("DEBUG : variations :", variations, " seletced : ", selected)
-  
+
   return variations.find((variation) =>
     variation.attributes.nodes.every((attr) => {
       const key = attr.name.replace("pa_", "");
       return selected[key] === attr.value;
-    })
+    }),
   );
 }

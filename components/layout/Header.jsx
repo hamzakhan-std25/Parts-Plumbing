@@ -2,14 +2,13 @@
 
 import { useState, useEffect, useRef } from "react";
 
-import SearchOverlay from '@/components/search/SearchOverlay';
+import SearchOverlay from "@/components/search/SearchOverlay";
 import Link from "next/link";
 import Image from "next/image";
 import { Menu, X, Phone, Search } from "lucide-react";
 import { useDebouncedClick } from "@/hooks/useDebouncedClick";
 
 export default function Header() {
-
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isVisible, setIsVisible] = useState(true);
@@ -135,8 +134,9 @@ export default function Header() {
 
       {/* Mobile Drawer Overlay */}
       <div
-        className={`fixed inset-0 z-50 bg-black/50 transition-opacity duration-300 ${isMenuOpen ? "opacity-100 visible" : "opacity-0 invisible"
-          }`}
+        className={`fixed inset-0 z-50 bg-black/50 transition-opacity duration-300 ${
+          isMenuOpen ? "opacity-100 visible" : "opacity-0 invisible"
+        }`}
         onClick={debouncedCloseMenu}
       />
 
@@ -174,11 +174,12 @@ export default function Header() {
           </nav>
 
           <div className="mt-auto pt-6 border-t">
-            <p className="text-xs text-gray-400">© {new Date().getFullYear()} Hassan Sanitory Store</p>
+            <p className="text-xs text-gray-400">
+              © {new Date().getFullYear()} Hassan Sanitory Store
+            </p>
           </div>
         </div>
       </aside>
-
 
       <SearchOverlay isOpen={isSearchOpen} onClose={debouncedCloseSearch} />
     </>

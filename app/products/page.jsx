@@ -1,6 +1,6 @@
 // app/products/page.jsx
-import { Suspense } from 'react';
-import ProductsPageContentWrapper from '@/components/product/ProductsPageContentWrapper';
+import { Suspense } from "react";
+import ProductsPageContentWrapper from "@/components/product/ProductsPageContentWrapper";
 
 export default function ProductsPage() {
   return (

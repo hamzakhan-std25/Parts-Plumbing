@@ -1,16 +1,16 @@
-import { NextResponse } from 'next/server';
-import axios from 'axios';
-import { logChatMetric } from '@/utils/logger';
+import { NextResponse } from "next/server";
+import axios from "axios";
+import { logChatMetric } from "@/utils/logger";
 
-const NEXT_PUBLIC_GEN_AI_URL = process.env.NEXT_PUBLIC_GEN_AI_URL
-const NEXT_PUBLIC_GEN_AI_API_KEY = process.env.NEXT_PUBLIC_GEN_AI_API_KEY
-const EMBEDDING_MODEL = process.env.EMBEDDING_MODEL
-const EMBEDDING_MODEL_API_KEY = process.env.EMBEDDING_MODEL_API_KEY
+const NEXT_PUBLIC_GEN_AI_URL = process.env.NEXT_PUBLIC_GEN_AI_URL;
+const NEXT_PUBLIC_GEN_AI_API_KEY = process.env.NEXT_PUBLIC_GEN_AI_API_KEY;
+const EMBEDDING_MODEL = process.env.EMBEDDING_MODEL;
+const EMBEDDING_MODEL_API_KEY = process.env.EMBEDDING_MODEL_API_KEY;
 const EMBEDDING_DIMENSION = 768; // Ensure this matches your model's output
-const PINECONE_HOST = process.env.PINECONE_HOST
+const PINECONE_HOST = process.env.PINECONE_HOST;
 const PINECONE_API_KEY = process.env.PINECONE_API_KEY;
 
-function shouldOfferSupport(content = '') {
+function shouldOfferSupport(content = "") {
   const text = String(content).toLowerCase();
   const unknownSignals = [
     "i don't know",
@@ -27,7 +27,6 @@ function shouldOfferSupport(content = '') {
   return unknownSignals.some((signal) => text.includes(signal));
 }
 
-
 async function getEmbedding(text) {
   const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-embedding-001:embedContent?key=${EMBEDDING_MODEL_API_KEY}`;
 
@@ -35,13 +34,11 @@ async function getEmbedding(text) {
     model: EMBEDDING_MODEL,
     content: { parts: [{ text }] },
     // This line is the fix!
-    outputDimensionality: EMBEDDING_DIMENSION
+    outputDimensionality: EMBEDDING_DIMENSION,
   });
 
   return res.data.embedding.values;
 }
-
-
 
 export async function POST(req) {
   const requestStartTime = Date.now();
@@ -60,15 +57,19 @@ export async function POST(req) {
     console.time("Pinecone API Call");
 
     // 2. QUERY Pinecone via REST API (Bypassing SDK issues)
-    const pineconeRes = await axios.post(`${PINECONE_HOST}/query`, {
-      vector: queryVector,
-      topK: 5,
-      includeMetadata: true,
-      select: ["text", "source"]
-    }, {
-      headers: { 'Api-Key': PINECONE_API_KEY },
-      httpsAgent: httpsAgent
-    });
+    const pineconeRes = await axios.post(
+      `${PINECONE_HOST}/query`,
+      {
+        vector: queryVector,
+        topK: 5,
+        includeMetadata: true,
+        select: ["text", "source"],
+      },
+      {
+        headers: { "Api-Key": PINECONE_API_KEY },
+        httpsAgent: httpsAgent,
+      },
+    );
 
     console.timeEnd("Pinecone API Call");
 
@@ -76,9 +77,11 @@ export async function POST(req) {
     // Only keep matches with a score > 0.5
     console.time("JS Filtering & Mapping");
 
-    const relevantMatches = pineconeRes.data.matches.filter(match => match.score > 0.4);
+    const relevantMatches = pineconeRes.data.matches.filter(
+      (match) => match.score > 0.4,
+    );
     // Format retrievedDocs for storage
-    const retrievedDocs = relevantMatches.map(doc => ({
+    const retrievedDocs = relevantMatches.map((doc) => ({
       id: doc.id,
       score: doc.score,
       text: doc.metadata.text,
@@ -94,15 +97,17 @@ export async function POST(req) {
     console.log("Retrieved documents:", retrievedDocs.length);
     // console.log("Relevant documents:", retrievedDocs);
 
-
-    const retrievedContext = relevantMatches.length > 0
-      ? relevantMatches.map(m => {
-        // We combine the text and the URL into a single "fact" for the AI
-        const text = m.metadata.text;
-        const url = m.metadata.url || "";
-        return `CONTENT: ${text}\nSOURCE URL: ${url}`;
-      }).join("\n\n---\n\n")
-      : "No relevant information found in the knowledge base.";
+    const retrievedContext =
+      relevantMatches.length > 0
+        ? relevantMatches
+            .map((m) => {
+              // We combine the text and the URL into a single "fact" for the AI
+              const text = m.metadata.text;
+              const url = m.metadata.url || "";
+              return `CONTENT: ${text}\nSOURCE URL: ${url}`;
+            })
+            .join("\n\n---\n\n")
+        : "No relevant information found in the knowledge base.";
 
     // 1. Define your Static Context (or fetch from WordPress here)
     const systemPrompt = `You are the Parts Plumbing Support Bot.
@@ -111,12 +116,11 @@ export async function POST(req) {
                     2. If the answer is not in the KNOWLEDGE, say you don't know. Do not try to fabricate an answer. If you're unsure, suggest the user contact support on whatsapp.
                     3. Be polite and concise.`;
 
-
     // 2. Build the messages array (System + History + New Question)
     const messages = [
       { role: "system", content: systemPrompt },
       ...history, // Previous messages from the UI
-      { role: "user", content: userQuestion }
+      { role: "user", content: userQuestion },
     ];
 
     // 3. Call Groq
@@ -124,7 +128,7 @@ export async function POST(req) {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        "Authorization": `Bearer ${NEXT_PUBLIC_GEN_AI_API_KEY}`, // Keep key in .env
+        Authorization: `Bearer ${NEXT_PUBLIC_GEN_AI_API_KEY}`, // Keep key in .env
       },
       body: JSON.stringify({
         model: "llama-3.3-70b-versatile", // Use a valid Groq model name
@@ -139,11 +143,14 @@ export async function POST(req) {
     // console.log("AI response :", data);
     // console.log("AI response object: :", data?.choices?.[0]?.message);
 
-    const assistantMessage = data?.choices?.[0]?.message || { role: 'assistant', content: '' };
-    const answer = assistantMessage?.content || '';
+    const assistantMessage = data?.choices?.[0]?.message || {
+      role: "assistant",
+      content: "",
+    };
+    const answer = assistantMessage?.content || "";
     const responseTimeMs = Date.now() - requestStartTime;
     const totalTokens = data?.usage?.total_tokens ?? null;
-    const model = data?.model || 'unknown';
+    const model = data?.model || "unknown";
     const costUsd = (totalTokens / 1000) * 0.0001; // Example: $0.0001 per 1K tokens (adjust to Groq's actual pricing)
 
     const metricResult = await logChatMetric(
@@ -154,13 +161,13 @@ export async function POST(req) {
       responseTimeMs,
       totalTokens,
       costUsd,
-      model
+      model,
     );
 
     if (!metricResult.success) {
-      console.warn('Metric logging failed:', metricResult.error);
+      console.warn("Metric logging failed:", metricResult.error);
     } else {
-      console.log('Metric logged successfully!');
+      console.log("Metric logged successfully!");
     }
 
     const needsSupport = shouldOfferSupport(answer);
@@ -175,7 +182,6 @@ export async function POST(req) {
         model,
       },
     });
-
   } catch (error) {
     return NextResponse.json({ error: "Failed to fetch" }, { status: 500 });
   }

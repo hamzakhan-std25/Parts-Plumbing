@@ -1,7 +1,10 @@
 import client from "@/lib/graphql";
 import { fetchGraphQL } from "@/lib/graphql";
-import { GET_PRODUCTS, GET_FILTERED_PRODUCTS, GET_PRODUCT_BY_SLUG } from "@/lib/queries";
-
+import {
+  GET_PRODUCTS,
+  GET_FILTERED_PRODUCTS,
+  GET_PRODUCT_BY_SLUG,
+} from "@/lib/queries";
 
 export async function getProductBySlug(slug) {
   // console.log("DEBUG: Sending slug to WP ->", slug);
@@ -22,21 +25,19 @@ export async function getProducts(first, after = null) {
   return data?.products || { nodes: [] }; // ← returns products object
 }
 
-
-
 export async function getFilteredProducts({
   categoryIn = [],
   brandIn = [],
   minPrice,
   maxPrice,
-  search,  
-  }) {
+  search,
+}) {
   const data = await fetchGraphQL(GET_FILTERED_PRODUCTS, {
     categoryIn,
     brandIn,
     minPrice,
     maxPrice,
-    search
+    search,
   });
   // console.log("filters :", { categoryIn, brandIn, minPrice, maxPrice, search })
 

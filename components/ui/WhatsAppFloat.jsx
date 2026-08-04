@@ -11,7 +11,7 @@ export default function WhatsAppFloat() {
       aria-label="Chat on WhatsApp"
     >
       <MessageCircle size={28} />
-      
+
       {/* Optional: Tooltip that appears on hover */}
       <span className="absolute right-16 bg-white text-gray-800 text-sm px-3 py-1 rounded-lg shadow-md opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none">
         Need help? Chat with us!

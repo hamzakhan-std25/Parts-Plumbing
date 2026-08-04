@@ -1,4 +1,3 @@
-
 "use client";
 
 import { useState, useEffect, useMemo } from "react";
@@ -15,11 +14,10 @@ export default function VariationSelector({ variations, productName }) {
   const [currentVariation, setCurrentVariation] = useState(null);
 
   // ✅ Use useMemo to keep the reference stable
-  const attributeGroups = useMemo(() =>
-    extractAttributeGroups(variations),
-    [variations]
+  const attributeGroups = useMemo(
+    () => extractAttributeGroups(variations),
+    [variations],
   );
-
 
   // ✅ Simplified, stable initialization
   useEffect(() => {
@@ -29,7 +27,7 @@ export default function VariationSelector({ variations, productName }) {
 
       attributeGroups.forEach((group) => {
         const attr = firstVariation.attributes.nodes.find(
-          (a) => a.name.replace(/^pa_/, "") === group.name
+          (a) => a.name.replace(/^pa_/, "") === group.name,
         );
         if (attr) {
           initial[group.name] = attr.value;
@@ -37,7 +35,7 @@ export default function VariationSelector({ variations, productName }) {
       });
 
       setSelectedAttributes(initial);
-      // No need to set currentVariation here, 
+      // No need to set currentVariation here,
       // the second useEffect below handles it based on selectedAttributes
     }
   }, [variations, attributeGroups]);
@@ -47,7 +45,6 @@ export default function VariationSelector({ variations, productName }) {
     const match = findMatchingVariation(variations, selectedAttributes);
     setCurrentVariation(match);
   }, [selectedAttributes, variations]);
-
 
   const handleAttributeChange = (attributeName, value) => {
     setSelectedAttributes((prev) => ({ ...prev, [attributeName]: value }));
@@ -60,7 +57,7 @@ export default function VariationSelector({ variations, productName }) {
   const whatsappLink = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(
     `I'm interested in ${productName} - ${Object.entries(selectedAttributes)
       .map(([k, v]) => `${formatAttributeName(k)}: ${v}`)
-      .join(", ")}`
+      .join(", ")}`,
   )}`;
 
   if (!variations.length || attributeGroups.length === 0) return null;
@@ -83,15 +80,14 @@ export default function VariationSelector({ variations, productName }) {
                     key={option}
                     onClick={() => debouncedAttributeChange(group.name, option)}
                     className={`px-4 py-2 rounded-full border text-sm flex items-center gap-1 transition
-                      ${isSelected
-                        ? "bg-blue-600 text-white border-blue-600"
-                        : "bg-white text-gray-700 border-gray-300 hover:border-gray-400"
+                      ${
+                        isSelected
+                          ? "bg-blue-600 text-white border-blue-600"
+                          : "bg-white text-gray-700 border-gray-300 hover:border-gray-400"
                       }`}
                   >
                     <span>{option}</span>
-                    <span className="text-xs">
-                      {isSelected ? "⬇️" : "⬆️"}
-                    </span>
+                    <span className="text-xs">{isSelected ? "⬇️" : "⬆️"}</span>
                   </button>
                 );
               })}
@@ -113,8 +109,9 @@ export default function VariationSelector({ variations, productName }) {
               href={currentVariation ? whatsappLink : "#"}
               target="_blank"
               rel="noopener noreferrer"
-              className={`px-6 py-3 bg-green-600 text-white rounded-lg font-medium hover:bg-green-700 transition ${!currentVariation && "opacity-50 pointer-events-none"
-                }`}
+              className={`px-6 py-3 bg-green-600 text-white rounded-lg font-medium hover:bg-green-700 transition ${
+                !currentVariation && "opacity-50 pointer-events-none"
+              }`}
             >
               Ask Price on WhatsApp
             </a>

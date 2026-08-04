@@ -13,7 +13,6 @@ export default function VariationOptions({
 
   return (
     <div className="mt-6 space-y-4">
-
       {Object.entries(attributes).map(([key, values]) => (
         <div key={key}>
           <h3 className="text-sm text-gray-400 capitalize mb-2">

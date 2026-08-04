@@ -7,7 +7,7 @@ import { useDebouncedClick } from "@/hooks/useDebouncedClick";
 export default function FilterSidebar() {
   const router = useRouter();
   const [isOpen, setIsOpen] = useState(false);
-  
+
   // Filter states
   const [selectedCategories, setSelectedCategories] = useState([]);
   const [selectedBrands, setSelectedBrands] = useState([]);
@@ -20,19 +20,19 @@ export default function FilterSidebar() {
     setSelectedCategories((prev) =>
       prev.includes(category)
         ? prev.filter((c) => c !== category)
-        : [...prev, category]
+        : [...prev, category],
     );
   };
 
   const handleBrandChange = (brand) => {
     setSelectedBrands((prev) =>
-      prev.includes(brand) ? prev.filter((b) => b !== brand) : [...prev, brand]
+      prev.includes(brand) ? prev.filter((b) => b !== brand) : [...prev, brand],
     );
   };
 
   // Build query string and navigate
   const applyFilters = () => {
-    setIsOpen(false)
+    setIsOpen(false);
     const params = new URLSearchParams();
 
     // Add categories (multiple)
@@ -69,19 +69,21 @@ export default function FilterSidebar() {
       <div className="mb-6">
         <h4 className="font-medium text-gray-700 mb-2">Category</h4>
         <ul className="space-y-1">
-          {["Pipes", "Fittings", "Valves", "Sanitary", "Accessories"].map((cat) => (
-            <li key={cat}>
-              <label className="flex items-center gap-2 text-sm text-gray-600">
-                <input
-                  type="checkbox"
-                  className="rounded"
-                  checked={selectedCategories.includes(cat)}
-                  onChange={() => handleCategoryChange(cat)}
-                />
-                {cat}
-              </label>
-            </li>
-          ))}
+          {["Pipes", "Fittings", "Valves", "Sanitary", "Accessories"].map(
+            (cat) => (
+              <li key={cat}>
+                <label className="flex items-center gap-2 text-sm text-gray-600">
+                  <input
+                    type="checkbox"
+                    className="rounded"
+                    checked={selectedCategories.includes(cat)}
+                    onChange={() => handleCategoryChange(cat)}
+                  />
+                  {cat}
+                </label>
+              </li>
+            ),
+          )}
         </ul>
       </div>
 
@@ -156,7 +158,12 @@ export default function FilterSidebar() {
             stroke="currentColor"
             viewBox="0 0 24 24"
           >
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth={2}
+              d="M19 9l-7 7-7-7"
+            />
           </svg>
         </button>
 

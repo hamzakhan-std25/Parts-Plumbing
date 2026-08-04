@@ -6,7 +6,13 @@
     "dev": "next dev --turbopack",
     "build": "next build --turbopack",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "lint:fix": "next lint --fix",
+    "format:check": "prettier --check .",
+    "format:fix": "prettier --write .",
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run",
+    "validate": "npm run format:check && npm run lint && npm run test && npm run build"
   },
   "dependencies": {
     "@pinecone-database/pinecone": "^7.1.0",
@@ -30,6 +36,7 @@
     "@tailwindcss/postcss": "^4",
     "eslint": "^9",
     "eslint-config-next": "15.5.3",
+    "prettier": "^3.9.6",
     "tailwindcss": "^4"
   }
 }

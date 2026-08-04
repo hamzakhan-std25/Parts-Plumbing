@@ -19,7 +19,6 @@ import {
 // Replace with your actual API key
 const apiKey = "YOUR_GOOGLE_MAPS_API_KEY";
 
-
 // ─── Static Data ─────────────────────────────────────────────────────────────
 
 const CONTACT_INFO = [
@@ -209,7 +208,9 @@ function ContactForm() {
             onChange={handleChange}
             className="w-full bg-slate-800 border border-slate-700 focus:border-blue-500 rounded-xl px-4 py-3 text-white outline-none transition-colors text-sm"
           >
-            <option value="" disabled>Select a subject</option>
+            <option value="" disabled>
+              Select a subject
+            </option>
             <option value="product-inquiry">Product Inquiry</option>
             <option value="bulk-order">Bulk Order / Quote</option>
             <option value="delivery">Delivery Information</option>
@@ -298,7 +299,10 @@ export default function ContactPage() {
           <nav className="text-sm text-slate-400 mb-8">
             <ol className="flex items-center gap-2">
               <li>
-                <Link href="/home" className="hover:text-white transition-colors">
+                <Link
+                  href="/home"
+                  className="hover:text-white transition-colors"
+                >
                   Home
                 </Link>
               </li>
@@ -308,7 +312,9 @@ export default function ContactPage() {
           </nav>
 
           <div className="max-w-2xl">
-            <h1 className="text-4xl sm:text-5xl font-extrabold mb-4">Get in Touch</h1>
+            <h1 className="text-4xl sm:text-5xl font-extrabold mb-4">
+              Get in Touch
+            </h1>
             <p className="text-slate-400 text-lg leading-relaxed">
               We're here to help with your plumbing needs — from product
               selection to technical advice. Reach out and our team will respond
@@ -324,17 +330,16 @@ export default function ContactPage() {
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-4">
             {CONTACT_INFO.map((item) => {
               const Icon = item.icon;
-              const Wrapper = item.href
+              const Wrapper = item.href ? (item.external ? "a" : "a") : "div";
+              const extraProps = item.href
                 ? item.external
-                  ? "a"
-                  : "a"
-                : "div";
-              const extraProps =
-                item.href
-                  ? item.external
-                    ? { href: item.href, target: "_blank", rel: "noopener noreferrer" }
-                    : { href: item.href }
-                  : {};
+                  ? {
+                      href: item.href,
+                      target: "_blank",
+                      rel: "noopener noreferrer",
+                    }
+                  : { href: item.href }
+                : {};
 
               return (
                 <Wrapper
@@ -342,14 +347,18 @@ export default function ContactPage() {
                   {...extraProps}
                   className={`group bg-slate-800 border ${item.border} rounded-2xl p-5 flex flex-col gap-3 ${item.href ? "hover:border-opacity-60 hover:-translate-y-0.5 transition-all cursor-pointer" : ""}`}
                 >
-                  <div className={`w-10 h-10 ${item.bg} rounded-xl flex items-center justify-center`}>
+                  <div
+                    className={`w-10 h-10 ${item.bg} rounded-xl flex items-center justify-center`}
+                  >
                     <Icon size={20} className={item.color} />
                   </div>
                   <div>
                     <p className="text-xs text-slate-500 font-medium uppercase tracking-wider mb-1">
                       {item.label}
                     </p>
-                    <p className={`font-semibold text-sm ${item.href ? item.color : "text-white"}`}>
+                    <p
+                      className={`font-semibold text-sm ${item.href ? item.color : "text-white"}`}
+                    >
                       {item.value}
                     </p>
                     <p className="text-slate-500 text-xs mt-0.5">{item.sub}</p>
@@ -389,8 +398,7 @@ export default function ContactPage() {
                   referrerPolicy="no-referrer-when-downgrade"
                 />
                 {/* <MapComponent apiKey={apiKey} />   // use when you have a real API key and want to show a custom map with marker
-                     */}
-                     
+                 */}
               </div>
 
               {/* WhatsApp Quick CTA */}
@@ -422,7 +430,9 @@ export default function ContactPage() {
       <section className="py-20">
         <div className="container mx-auto px-4 max-w-3xl">
           <div className="text-center mb-12">
-            <h2 className="text-3xl font-bold mb-3">Frequently Asked Questions</h2>
+            <h2 className="text-3xl font-bold mb-3">
+              Frequently Asked Questions
+            </h2>
             <p className="text-slate-400">
               Quick answers to common questions — can't find yours? Just ask us!
             </p>
@@ -447,7 +457,6 @@ export default function ContactPage() {
           </div>
         </div>
       </section>
-
     </main>
   );
 }

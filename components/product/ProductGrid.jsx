@@ -1,4 +1,4 @@
- "use client"
+"use client";
 
 import ProductCard from "./ProductCard";
 
@@ -9,7 +9,7 @@ export default function ProductGrid({ products }) {
   // On mobile, all cards stack.
 
   return (
-    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 auto-rows-fr">
+    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 ">
       {products.map((product, index) => {
         // Determine if this product should be featured (index % 5 === 0)
         const isFeatured = index % 5 === 0;
@@ -17,7 +17,7 @@ export default function ProductGrid({ products }) {
         return (
           <div
             key={product.id}
-            className={`${isFeatured ? 'sm:col-span-2 lg:col-span-2' : ''}`}
+            className={`${isFeatured ? "sm:col-span-2 lg:col-span-2" : ""}`}
           >
             <ProductCard product={product} isFeatured={isFeatured} />
           </div>

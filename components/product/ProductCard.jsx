@@ -1,4 +1,4 @@
-"use Client"
+"use Client";
 
 import Link from "next/link";
 
@@ -8,9 +8,14 @@ export default function ProductCard({ product, isFeatured = false }) {
 
   return (
     <Link href={`/products/${product.slug}`} className="group block m-2">
-      <div className={`bg-gray-400 rounded-xl shadow-sm hover:shadow-md transition-all duration-300 h-full flex flex-col  overflow-hidden ${isFeatured ? 'featured-card' : ''}`}>
+      <div
+        className={`bg-gray-400 rounded-xl shadow-sm hover:shadow-md transition-all duration-300 h-full flex flex-col  overflow-hidden ${isFeatured ? "featured-card" : ""}`}
+      >
         {/* Image container with aspect ratio */}
-        <div className="relative overflow-hidden bg-gray-50" style={{ aspectRatio: '4/3' }}>
+        <div
+          className="relative overflow-hidden bg-gray-50"
+          style={{ aspectRatio: "4/3" }}
+        >
           <img
             src={imageUrl}
             alt={product.name}

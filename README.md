@@ -43,26 +43,26 @@ A modern, high‑performance e‑commerce platform for plumbing shops. Built wit
 
 ## ✨ Features
 
-| Feature | Description |
-|---------|-------------|
-| **Product Catalog** | Bento-style grid layout with product cards showing images, prices, and categories |
-| **Search Overlay** | Full-screen overlay with live search suggestions (debounced) |
-| **Filtering System** | Sidebar with category, brand, and price filters – updates URL and results client-side |
-| **Product Detail Page** | Variation selector, WhatsApp pre-filled messages, read-more toggle |
-| **AI Chat Widget** | Floating button with chat panel (full-screen on mobile) – placeholder AI response, ready for OpenAI integration |
-| **Responsive Design** | Mobile-first approach with smooth animations |
-| **Headless CMS** | WordPress backend with WooCommerce, exposed via WPGraphQL |
-| **Performance** | Client-side caching (24h), debounced search, ISR for dynamic pages |
+| Feature                 | Description                                                                                                     |
+| ----------------------- | --------------------------------------------------------------------------------------------------------------- |
+| **Product Catalog**     | Bento-style grid layout with product cards showing images, prices, and categories                               |
+| **Search Overlay**      | Full-screen overlay with live search suggestions (debounced)                                                    |
+| **Filtering System**    | Sidebar with category, brand, and price filters – updates URL and results client-side                           |
+| **Product Detail Page** | Variation selector, WhatsApp pre-filled messages, read-more toggle                                              |
+| **AI Chat Widget**      | Floating button with chat panel (full-screen on mobile) – placeholder AI response, ready for OpenAI integration |
+| **Responsive Design**   | Mobile-first approach with smooth animations                                                                    |
+| **Headless CMS**        | WordPress backend with WooCommerce, exposed via WPGraphQL                                                       |
+| **Performance**         | Client-side caching (24h), debounced search, ISR for dynamic pages                                              |
 
 ---
 
 ## 🖼️ Screenshots
 
-| Home Page | Product Listing | Product Detail |
-|-----------|-----------------|----------------|
+| Home Page                                                   | Product Listing                                                       | Product Detail                                                      |
+| ----------------------------------------------------------- | --------------------------------------------------------------------- | ------------------------------------------------------------------- |
 | ![Home](https://via.placeholder.com/300x200?text=Home+Page) | ![Products](https://via.placeholder.com/300x200?text=Product+Listing) | ![Product](https://via.placeholder.com/300x200?text=Product+Detail) |
 
-> *Replace placeholder images with actual screenshots of your project.*
+> _Replace placeholder images with actual screenshots of your project._
 
 ---
 
@@ -133,11 +133,11 @@ A modern, high‑performance e‑commerce platform for plumbing shops. Built wit
 
 ### Environment Variables
 
-| Variable | Description | Required |
-|----------|-------------|----------|
-| `NEXT_PUBLIC_WORDPRESS_GRAPHQL_ENDPOINT` | Your WordPress GraphQL endpoint | ✅ |
-| `NEXT_PUBLIC_WHATSAPP_NUMBER` | WhatsApp number for contact buttons (format: 923001234567) | ✅ |
-| `NEXT_PUBLIC_GOOGLE_MAPS_API_KEY` | Google Maps API key for contact page map | ❌ |
+| Variable                                 | Description                                                | Required |
+| ---------------------------------------- | ---------------------------------------------------------- | -------- |
+| `NEXT_PUBLIC_WORDPRESS_GRAPHQL_ENDPOINT` | Your WordPress GraphQL endpoint                            | ✅       |
+| `NEXT_PUBLIC_WHATSAPP_NUMBER`            | WhatsApp number for contact buttons (format: 923001234567) | ✅       |
+| `NEXT_PUBLIC_GOOGLE_MAPS_API_KEY`        | Google Maps API key for contact page map                   | ❌       |
 
 ### Adding Products
 
