@@ -30,6 +30,7 @@ function shouldOfferSupport(content = '') {
 async function getEmbedding(text) {
   const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-embedding-001:embedContent?key=${EMBEDDING_MODEL_API_KEY}`;
 
+
   const res = await axios.post(url, {
     model: EMBEDDING_MODEL,
     content: { parts: [{ text }] },
@@ -53,30 +54,22 @@ export async function POST(req) {
     // 1. EMBED the user's question (Match your seeding dimension!)
     const queryVector = await getEmbedding(userQuestion);
 
-    console.time('Total Query Time');
-    console.time('Pinecone API Call');
-
     // 2. QUERY Pinecone via REST API (Bypassing SDK issues)
     const pineconeRes = await axios.post(
       `${PINECONE_HOST}/query`,
       {
         vector: queryVector,
-        topK: 5,
+        topK: 3,
         includeMetadata: true,
         select: ['text', 'source'],
       },
       {
         headers: { 'Api-Key': PINECONE_API_KEY },
-        httpsAgent: httpsAgent,
       }
     );
-
-    console.timeEnd('Pinecone API Call');
-
+    
     // 2. FILTER and JOIN the results
     // Only keep matches with a score > 0.5
-    console.time('JS Filtering & Mapping');
-
     const relevantMatches = pineconeRes.data.matches.filter((match) => match.score > 0.4);
     // Format retrievedDocs for storage
     const retrievedDocs = relevantMatches.map((doc) => ({
@@ -85,10 +78,6 @@ export async function POST(req) {
       text: doc.metadata.text,
       source: doc.metadata.source || null,
     }));
-
-    console.timeEnd('JS Filtering & Mapping');
-
-    console.timeEnd('Total Query Time');
 
     // console.log("Relevant findings:", relevantMatches.length);
     // console.log("Relevant documents:", relevantMatches);

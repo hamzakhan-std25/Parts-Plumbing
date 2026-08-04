@@ -215,4 +215,4 @@ Distributed under the MIT License. See [LICENSE](LICENSE) for more information.
 
 ---
 
-<p align="center">Made with ❤️ for the plumbing community this is checking that main is protected or not</p>
+<p align="center">Made with ❤️ for the plumbing community</p>
