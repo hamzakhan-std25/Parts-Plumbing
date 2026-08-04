@@ -4,7 +4,7 @@ import { getProducts } from '@/services/product.service';
 import { useEffect, useState } from 'react';
 
 const CACHE_KEY = 'kpk_all_products';
-const CACHE_DURATION = 24 * 60 * 60 * 1000; // 24 hours
+const CACHE_DURATION = 60 * 60 * 1000; // 1 hour
 
 export function useAllProducts() {
   const [products, setProducts] = useState([]);

@@ -39,7 +39,7 @@ export default function ProductDetail({ product }) {
 
         {/* Image */}
         <img
-          src={product.image?.sourceUrl}
+          src={product.image?.sourceUrl || "/placeholder-product.png"}
           alt={product.name}
           className="w-full h-80 object-cover"
         />

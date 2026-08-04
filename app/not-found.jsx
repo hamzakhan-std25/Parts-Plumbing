@@ -50,7 +50,7 @@ export default function NotFound() {
           <p className="mt-8 text-sm text-gray-500">
             Still stuck?{' '}
             <a
-              href="https://wa.me/923001234567"
+              href="https://wa.me/923123456789"
               className="text-green-600 shadow-2xl hover:text-green-400 transition-colors"
               target="_blank"
               rel="noopener noreferrer"
@@ -60,7 +60,6 @@ export default function NotFound() {
           </p>
         </div>
       </Container>
-      {/* Optionally include your footer here */}
     </>
   );
 }

@@ -35,6 +35,45 @@ export default function AIChatButton() {
   const inputRef = useRef(null);
   const messagesEndRef = useRef(null);
   const supportFormTimeoutRef = useRef(null);
+  const feedbackDebounceTimersRef = useRef(new Map());
+  const lastSavedFeedbackRef = useRef(new Map());
+
+  const clearAllFeedbackDebounceTimers = () => {
+    feedbackDebounceTimersRef.current.forEach((timerId) => {
+      clearTimeout(timerId);
+    });
+    feedbackDebounceTimersRef.current.clear();
+  };
+
+  const queueFeedbackSave = (messageId, type) => {
+    const existingTimer = feedbackDebounceTimersRef.current.get(messageId);
+
+    if (existingTimer) {
+      clearTimeout(existingTimer);
+    }
+
+    const timerId = setTimeout(async () => {
+      feedbackDebounceTimersRef.current.delete(messageId);
+
+      if (lastSavedFeedbackRef.current.get(messageId) === type) {
+        return;
+      }
+
+      try {
+        await fetch(`/api/conversations/${conversationId}/messages/${messageId}/feedback`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ feedback: type }),
+        });
+
+        lastSavedFeedbackRef.current.set(messageId, type);
+      } catch (err) {
+        console.error("Feedback failed to save", err);
+      }
+    }, 600);
+
+    feedbackDebounceTimersRef.current.set(messageId, timerId);
+  };
 
   // Check mobile viewport
   useEffect(() => {
@@ -85,6 +124,8 @@ export default function AIChatButton() {
       clearTimeout(supportFormTimeoutRef.current);
       supportFormTimeoutRef.current = null;
     }
+    clearAllFeedbackDebounceTimers();
+    lastSavedFeedbackRef.current.clear();
     setMessages([]);
     setChatHistory([]);
     setLastSummary(null);
@@ -98,6 +139,12 @@ export default function AIChatButton() {
   const toggleChat = () => setIsOpen(!isOpen);
 
   const handleFeedback = async (messageId, type) => {
+
+    const currentMessage = messages.find((message) => message.id === messageId);
+
+    if (currentMessage?.feedback === type) {
+      return;
+    }
 
     // 1. Optimistically update local UI state
     setMessages((prev) =>
@@ -133,17 +180,8 @@ export default function AIChatButton() {
       feedback: type,
     });
 
-    // // 2. Sync with database
-    try {
-      await fetch(`/api/conversations/${conversationId}/messages/${messageId}/feedback`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ feedback: type }),
-      });
-    } catch (err) {
-      console.error("Feedback failed to save", err);
-      // Optionally: Rollback local state if API fails
-    }
+    // 2. Debounced sync with database to avoid duplicate rapid submissions.
+    queueFeedbackSave(messageId, type);
 
 
   };
@@ -153,6 +191,8 @@ export default function AIChatButton() {
       if (supportFormTimeoutRef.current) {
         clearTimeout(supportFormTimeoutRef.current);
       }
+
+      clearAllFeedbackDebounceTimers();
     };
   }, []);
 

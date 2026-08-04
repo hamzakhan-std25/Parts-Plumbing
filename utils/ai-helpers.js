@@ -2,10 +2,6 @@
 const NEXT_PUBLIC_GEN_AI_URL = process.env.NEXT_PUBLIC_GEN_AI_URL
 const NEXT_PUBLIC_GEN_AI_API_KEY = process.env.NEXT_PUBLIC_GEN_AI_API_KEY
 
-
-console.log("url :", NEXT_PUBLIC_GEN_AI_URL)
-console.log("key :", NEXT_PUBLIC_GEN_AI_API_KEY)
-
 //  helper function to summarize chat history if it exceeds a certain length, to keep the prompt concise for the AI. This is optional but can help with performance and relevance.
 export async function summarizeHistory(messages) {
     try {

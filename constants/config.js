@@ -1,11 +1,11 @@
 export const WORDPRESS_GRAPHQL_ENDPOINT =
   process.env.NEXT_PUBLIC_WORDPRESS_GRAPHQL_ENDPOINT ||
-  "https://dev-parts-plumbing.pantheonsite.io/graphql";
+  "https://test-parts-plumbing.pantheonsite.io/graphql";
 
-export const SITE_NAME = "Hassan Sanitory Store";
+export const SITE_NAME = "Parts Plumbing Store";
 
-// Replace with your actual WhatsApp number
+
 export const WHATSAPP_NUMBER =
-  process.env.NEXT_PUBLIC_WHATSAPP_NUMBER || "03359183182";
+  process.env.NEXT_PUBLIC_WHATSAPP_NUMBER || "03123456789";
 
 export const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000";

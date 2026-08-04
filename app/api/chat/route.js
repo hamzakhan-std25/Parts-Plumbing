@@ -48,24 +48,34 @@ export async function POST(req) {
 
   try {
     const { userQuestion, history = [], conversationId } = await req.json();
+
+    console.log("Conversation ID:", conversationId);
     console.log("User Question:", userQuestion);
-    console.log("Chat History:", "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InljeXduenZjemZ2bXhvemF1dXlsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzQ0MzIwODUsImV4cCI6MjA5MDAwODA4NX0.OKIpYbnqCH4zGH0iU0Om1PMWqDdEfGB2ewnzAiRNQdc".length); // Log last 5 messages for context
-    // console.log("Conversation ID:", conversationId);
+    console.log("Chat History:", history.length); // Log last 5 messages for context
 
     // 1. EMBED the user's question (Match your seeding dimension!)
     const queryVector = await getEmbedding(userQuestion);
+
+    console.time("Total Query Time");
+    console.time("Pinecone API Call");
 
     // 2. QUERY Pinecone via REST API (Bypassing SDK issues)
     const pineconeRes = await axios.post(`${PINECONE_HOST}/query`, {
       vector: queryVector,
       topK: 5,
-      includeMetadata: true
+      includeMetadata: true,
+      select: ["text", "source"]
     }, {
-      headers: { 'Api-Key': PINECONE_API_KEY }
+      headers: { 'Api-Key': PINECONE_API_KEY },
+      httpsAgent: httpsAgent
     });
+
+    console.timeEnd("Pinecone API Call");
 
     // 2. FILTER and JOIN the results
     // Only keep matches with a score > 0.5
+    console.time("JS Filtering & Mapping");
+
     const relevantMatches = pineconeRes.data.matches.filter(match => match.score > 0.4);
     // Format retrievedDocs for storage
     const retrievedDocs = relevantMatches.map(doc => ({
@@ -75,6 +85,9 @@ export async function POST(req) {
       source: doc.metadata.source || null,
     }));
 
+    console.timeEnd("JS Filtering & Mapping");
+
+    console.timeEnd("Total Query Time");
 
     // console.log("Relevant findings:", relevantMatches.length);
     // console.log("Relevant documents:", relevantMatches);
