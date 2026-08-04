@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { useDebouncedClick } from "@/hooks/useDebouncedClick";
+import { useDebouncedClick } from "../../hooks/useDebouncedClick";
 
 export default function Description({ htmlContent }) {
   const [isExpanded, setIsExpanded] = useState(false);
