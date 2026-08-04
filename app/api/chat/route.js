@@ -30,7 +30,6 @@ function shouldOfferSupport(content = '') {
 async function getEmbedding(text) {
   const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-embedding-001:embedContent?key=${EMBEDDING_MODEL_API_KEY}`;
 
-
   const res = await axios.post(url, {
     model: EMBEDDING_MODEL,
     content: { parts: [{ text }] },
@@ -67,7 +66,7 @@ export async function POST(req) {
         headers: { 'Api-Key': PINECONE_API_KEY },
       }
     );
-    
+
     // 2. FILTER and JOIN the results
     // Only keep matches with a score > 0.5
     const relevantMatches = pineconeRes.data.matches.filter((match) => match.score > 0.4);
