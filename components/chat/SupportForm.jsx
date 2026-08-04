@@ -1,12 +1,12 @@
-"use client";
+'use client';
 
-import { useState } from "react";
-import { motion } from "framer-motion";
+import { useState } from 'react';
+import { motion } from 'framer-motion';
 
 export default function SupportForm({ messageId, onClose }) {
-  const [name, setName] = useState("");
-  const [email, setEmail] = useState("");
-  const [query, setQuery] = useState("");
+  const [name, setName] = useState('');
+  const [email, setEmail] = useState('');
+  const [query, setQuery] = useState('');
   const [submitted, setSubmitted] = useState(false);
 
   const handleSubmit = (e) => {
@@ -31,15 +31,13 @@ export default function SupportForm({ messageId, onClose }) {
         initial={{ opacity: 0, y: 18, scale: 0.98 }}
         animate={{ opacity: 1, y: 0, scale: 1 }}
         exit={{ opacity: 0, y: 10 }}
-        transition={{ duration: 0.25, ease: "easeOut" }}
+        transition={{ duration: 0.25, ease: 'easeOut' }}
         onClick={(e) => e.stopPropagation()}
         className="w-full max-w-sm rounded-xl border border-blue-100 bg-white p-4 shadow-xl"
       >
         <div className="flex items-start justify-between gap-3">
           <div>
-            <h4 className="text-sm font-semibold text-gray-800">
-              Need more help?
-            </h4>
+            <h4 className="text-sm font-semibold text-gray-800">Need more help?</h4>
             <p className="mt-1 text-xs text-gray-500">
               Share your details and our support team will follow up.
             </p>
@@ -57,8 +55,7 @@ export default function SupportForm({ messageId, onClose }) {
         {submitted ? (
           <div className="mt-3 rounded-lg bg-green-50 px-3 py-2 text-xs text-green-700">
             {/* Thanks. Your request for message ID {messageId} has been captured. */}
-            Thanks. Your support request has been captured. Our team will follow
-            up soon.
+            Thanks. Your support request has been captured. Our team will follow up soon.
           </div>
         ) : (
           <form onSubmit={handleSubmit} className="mt-3 space-y-2">

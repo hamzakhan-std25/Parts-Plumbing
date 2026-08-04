@@ -1,13 +1,13 @@
 // components/search/SearchOverlay.jsx
-"use client";
+'use client';
 
-import { useEffect, useRef } from "react";
-import { createPortal } from "react-dom";
-import { motion, AnimatePresence } from "framer-motion";
-import { X, Search as SearchIcon, Loader2 } from "lucide-react";
-import Link from "next/link";
-import { useSearch } from "@/hooks/useSearch";
-import { useDebouncedClick } from "@/hooks/useDebouncedClick";
+import { useEffect, useRef } from 'react';
+import { createPortal } from 'react-dom';
+import { motion, AnimatePresence } from 'framer-motion';
+import { X, Search as SearchIcon, Loader2 } from 'lucide-react';
+import Link from 'next/link';
+import { useSearch } from '@/hooks/useSearch';
+import { useDebouncedClick } from '@/hooks/useDebouncedClick';
 
 export default function SearchOverlay({ isOpen, onClose }) {
   const overlayRef = useRef(null);
@@ -25,23 +25,23 @@ export default function SearchOverlay({ isOpen, onClose }) {
   // Handle escape key
   useEffect(() => {
     const handleKeyDown = (e) => {
-      if (e.key === "Escape") onClose();
+      if (e.key === 'Escape') onClose();
     };
     if (isOpen) {
-      document.addEventListener("keydown", handleKeyDown);
+      document.addEventListener('keydown', handleKeyDown);
     }
-    return () => document.removeEventListener("keydown", handleKeyDown);
+    return () => document.removeEventListener('keydown', handleKeyDown);
   }, [isOpen, onClose]);
 
   // Prevent body scroll when overlay is open
   useEffect(() => {
     if (isOpen) {
-      document.body.style.overflow = "hidden";
+      document.body.style.overflow = 'hidden';
     } else {
-      document.body.style.overflow = "";
+      document.body.style.overflow = '';
     }
     return () => {
-      document.body.style.overflow = "";
+      document.body.style.overflow = '';
     };
   }, [isOpen]);
 
@@ -62,19 +62,16 @@ export default function SearchOverlay({ isOpen, onClose }) {
 
           {/* Search Panel (slides from top) */}
           <motion.div
-            initial={{ y: "-100%" }}
+            initial={{ y: '-100%' }}
             animate={{ y: 0 }}
-            exit={{ y: "-100%" }}
-            transition={{ type: "spring", damping: 25, stiffness: 300 }}
+            exit={{ y: '-100%' }}
+            transition={{ type: 'spring', damping: 25, stiffness: 300 }}
             className="fixed top-0 left-0 right-0 bg-white shadow-xl z-50 rounded-b-2xl border-b"
             ref={overlayRef}
           >
             <div className="container mx-auto px-4 py-6">
               {/* Search Form */}
-              <form
-                onSubmit={(e) => submitSearch(e, onClose)}
-                className="relative"
-              >
+              <form onSubmit={(e) => submitSearch(e, onClose)} className="relative">
                 <input
                   ref={inputRef}
                   type="text"
@@ -124,6 +121,6 @@ export default function SearchOverlay({ isOpen, onClose }) {
         </>
       )}
     </AnimatePresence>,
-    document.body,
+    document.body
   );
 }

@@ -1,5 +1,5 @@
-import Link from "next/link";
-import Footer from "@/components/layout/Footer";
+import Link from 'next/link';
+import Footer from '@/components/layout/Footer';
 import {
   Pipette,
   Wrench,
@@ -11,149 +11,114 @@ import {
   Droplets,
   ChevronRight,
   LayoutGrid,
-} from "lucide-react";
+} from 'lucide-react';
 
 // ─── Static Category Data ────────────────────────────────────────────────────
 
 const CATEGORIES = [
   {
-    name: "Pipes",
-    slug: "pipes",
+    name: 'Pipes',
+    slug: 'pipes',
     icon: Pipette,
-    color: "from-blue-600/30 to-blue-800/10",
-    border: "border-blue-500/30",
-    iconColor: "text-blue-400",
-    iconBg: "bg-blue-500/15",
+    color: 'from-blue-600/30 to-blue-800/10',
+    border: 'border-blue-500/30',
+    iconColor: 'text-blue-400',
+    iconBg: 'bg-blue-500/15',
     description:
-      "Complete range of PPR, PVC, CPVC and GI pipes for residential, commercial and industrial plumbing systems.",
+      'Complete range of PPR, PVC, CPVC and GI pipes for residential, commercial and industrial plumbing systems.',
     productCount: 48,
-    subcategories: [
-      "PPR Pipes",
-      "PVC Pipes",
-      "CPVC Pipes",
-      "GI Pipes",
-      "HDPE Pipes",
-    ],
+    subcategories: ['PPR Pipes', 'PVC Pipes', 'CPVC Pipes', 'GI Pipes', 'HDPE Pipes'],
   },
   {
-    name: "Fittings",
-    slug: "fittings",
+    name: 'Fittings',
+    slug: 'fittings',
     icon: Wrench,
-    color: "from-purple-600/30 to-purple-800/10",
-    border: "border-purple-500/30",
-    iconColor: "text-purple-400",
-    iconBg: "bg-purple-500/15",
+    color: 'from-purple-600/30 to-purple-800/10',
+    border: 'border-purple-500/30',
+    iconColor: 'text-purple-400',
+    iconBg: 'bg-purple-500/15',
     description:
-      "Elbows, tees, reducers, couplings and unions in PPR, PVC and brass for leak-proof connections.",
+      'Elbows, tees, reducers, couplings and unions in PPR, PVC and brass for leak-proof connections.',
     productCount: 72,
-    subcategories: [
-      "Elbows",
-      "Tees",
-      "Couplings",
-      "Reducers",
-      "End Caps",
-      "Unions",
-    ],
+    subcategories: ['Elbows', 'Tees', 'Couplings', 'Reducers', 'End Caps', 'Unions'],
   },
   {
-    name: "Valves",
-    slug: "valves",
+    name: 'Valves',
+    slug: 'valves',
     icon: Gauge,
-    color: "from-orange-600/30 to-orange-800/10",
-    border: "border-orange-500/30",
-    iconColor: "text-orange-400",
-    iconBg: "bg-orange-500/15",
+    color: 'from-orange-600/30 to-orange-800/10',
+    border: 'border-orange-500/30',
+    iconColor: 'text-orange-400',
+    iconBg: 'bg-orange-500/15',
     description:
-      "Ball valves, gate valves, check valves and pressure-reducing valves for precise flow control.",
+      'Ball valves, gate valves, check valves and pressure-reducing valves for precise flow control.',
     productCount: 35,
-    subcategories: [
-      "Ball Valves",
-      "Gate Valves",
-      "Check Valves",
-      "PRV",
-      "Float Valves",
-    ],
+    subcategories: ['Ball Valves', 'Gate Valves', 'Check Valves', 'PRV', 'Float Valves'],
   },
   {
-    name: "Fixtures",
-    slug: "fixtures",
+    name: 'Fixtures',
+    slug: 'fixtures',
     icon: ShowerHead,
-    color: "from-cyan-600/30 to-cyan-800/10",
-    border: "border-cyan-500/30",
-    iconColor: "text-cyan-400",
-    iconBg: "bg-cyan-500/15",
+    color: 'from-cyan-600/30 to-cyan-800/10',
+    border: 'border-cyan-500/30',
+    iconColor: 'text-cyan-400',
+    iconBg: 'bg-cyan-500/15',
     description:
-      "Taps, mixers, showers, basins and sanitaryware from top brands for modern bathrooms and kitchens.",
+      'Taps, mixers, showers, basins and sanitaryware from top brands for modern bathrooms and kitchens.',
     productCount: 60,
-    subcategories: [
-      "Taps & Mixers",
-      "Showers",
-      "Basins",
-      "Toilets",
-      "Bathtubs",
-    ],
+    subcategories: ['Taps & Mixers', 'Showers', 'Basins', 'Toilets', 'Bathtubs'],
   },
   {
-    name: "Water Tanks",
-    slug: "water-tanks",
+    name: 'Water Tanks',
+    slug: 'water-tanks',
     icon: Droplets,
-    color: "from-teal-600/30 to-teal-800/10",
-    border: "border-teal-500/30",
-    iconColor: "text-teal-400",
-    iconBg: "bg-teal-500/15",
+    color: 'from-teal-600/30 to-teal-800/10',
+    border: 'border-teal-500/30',
+    iconColor: 'text-teal-400',
+    iconBg: 'bg-teal-500/15',
     description:
-      "Plastic and stainless-steel water storage tanks in various capacities for homes and commercial use.",
+      'Plastic and stainless-steel water storage tanks in various capacities for homes and commercial use.',
     productCount: 20,
-    subcategories: ["Plastic Tanks", "Steel Tanks", "Underground Tanks"],
+    subcategories: ['Plastic Tanks', 'Steel Tanks', 'Underground Tanks'],
   },
   {
-    name: "Water Heaters",
-    slug: "water-heaters",
+    name: 'Water Heaters',
+    slug: 'water-heaters',
     icon: Flame,
-    color: "from-red-600/30 to-red-800/10",
-    border: "border-red-500/30",
-    iconColor: "text-red-400",
-    iconBg: "bg-red-500/15",
+    color: 'from-red-600/30 to-red-800/10',
+    border: 'border-red-500/30',
+    iconColor: 'text-red-400',
+    iconBg: 'bg-red-500/15',
     description:
-      "Electric and gas water heaters, geysers and solar water heating systems for every budget.",
+      'Electric and gas water heaters, geysers and solar water heating systems for every budget.',
     productCount: 18,
-    subcategories: [
-      "Electric Geysers",
-      "Gas Geysers",
-      "Solar Heaters",
-      "Instant Heaters",
-    ],
+    subcategories: ['Electric Geysers', 'Gas Geysers', 'Solar Heaters', 'Instant Heaters'],
   },
   {
-    name: "Pumps",
-    slug: "pumps",
+    name: 'Pumps',
+    slug: 'pumps',
     icon: Layers,
-    color: "from-green-600/30 to-green-800/10",
-    border: "border-green-500/30",
-    iconColor: "text-green-400",
-    iconBg: "bg-green-500/15",
+    color: 'from-green-600/30 to-green-800/10',
+    border: 'border-green-500/30',
+    iconColor: 'text-green-400',
+    iconBg: 'bg-green-500/15',
     description:
-      "Submersible, centrifugal and booster pumps for water supply, drainage and irrigation.",
+      'Submersible, centrifugal and booster pumps for water supply, drainage and irrigation.',
     productCount: 25,
-    subcategories: ["Submersible Pumps", "Centrifugal Pumps", "Booster Pumps"],
+    subcategories: ['Submersible Pumps', 'Centrifugal Pumps', 'Booster Pumps'],
   },
   {
-    name: "Filters & Purifiers",
-    slug: "filters",
+    name: 'Filters & Purifiers',
+    slug: 'filters',
     icon: Filter,
-    color: "from-indigo-600/30 to-indigo-800/10",
-    border: "border-indigo-500/30",
-    iconColor: "text-indigo-400",
-    iconBg: "bg-indigo-500/15",
+    color: 'from-indigo-600/30 to-indigo-800/10',
+    border: 'border-indigo-500/30',
+    iconColor: 'text-indigo-400',
+    iconBg: 'bg-indigo-500/15',
     description:
-      "Sediment filters, RO systems and UV purifiers to ensure clean, safe drinking water.",
+      'Sediment filters, RO systems and UV purifiers to ensure clean, safe drinking water.',
     productCount: 22,
-    subcategories: [
-      "Sediment Filters",
-      "RO Systems",
-      "UV Purifiers",
-      "Filter Cartridges",
-    ],
+    subcategories: ['Sediment Filters', 'RO Systems', 'UV Purifiers', 'Filter Cartridges'],
   },
 ];
 
@@ -174,10 +139,7 @@ export default function CategoriesPage() {
           <nav className="text-sm text-slate-400 mb-8">
             <ol className="flex items-center gap-2">
               <li>
-                <Link
-                  href="/home"
-                  className="hover:text-white transition-colors"
-                >
+                <Link href="/home" className="hover:text-white transition-colors">
                   Home
                 </Link>
               </li>
@@ -192,22 +154,16 @@ export default function CategoriesPage() {
                 <div className="w-10 h-10 bg-blue-600/20 rounded-xl flex items-center justify-center">
                   <LayoutGrid size={20} className="text-blue-400" />
                 </div>
-                <span className="text-blue-400 font-medium text-sm">
-                  All Categories
-                </span>
+                <span className="text-blue-400 font-medium text-sm">All Categories</span>
               </div>
-              <h1 className="text-4xl sm:text-5xl font-extrabold mb-3">
-                Shop by Category
-              </h1>
+              <h1 className="text-4xl sm:text-5xl font-extrabold mb-3">Shop by Category</h1>
               <p className="text-slate-400 max-w-xl text-lg">
-                Browse our complete range of plumbing products — from pipes and
-                fittings to sanitaryware and water heaters.
+                Browse our complete range of plumbing products — from pipes and fittings to
+                sanitaryware and water heaters.
               </p>
             </div>
             <div className="flex-shrink-0 bg-slate-800 border border-slate-700 rounded-2xl px-6 py-4 text-center">
-              <p className="text-3xl font-extrabold text-white">
-                {totalProducts}+
-              </p>
+              <p className="text-3xl font-extrabold text-white">{totalProducts}+</p>
               <p className="text-slate-400 text-sm mt-1">Products Available</p>
             </div>
           </div>
@@ -277,12 +233,10 @@ export default function CategoriesPage() {
       {/* ── BOTTOM CTA ──────────────────────────────────────────────────── */}
       <section className="py-16 bg-slate-800/50">
         <div className="container mx-auto px-4 text-center">
-          <h2 className="text-2xl font-bold mb-3">
-            Can't find what you're looking for?
-          </h2>
+          <h2 className="text-2xl font-bold mb-3">Can't find what you're looking for?</h2>
           <p className="text-slate-400 mb-8 max-w-lg mx-auto">
-            Our team can source any plumbing product for you. Get in touch and
-            we'll help you find exactly what you need.
+            Our team can source any plumbing product for you. Get in touch and we'll help you find
+            exactly what you need.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Link

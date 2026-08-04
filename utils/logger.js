@@ -1,4 +1,4 @@
-import { supabase } from "@/lib/supabase";
+import { supabase } from '@/lib/supabase';
 
 export async function logChatMetric(
   conversationId,
@@ -8,28 +8,24 @@ export async function logChatMetric(
   responseTimeMs,
   totalTokens,
   costUsd,
-  model,
+  model
 ) {
   try {
     // Validate required parameters
     if (!userQuestion || !answer || !model) {
-      console.warn(
-        "logChatMetric: Missing required parameters (userQuestion, answer, or model)",
-      );
+      console.warn('logChatMetric: Missing required parameters (userQuestion, answer, or model)');
       return {
         success: false,
-        error: "Missing required parameters",
+        error: 'Missing required parameters',
       };
     }
 
     // Ensure retrieved_docs is properly formatted as JSON
     const docsData =
-      typeof retrievedDocs === "string"
-        ? JSON.parse(retrievedDocs)
-        : retrievedDocs || null;
+      typeof retrievedDocs === 'string' ? JSON.parse(retrievedDocs) : retrievedDocs || null;
 
     const { data, error } = await supabase
-      .from("chatbot_logs")
+      .from('chatbot_logs')
       .insert([
         {
           conversation_id: conversationId,
@@ -52,7 +48,7 @@ export async function logChatMetric(
       .select();
 
     if (error) {
-      console.error("Error logging chat metric:", error);
+      console.error('Error logging chat metric:', error);
       return {
         success: false,
         error: error.message,
@@ -64,10 +60,10 @@ export async function logChatMetric(
       data,
     };
   } catch (err) {
-    console.error("Unexpected error in logChatMetric:", err);
+    console.error('Unexpected error in logChatMetric:', err);
     return {
       success: false,
-      error: err instanceof Error ? err.message : "Unknown error occurred",
+      error: err instanceof Error ? err.message : 'Unknown error occurred',
     };
   }
 }

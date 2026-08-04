@@ -1,7 +1,7 @@
-"use client";
+'use client';
 
-import { useState } from "react";
-import { useDebouncedClick } from "../../hooks/useDebouncedClick";
+import { useState } from 'react';
+import { useDebouncedClick } from '../../hooks/useDebouncedClick';
 
 export default function Description({ htmlContent }) {
   const [isExpanded, setIsExpanded] = useState(false);
@@ -12,16 +12,14 @@ export default function Description({ htmlContent }) {
   return (
     <div>
       <div
-        className={`prose prose-sm text-gray-300 ${
-          !isExpanded ? "line-clamp-3" : ""
-        }`}
+        className={`prose prose-sm text-gray-300 ${!isExpanded ? 'line-clamp-3' : ''}`}
         dangerouslySetInnerHTML={{ __html: htmlContent }}
       />
       <button
         onClick={debouncedToggleExpanded}
         className="bg-yellow-300 p-2 block  rounded-xl cursor-pointer transition-all float-end text-black text-sm font-medium mt-2"
       >
-        {isExpanded ? "Read Less" : "Read More"}
+        {isExpanded ? 'Read Less' : 'Read More'}
       </button>
     </div>
   );

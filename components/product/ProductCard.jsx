@@ -1,21 +1,18 @@
-"use Client";
+'use Client';
 
-import Link from "next/link";
+import Link from 'next/link';
 
 export default function ProductCard({ product, isFeatured = false }) {
-  const imageUrl = product.image?.sourceUrl || "/placeholder-product.png";
+  const imageUrl = product.image?.sourceUrl || '/placeholder-product.png';
   // Get price – fallback for variable products
 
   return (
     <Link href={`/products/${product.slug}`} className="group block m-2">
       <div
-        className={`bg-gray-400 rounded-xl shadow-sm hover:shadow-md transition-all duration-300 h-full flex flex-col  overflow-hidden ${isFeatured ? "featured-card" : ""}`}
+        className={`bg-gray-400 rounded-xl shadow-sm hover:shadow-md transition-all duration-300 h-full flex flex-col  overflow-hidden ${isFeatured ? 'featured-card' : ''}`}
       >
         {/* Image container with aspect ratio */}
-        <div
-          className="relative overflow-hidden bg-gray-50"
-          style={{ aspectRatio: "4/3" }}
-        >
+        <div className="relative overflow-hidden bg-gray-50" style={{ aspectRatio: '4/3' }}>
           <img
             src={imageUrl}
             alt={product.name}
@@ -34,9 +31,7 @@ export default function ProductCard({ product, isFeatured = false }) {
             {product.name}
           </h3>
           {product.productCategories?.nodes?.[0] && (
-            <p className="text-xs text-gray-500 mb-2">
-              {product.productCategories.nodes[0].name}
-            </p>
+            <p className="text-xs text-gray-500 mb-2">{product.productCategories.nodes[0].name}</p>
           )}
           <div className=" flex items-center justify-between">
             <span className="text-sm text-white opacity-0 group-hover:opacity-100 transition-opacity">

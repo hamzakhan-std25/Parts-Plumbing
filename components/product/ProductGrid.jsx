@@ -1,6 +1,6 @@
-"use client";
+'use client';
 
-import ProductCard from "./ProductCard";
+import ProductCard from './ProductCard';
 
 export default function ProductGrid({ products }) {
   // Unique grid logic: Every 5th product becomes a "featured" card (spans 2 columns)
@@ -15,10 +15,7 @@ export default function ProductGrid({ products }) {
         const isFeatured = index % 5 === 0;
 
         return (
-          <div
-            key={product.id}
-            className={`${isFeatured ? "sm:col-span-2 lg:col-span-2" : ""}`}
-          >
+          <div key={product.id} className={`${isFeatured ? 'sm:col-span-2 lg:col-span-2' : ''}`}>
             <ProductCard product={product} isFeatured={isFeatured} />
           </div>
         );

@@ -1,12 +1,12 @@
-"use client";
-import { Suspense } from "react";
-import Container from "@/components/layout/Container";
-import { ViewTransition } from "react";
-import ProductGrid from "@/components/product/ProductGrid";
-import FilterSidebar from "@/components/filters/FilterSidebar";
-import { useAllProducts } from "@/hooks/useAllProducts";
+'use client';
+import { Suspense } from 'react';
+import Container from '@/components/layout/Container';
+import { ViewTransition } from 'react';
+import ProductGrid from '@/components/product/ProductGrid';
+import FilterSidebar from '@/components/filters/FilterSidebar';
+import { useAllProducts } from '@/hooks/useAllProducts';
 
-import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 
 export default function ProductsPageContent() {
   // Use useSearchParams to get reactive URL params (works in client)
@@ -17,20 +17,14 @@ export default function ProductsPageContent() {
   const { products, loading, error } = useAllProducts();
 
   // Extract and force lowercase immediately
-  const categories = searchParams
-    .getAll("category")
-    .map((c) => c.toLowerCase());
-  const brands = searchParams.getAll("brand").map((b) => b.toLowerCase());
+  const categories = searchParams.getAll('category').map((c) => c.toLowerCase());
+  const brands = searchParams.getAll('brand').map((b) => b.toLowerCase());
 
   // For single strings, just use .toLowerCase() directly
-  const search = (searchParams.get("search") || "").toLowerCase();
+  const search = (searchParams.get('search') || '').toLowerCase();
 
-  const minPrice = searchParams.get("minPrice")
-    ? Number(searchParams.get("minPrice"))
-    : null;
-  const maxPrice = searchParams.get("maxPrice")
-    ? Number(searchParams.get("maxPrice"))
-    : null;
+  const minPrice = searchParams.get('minPrice') ? Number(searchParams.get('minPrice')) : null;
+  const maxPrice = searchParams.get('maxPrice') ? Number(searchParams.get('maxPrice')) : null;
 
   // Apply filters client‑side
   let filtered = products;
@@ -43,13 +37,11 @@ export default function ProductsPageContent() {
       .filter((w) => w.length > 0);
     filtered = filtered.filter((product) => {
       const nameLower = product.name.toLowerCase();
-      const descLower = product.description
-        ? product.description.toLowerCase()
-        : "";
+      const descLower = product.description ? product.description.toLowerCase() : '';
       return words.some(
         (word) =>
           // 👈 OR logic
-          nameLower.includes(word) || descLower.includes(word),
+          nameLower.includes(word) || descLower.includes(word)
       );
     });
   }
@@ -58,7 +50,7 @@ export default function ProductsPageContent() {
   if (categories.length > 0) {
     filtered = filtered.filter((product) => {
       return product.productCategories?.edges.some((edge) =>
-        categories.includes(edge.node.name.toLowerCase()),
+        categories.includes(edge.node.name.toLowerCase())
       );
     });
   }
@@ -67,7 +59,7 @@ export default function ProductsPageContent() {
   if (brands.length > 0) {
     filtered = filtered.filter((product) => {
       return product.allPaBrand?.edges.some((edge) =>
-        brands.includes(edge.node.name.toLowerCase()),
+        brands.includes(edge.node.name.toLowerCase())
       );
     });
   }
@@ -75,7 +67,7 @@ export default function ProductsPageContent() {
   // Price filter – requires price parsing (you may need to extract from product.price)
   if (minPrice !== null || maxPrice !== null) {
     filtered = filtered.filter((product) => {
-      const formatPrice = parseInt(product.price.replace(/[^0-9]/g, ""), 10);
+      const formatPrice = parseInt(product.price.replace(/[^0-9]/g, ''), 10);
       const price = parseFloat(formatPrice) || 0; // adjust based on your price field
       if (minPrice !== null && price < minPrice) return false;
       if (maxPrice !== null && price > maxPrice) return false;
@@ -89,12 +81,7 @@ export default function ProductsPageContent() {
         <div className="animate-spin rounded-full h-12 w-12 border-t-4 border-blue-500"></div>
       </div>
     );
-  if (error)
-    return (
-      <div className="text-center py-20 text-red-600">
-        Error loading products
-      </div>
-    );
+  if (error) return <div className="text-center py-20 text-red-600">Error loading products</div>;
 
   const hasFilters =
     categories.length > 0 ||
@@ -105,8 +92,8 @@ export default function ProductsPageContent() {
 
   const clearSearchAndCategoryFilters = () => {
     const params = new URLSearchParams(searchParams.toString());
-    params.delete("search");
-    params.delete("category");
+    params.delete('search');
+    params.delete('category');
 
     const query = params.toString();
     router.push(query ? `${pathname}?${query}` : pathname);
@@ -124,10 +111,7 @@ export default function ProductsPageContent() {
               </a>
             </li>
             <li className="mx-2">/</li>
-            <li className="text-gray-400 font-medium">
-              {" "}
-              {hasFilters ? "Products" : "Products"}
-            </li>
+            <li className="text-gray-400 font-medium"> {hasFilters ? 'Products' : 'Products'}</li>
           </ul>
         </nav>
 
@@ -139,26 +123,19 @@ export default function ProductsPageContent() {
 
           {/* Main Content */}
 
-          <Suspense
-            fallback={
-              <div className="text-center py-20">Loading filters...</div>
-            }
-          >
+          <Suspense fallback={<div className="text-center py-20">Loading filters...</div>}>
             <div className="flex-1">
               <h1 className="text-2xl text-white font-bold mb-6 ">
-                {" "}
-                {hasFilters ? "Filtered Products" : "All Products"}
+                {' '}
+                {hasFilters ? 'Filtered Products' : 'All Products'}
               </h1>
               {filtered.length > 0 ? (
                 <ProductGrid products={filtered} />
               ) : (
                 <div className="rounded-2xl border border-slate-700 bg-slate-900/70 px-6 py-10 text-center">
-                  <h2 className="text-xl font-semibold text-white">
-                    No products found
-                  </h2>
+                  <h2 className="text-xl font-semibold text-white">No products found</h2>
                   <p className="mt-2 text-slate-300">
-                    Try adjusting your search or category filters to see more
-                    products.
+                    Try adjusting your search or category filters to see more products.
                   </p>
                   <button
                     type="button"

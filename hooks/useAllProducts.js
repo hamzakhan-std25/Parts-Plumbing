@@ -1,9 +1,9 @@
 // hooks/useAllProducts.js
-"use client";
-import { getProducts } from "@/services/product.service";
-import { useEffect, useState } from "react";
+'use client';
+import { getProducts } from '@/services/product.service';
+import { useEffect, useState } from 'react';
 
-const CACHE_KEY = "kpk_all_products";
+const CACHE_KEY = 'kpk_all_products';
 const CACHE_DURATION = 60 * 60 * 1000; // 1 hour
 
 export function useAllProducts() {
@@ -19,21 +19,21 @@ export function useAllProducts() {
         if (cached) {
           const { timestamp, data } = JSON.parse(cached);
           if (Date.now() - timestamp < CACHE_DURATION) {
-            console.log("from localStorage : ...");
+            console.log('from localStorage : ...');
             setProducts(data);
             setLoading(false);
             return;
           }
         }
         const res = await getProducts(200);
-        console.log("getProducts is :", res);
+        console.log('getProducts is :', res);
         const fetchedProducts = res?.nodes || [];
-        console.log("fetchedProducts : ", fetchedProducts);
+        console.log('fetchedProducts : ', fetchedProducts);
 
         // Store in localStorage
         localStorage.setItem(
           CACHE_KEY,
-          JSON.stringify({ timestamp: Date.now(), data: fetchedProducts }),
+          JSON.stringify({ timestamp: Date.now(), data: fetchedProducts })
         );
 
         setProducts(fetchedProducts);

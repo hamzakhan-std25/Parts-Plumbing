@@ -1,23 +1,20 @@
-"use client";
+'use client';
 
-import { useState, useEffect, useMemo } from "react";
+import { useState, useEffect, useMemo } from 'react';
 import {
   extractAttributeGroups,
   findMatchingVariation,
   formatAttributeName,
-} from "@/utils/variation.utils";
-import { WHATSAPP_NUMBER } from "@/constants/config";
-import { useDebouncedClick } from "@/hooks/useDebouncedClick";
+} from '@/utils/variation.utils';
+import { WHATSAPP_NUMBER } from '@/constants/config';
+import { useDebouncedClick } from '@/hooks/useDebouncedClick';
 
 export default function VariationSelector({ variations, productName }) {
   const [selectedAttributes, setSelectedAttributes] = useState({});
   const [currentVariation, setCurrentVariation] = useState(null);
 
   // ✅ Use useMemo to keep the reference stable
-  const attributeGroups = useMemo(
-    () => extractAttributeGroups(variations),
-    [variations],
-  );
+  const attributeGroups = useMemo(() => extractAttributeGroups(variations), [variations]);
 
   // ✅ Simplified, stable initialization
   useEffect(() => {
@@ -27,7 +24,7 @@ export default function VariationSelector({ variations, productName }) {
 
       attributeGroups.forEach((group) => {
         const attr = firstVariation.attributes.nodes.find(
-          (a) => a.name.replace(/^pa_/, "") === group.name,
+          (a) => a.name.replace(/^pa_/, '') === group.name
         );
         if (attr) {
           initial[group.name] = attr.value;
@@ -57,7 +54,7 @@ export default function VariationSelector({ variations, productName }) {
   const whatsappLink = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(
     `I'm interested in ${productName} - ${Object.entries(selectedAttributes)
       .map(([k, v]) => `${formatAttributeName(k)}: ${v}`)
-      .join(", ")}`,
+      .join(', ')}`
   )}`;
 
   if (!variations.length || attributeGroups.length === 0) return null;
@@ -82,12 +79,12 @@ export default function VariationSelector({ variations, productName }) {
                     className={`px-4 py-2 rounded-full border text-sm flex items-center gap-1 transition
                       ${
                         isSelected
-                          ? "bg-blue-600 text-white border-blue-600"
-                          : "bg-white text-gray-700 border-gray-300 hover:border-gray-400"
+                          ? 'bg-blue-600 text-white border-blue-600'
+                          : 'bg-white text-gray-700 border-gray-300 hover:border-gray-400'
                       }`}
                   >
                     <span>{option}</span>
-                    <span className="text-xs">{isSelected ? "⬇️" : "⬆️"}</span>
+                    <span className="text-xs">{isSelected ? '⬇️' : '⬆️'}</span>
                   </button>
                 );
               })}
@@ -100,17 +97,15 @@ export default function VariationSelector({ variations, productName }) {
         <div className="flex items-center justify-between flex-wrap gap-4">
           <div>
             <span className="text-sm text-gray-500">Price</span>
-            <p className="text-3xl font-bold text-gray-900">
-              {currentVariation?.price || "₨ --"}
-            </p>
+            <p className="text-3xl font-bold text-gray-900">{currentVariation?.price || '₨ --'}</p>
           </div>
           <div className="flex gap-4">
             <a
-              href={currentVariation ? whatsappLink : "#"}
+              href={currentVariation ? whatsappLink : '#'}
               target="_blank"
               rel="noopener noreferrer"
               className={`px-6 py-3 bg-green-600 text-white rounded-lg font-medium hover:bg-green-700 transition ${
-                !currentVariation && "opacity-50 pointer-events-none"
+                !currentVariation && 'opacity-50 pointer-events-none'
               }`}
             >
               Ask Price on WhatsApp

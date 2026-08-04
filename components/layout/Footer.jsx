@@ -1,21 +1,21 @@
-import Link from "next/link";
-import Image from "next/image";
-import { Phone, MessageCircle, Mail, MapPin, Clock } from "lucide-react";
+import Link from 'next/link';
+import Image from 'next/image';
+import { Phone, MessageCircle, Mail, MapPin, Clock } from 'lucide-react';
 
 const FOOTER_LINKS = {
   Shop: [
-    { name: "All Products", href: "/products" },
-    { name: "Pipes", href: "/products?category=pipes" },
-    { name: "Fittings", href: "/products?category=fittings" },
-    { name: "Valves", href: "/products?category=valves" },
-    { name: "Fixtures", href: "/products?category=fixtures" },
+    { name: 'All Products', href: '/products' },
+    { name: 'Pipes', href: '/products?category=pipes' },
+    { name: 'Fittings', href: '/products?category=fittings' },
+    { name: 'Valves', href: '/products?category=valves' },
+    { name: 'Fixtures', href: '/products?category=fixtures' },
   ],
   Company: [
-    { name: "Home", href: "/home" },
-    { name: "Categories", href: "/categories" },
-    { name: "Contact Us", href: "/contact" },
-    { name: "Privacy Policy", href: "/privacy-policy" },
-    { name: "Terms & Conditions", href: "/terms-conditions" },
+    { name: 'Home', href: '/home' },
+    { name: 'Categories', href: '/categories' },
+    { name: 'Contact Us', href: '/contact' },
+    { name: 'Privacy Policy', href: '/privacy-policy' },
+    { name: 'Terms & Conditions', href: '/terms-conditions' },
   ],
 };
 
@@ -34,13 +34,11 @@ export default function Footer() {
                 height={40}
                 className="rounded-full"
               />
-              <span className="text-white font-bold text-lg">
-                Hassan Sanitory Store
-              </span>
+              <span className="text-white font-bold text-lg">Hassan Sanitory Store</span>
             </Link>
             <p className="text-sm leading-relaxed mb-6">
-              Your trusted sanitary store. Quality sanitary products & plumbing
-              supplies at 3FF3+C5C, Darra Bus Stop, Swabi Rd, Shahmansoor.
+              Your trusted sanitary store. Quality sanitary products & plumbing supplies at
+              3FF3+C5C, Darra Bus Stop, Swabi Rd, Shahmansoor.
             </p>
             {/* Social / Contact quick links */}
             <div className="flex flex-col gap-2 text-sm">
@@ -76,10 +74,7 @@ export default function Footer() {
               <ul className="flex flex-col gap-2">
                 {links.map((link) => (
                   <li key={link.name}>
-                    <Link
-                      href={link.href}
-                      className="text-sm hover:text-white transition-colors"
-                    >
+                    <Link href={link.href} className="text-sm hover:text-white transition-colors">
                       {link.name}
                     </Link>
                   </li>
@@ -95,17 +90,11 @@ export default function Footer() {
             </h3>
             <div className="flex flex-col gap-3 text-sm">
               <div className="flex items-start gap-2">
-                <MapPin
-                  size={15}
-                  className="mt-0.5 flex-shrink-0 text-orange-400"
-                />
+                <MapPin size={15} className="mt-0.5 flex-shrink-0 text-orange-400" />
                 <span>3FF3+C5V, Darra Bus Stop, Swabi Rd, Shahmansoor</span>
               </div>
               <div className="flex items-start gap-2">
-                <Clock
-                  size={15}
-                  className="mt-0.5 flex-shrink-0 text-cyan-400"
-                />
+                <Clock size={15} className="mt-0.5 flex-shrink-0 text-cyan-400" />
                 <div>
                   <p>Sat-Thu: 9:00 AM – 8:00 PM</p>
                   <p className="text-slate-600">Friday: Closed</p>
@@ -119,21 +108,12 @@ export default function Footer() {
       {/* Bottom bar */}
       <div className="border-t border-slate-800">
         <div className="container mx-auto px-4 py-5 flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-slate-600">
-          <p>
-            © {new Date().getFullYear()} Hassan Sanitory Store. All rights
-            reserved.
-          </p>
+          <p>© {new Date().getFullYear()} Hassan Sanitory Store. All rights reserved.</p>
           <div className="flex items-center gap-4">
-            <Link
-              href="/privacy-policy"
-              className="hover:text-slate-400 transition-colors"
-            >
+            <Link href="/privacy-policy" className="hover:text-slate-400 transition-colors">
               Privacy Policy
             </Link>
-            <Link
-              href="/terms-conditions"
-              className="hover:text-slate-400 transition-colors"
-            >
+            <Link href="/terms-conditions" className="hover:text-slate-400 transition-colors">
               Terms &amp; Conditions
             </Link>
           </div>

@@ -1,8 +1,8 @@
-"use client";
+'use client';
 
-import { useState } from "react";
-import { useRouter } from "next/navigation";
-import { useDebouncedClick } from "@/hooks/useDebouncedClick";
+import { useState } from 'react';
+import { useRouter } from 'next/navigation';
+import { useDebouncedClick } from '@/hooks/useDebouncedClick';
 
 export default function FilterSidebar() {
   const router = useRouter();
@@ -18,15 +18,13 @@ export default function FilterSidebar() {
   // Handle checkbox changes
   const handleCategoryChange = (category) => {
     setSelectedCategories((prev) =>
-      prev.includes(category)
-        ? prev.filter((c) => c !== category)
-        : [...prev, category],
+      prev.includes(category) ? prev.filter((c) => c !== category) : [...prev, category]
     );
   };
 
   const handleBrandChange = (brand) => {
     setSelectedBrands((prev) =>
-      prev.includes(brand) ? prev.filter((b) => b !== brand) : [...prev, brand],
+      prev.includes(brand) ? prev.filter((b) => b !== brand) : [...prev, brand]
     );
   };
 
@@ -36,14 +34,14 @@ export default function FilterSidebar() {
     const params = new URLSearchParams();
 
     // Add categories (multiple)
-    selectedCategories.forEach((cat) => params.append("category", cat));
+    selectedCategories.forEach((cat) => params.append('category', cat));
 
     // Add brands (multiple)
-    selectedBrands.forEach((brand) => params.append("brand", brand));
+    selectedBrands.forEach((brand) => params.append('brand', brand));
 
     // Add price range (only if not default)
-    if (priceRange[0] != 0) params.set("minPrice", priceRange[0]);
-    if (priceRange[1] != 0) params.set("maxPrice", priceRange[1]);
+    if (priceRange[0] != 0) params.set('minPrice', priceRange[0]);
+    if (priceRange[1] != 0) params.set('maxPrice', priceRange[1]);
 
     router.push(`/products?${params.toString()}`);
   };
@@ -69,21 +67,19 @@ export default function FilterSidebar() {
       <div className="mb-6">
         <h4 className="font-medium text-gray-700 mb-2">Category</h4>
         <ul className="space-y-1">
-          {["Pipes", "Fittings", "Valves", "Sanitary", "Accessories"].map(
-            (cat) => (
-              <li key={cat}>
-                <label className="flex items-center gap-2 text-sm text-gray-600">
-                  <input
-                    type="checkbox"
-                    className="rounded"
-                    checked={selectedCategories.includes(cat)}
-                    onChange={() => handleCategoryChange(cat)}
-                  />
-                  {cat}
-                </label>
-              </li>
-            ),
-          )}
+          {['Pipes', 'Fittings', 'Valves', 'Sanitary', 'Accessories'].map((cat) => (
+            <li key={cat}>
+              <label className="flex items-center gap-2 text-sm text-gray-600">
+                <input
+                  type="checkbox"
+                  className="rounded"
+                  checked={selectedCategories.includes(cat)}
+                  onChange={() => handleCategoryChange(cat)}
+                />
+                {cat}
+              </label>
+            </li>
+          ))}
         </ul>
       </div>
 
@@ -113,7 +109,7 @@ export default function FilterSidebar() {
       <div className="mb-6">
         <h4 className="font-medium text-gray-700 mb-2">Brand</h4>
         <ul className="space-y-1">
-          {["Alpha", "Master", "Supreme"].map((brand) => (
+          {['Alpha', 'Master', 'Supreme'].map((brand) => (
             <li key={brand}>
               <label className="flex items-center gap-2 text-sm text-gray-600">
                 <input
@@ -153,24 +149,17 @@ export default function FilterSidebar() {
         >
           <span className="font-medium">Filters</span>
           <svg
-            className={`w-5 h-5 transition-transform ${isOpen ? "rotate-180" : ""}`}
+            className={`w-5 h-5 transition-transform ${isOpen ? 'rotate-180' : ''}`}
             fill="none"
             stroke="currentColor"
             viewBox="0 0 24 24"
           >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth={2}
-              d="M19 9l-7 7-7-7"
-            />
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
           </svg>
         </button>
 
         {/* Collapsible filter panel */}
-        {isOpen && (
-          <div className="mb-6 animate-slideDown">{filterContent}</div>
-        )}
+        {isOpen && <div className="mb-6 animate-slideDown">{filterContent}</div>}
       </div>
     </>
   );

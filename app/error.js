@@ -1,6 +1,6 @@
-"use client";
+'use client';
 
-import Link from "next/link";
+import Link from 'next/link';
 
 export default function Error({ error, reset }) {
   return (
@@ -10,8 +10,7 @@ export default function Error({ error, reset }) {
           Something went wrong while loading the shop
         </h1>
         <p className="mt-3 text-slate-300">
-          Please try again. If the issue continues, our team can help you from
-          the contact page.
+          Please try again. If the issue continues, our team can help you from the contact page.
         </p>
 
         <div className="mt-6 flex flex-wrap items-center justify-center gap-3">

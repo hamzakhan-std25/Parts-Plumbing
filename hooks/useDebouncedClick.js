@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useRef } from "react";
+import { useCallback, useEffect, useRef } from 'react';
 
 export function useDebouncedClick(callback, delay = 300) {
   const callbackRef = useRef(callback);
@@ -18,6 +18,6 @@ export function useDebouncedClick(callback, delay = 300) {
       lastCallRef.current = now;
       return callbackRef.current?.(...args);
     },
-    [delay],
+    [delay]
   );
 }

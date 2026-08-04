@@ -1,10 +1,6 @@
-import client from "@/lib/graphql";
-import { fetchGraphQL } from "@/lib/graphql";
-import {
-  GET_PRODUCTS,
-  GET_FILTERED_PRODUCTS,
-  GET_PRODUCT_BY_SLUG,
-} from "@/lib/queries";
+import client from '@/lib/graphql';
+import { fetchGraphQL } from '@/lib/graphql';
+import { GET_PRODUCTS, GET_FILTERED_PRODUCTS, GET_PRODUCT_BY_SLUG } from '@/lib/queries';
 
 export async function getProductBySlug(slug) {
   // console.log("DEBUG: Sending slug to WP ->", slug);
@@ -14,7 +10,7 @@ export async function getProductBySlug(slug) {
     const data = await fetchGraphQL(GET_PRODUCT_BY_SLUG, { slug: slug });
     return data?.product;
   } catch (error) {
-    console.error("GraphQL Error:", error);
+    console.error('GraphQL Error:', error);
     return null;
   }
 }

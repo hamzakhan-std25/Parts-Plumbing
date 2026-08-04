@@ -1,14 +1,14 @@
-import { getProductBySlug } from "@/services/product.service";
-import ProductDetail from "@/components/product/ProductDetail";
-import { ViewTransition } from "react";
-import { notFound } from "next/navigation";
+import { getProductBySlug } from '@/services/product.service';
+import ProductDetail from '@/components/product/ProductDetail';
+import { ViewTransition } from 'react';
+import { notFound } from 'next/navigation';
 
 export const revalidate = 3600;
 
-function stripHtml(html = "") {
+function stripHtml(html = '') {
   return html
-    .replace(/<[^>]*>/g, " ")
-    .replace(/\s+/g, " ")
+    .replace(/<[^>]*>/g, ' ')
+    .replace(/\s+/g, ' ')
     .trim();
 }
 
@@ -18,26 +18,20 @@ export async function generateMetadata({ params }) {
 
   if (!product) {
     return {
-      title: "Product Not Found",
-      description: "The requested product could not be found.",
+      title: 'Product Not Found',
+      description: 'The requested product could not be found.',
     };
   }
 
-  const cleanDescription = stripHtml(
-    product.description || product.shortDescription || "",
-  );
+  const cleanDescription = stripHtml(product.description || product.shortDescription || '');
 
   return {
     title: product.name,
-    description:
-      cleanDescription ||
-      "Explore product details, pricing, and available options.",
+    description: cleanDescription || 'Explore product details, pricing, and available options.',
     openGraph: {
       title: product.name,
-      description:
-        cleanDescription ||
-        "Explore product details, pricing, and available options.",
-      type: "website",
+      description: cleanDescription || 'Explore product details, pricing, and available options.',
+      type: 'website',
       images: product.image?.sourceUrl
         ? [
             {
@@ -59,7 +53,7 @@ export default async function ProductPage({ params }) {
     notFound();
   }
 
-  console.log("[Product Page] -- product details: ", product);
+  console.log('[Product Page] -- product details: ', product);
 
   return (
     <ViewTransition>

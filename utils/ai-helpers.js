@@ -6,22 +6,22 @@ export async function summarizeHistory(messages) {
   try {
     // 3. Call Groq
     const response = await fetch(NEXT_PUBLIC_GEN_AI_URL, {
-      method: "POST",
+      method: 'POST',
       headers: {
-        "Content-Type": "application/json",
+        'Content-Type': 'application/json',
         Authorization: `Bearer ${NEXT_PUBLIC_GEN_AI_API_KEY}`, // Keep key in .env
       },
       body: JSON.stringify({
-        model: "llama-3.1-8b-instant", // Use a valid Groq model name
+        model: 'llama-3.1-8b-instant', // Use a valid Groq model name
         messages: [
           {
-            role: "system",
+            role: 'system',
             content:
               "Summarize the following chat history. Focus on the user's intent and any key details provided.",
           },
           {
-            role: "user",
-            content: messages.map((m) => `${m.role}: ${m.content}`).join("\n"),
+            role: 'user',
+            content: messages.map((m) => `${m.role}: ${m.content}`).join('\n'),
           },
         ],
         temperature: 0.5,
@@ -30,11 +30,11 @@ export async function summarizeHistory(messages) {
     });
 
     if (!response.ok) {
-      throw new Error(response || "Failed to summarize history");
+      throw new Error(response || 'Failed to summarize history');
     }
 
     const data = await response.json();
-    console.log("Summary response:", data);
+    console.log('Summary response:', data);
 
     const summary = data?.choices?.[0]?.message?.content?.trim();
     if (!summary) {
@@ -44,12 +44,12 @@ export async function summarizeHistory(messages) {
     // Return the summary as the new starting point for the AI
     return [
       {
-        role: "assistant",
+        role: 'assistant',
         content: `Recent Conversation Summary : ${summary}`,
       },
     ];
   } catch (error) {
-    console.error("Summarization failed:", error);
+    console.error('Summarization failed:', error);
     return null;
   }
 }

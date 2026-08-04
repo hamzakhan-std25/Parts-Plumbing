@@ -1,16 +1,16 @@
-import { SITE_URL } from "@/constants/config";
-import { getProducts } from "@/services/product.service";
+import { SITE_URL } from '@/constants/config';
+import { getProducts } from '@/services/product.service';
 
 export const revalidate = 3600;
 
 export default async function sitemap() {
-  const baseUrl = SITE_URL.replace(/\/$/, "");
+  const baseUrl = SITE_URL.replace(/\/$/, '');
 
-  const staticRoutes = ["/", "/home", "/contact"].map((route) => ({
+  const staticRoutes = ['/', '/home', '/contact'].map((route) => ({
     url: `${baseUrl}${route}`,
     lastModified: new Date(),
-    changeFrequency: "weekly",
-    priority: route === "/" ? 1 : 0.8,
+    changeFrequency: 'weekly',
+    priority: route === '/' ? 1 : 0.8,
   }));
 
   let productRoutes = [];
@@ -22,11 +22,11 @@ export default async function sitemap() {
       .map((product) => ({
         url: `${baseUrl}/products/${product.slug}`,
         lastModified: new Date(),
-        changeFrequency: "weekly",
+        changeFrequency: 'weekly',
         priority: 0.7,
       }));
   } catch (error) {
-    console.error("Failed to generate product sitemap entries:", error);
+    console.error('Failed to generate product sitemap entries:', error);
   }
 
   return [...staticRoutes, ...productRoutes];

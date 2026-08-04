@@ -56,7 +56,7 @@ export function extractAttributes(variations) {
 
   variations.forEach((variation) => {
     variation.attributes.nodes.forEach((attr) => {
-      const key = attr.name.replace("pa_", "");
+      const key = attr.name.replace('pa_', '');
 
       if (!attributes[key]) {
         attributes[key] = new Set();
@@ -78,8 +78,8 @@ export function findMatchingVariant(variations, selected) {
 
   return variations.find((variation) =>
     variation.attributes.nodes.every((attr) => {
-      const key = attr.name.replace("pa_", "");
+      const key = attr.name.replace('pa_', '');
       return selected[key] === attr.value;
-    }),
+    })
   );
 }

@@ -1,9 +1,9 @@
-"use client";
+'use client';
 
-import { useState } from "react";
-import Link from "next/link";
-import Footer from "@/components/layout/Footer";
-import { useDebouncedClick } from "@/hooks/useDebouncedClick";
+import { useState } from 'react';
+import Link from 'next/link';
+import Footer from '@/components/layout/Footer';
+import { useDebouncedClick } from '@/hooks/useDebouncedClick';
 import {
   MessageCircle,
   Phone,
@@ -14,91 +14,91 @@ import {
   ChevronDown,
   Send,
   CheckCircle,
-} from "lucide-react";
+} from 'lucide-react';
 
 // Replace with your actual API key
-const apiKey = "YOUR_GOOGLE_MAPS_API_KEY";
+const apiKey = 'YOUR_GOOGLE_MAPS_API_KEY';
 
 // ─── Static Data ─────────────────────────────────────────────────────────────
 
 const CONTACT_INFO = [
   {
     icon: MessageCircle,
-    label: "WhatsApp",
-    value: "+92 335 9183182",
-    sub: "Chat with us instantly",
-    href: "https://wa.me/923359183182?text=Hi%2C%20I%20need%20help%20with%20a%20sanitary%20product",
-    color: "text-green-400",
-    bg: "bg-green-400/10",
-    border: "border-green-500/20",
+    label: 'WhatsApp',
+    value: '+92 335 9183182',
+    sub: 'Chat with us instantly',
+    href: 'https://wa.me/923359183182?text=Hi%2C%20I%20need%20help%20with%20a%20sanitary%20product',
+    color: 'text-green-400',
+    bg: 'bg-green-400/10',
+    border: 'border-green-500/20',
     external: true,
   },
   {
     icon: Phone,
-    label: "Phone",
-    value: "+92 335 9183182",
-    sub: "Call us during business hours",
-    href: "tel:+923359183182",
-    color: "text-blue-400",
-    bg: "bg-blue-400/10",
-    border: "border-blue-500/20",
+    label: 'Phone',
+    value: '+92 335 9183182',
+    sub: 'Call us during business hours',
+    href: 'tel:+923359183182',
+    color: 'text-blue-400',
+    bg: 'bg-blue-400/10',
+    border: 'border-blue-500/20',
     external: false,
   },
   {
     icon: Mail,
-    label: "Email",
-    value: "info@hassanstore.pk",
-    sub: "We reply within 24 hours",
-    href: "mailto:info@hassanstore.pk",
-    color: "text-purple-400",
-    bg: "bg-purple-400/10",
-    border: "border-purple-500/20",
+    label: 'Email',
+    value: 'info@hassanstore.pk',
+    sub: 'We reply within 24 hours',
+    href: 'mailto:info@hassanstore.pk',
+    color: 'text-purple-400',
+    bg: 'bg-purple-400/10',
+    border: 'border-purple-500/20',
     external: false,
   },
   {
     icon: MapPin,
-    label: "Address",
-    value: "Hassan Sanitary Store, Darra Bus Stop, Swabi Rd, Shahmansoor",
-    sub: "Visit our showroom",
-    href: "https://maps.google.com/?q=3ff3+c5v+darra+bus+stop+swabiRd+Shahmansoor",
-    color: "text-orange-400",
-    bg: "bg-orange-400/10",
-    border: "border-orange-500/20",
+    label: 'Address',
+    value: 'Hassan Sanitary Store, Darra Bus Stop, Swabi Rd, Shahmansoor',
+    sub: 'Visit our showroom',
+    href: 'https://maps.google.com/?q=3ff3+c5v+darra+bus+stop+swabiRd+Shahmansoor',
+    color: 'text-orange-400',
+    bg: 'bg-orange-400/10',
+    border: 'border-orange-500/20',
     external: true,
   },
   {
     icon: Clock,
-    label: "Business Hours",
-    value: "Mon–Sat: 9:00 AM – 8:00 PM",
-    sub: "Sunday: Closed",
+    label: 'Business Hours',
+    value: 'Mon–Sat: 9:00 AM – 8:00 PM',
+    sub: 'Sunday: Closed',
     href: null,
-    color: "text-cyan-400",
-    bg: "bg-cyan-400/10",
-    border: "border-cyan-500/20",
+    color: 'text-cyan-400',
+    bg: 'bg-cyan-400/10',
+    border: 'border-cyan-500/20',
     external: false,
   },
 ];
 
 const FAQS = [
   {
-    q: "Do you deliver to Abbottabad, Mardan and other KPK cities?",
-    a: "Yes! We deliver across KPK including Peshawar, Mardan, Swat, Abbottabad, Nowshera, Charsadda and surrounding areas. Delivery times vary by location — typically 1–3 business days.",
+    q: 'Do you deliver to Abbottabad, Mardan and other KPK cities?',
+    a: 'Yes! We deliver across KPK including Peshawar, Mardan, Swat, Abbottabad, Nowshera, Charsadda and surrounding areas. Delivery times vary by location — typically 1–3 business days.',
   },
   {
-    q: "Can I get a discount on bulk orders?",
-    a: "Absolutely. We offer special pricing for contractors, builders and bulk buyers. Contact us on WhatsApp or call us directly to discuss your requirements and get a custom quote.",
+    q: 'Can I get a discount on bulk orders?',
+    a: 'Absolutely. We offer special pricing for contractors, builders and bulk buyers. Contact us on WhatsApp or call us directly to discuss your requirements and get a custom quote.',
   },
   {
-    q: "How do I know which pipe size I need?",
+    q: 'How do I know which pipe size I need?',
     a: "Our team of plumbing experts can help you choose the right pipe size and type for your project. Just send us a message on WhatsApp with your requirements and we'll guide you.",
   },
   {
-    q: "Are your products genuine and under warranty?",
-    a: "Yes, all our products are 100% genuine from authorised brands including Alpha, Master, Supreme and Pak Pipes. Products come with manufacturer warranties where applicable.",
+    q: 'Are your products genuine and under warranty?',
+    a: 'Yes, all our products are 100% genuine from authorised brands including Alpha, Master, Supreme and Pak Pipes. Products come with manufacturer warranties where applicable.',
   },
   {
-    q: "Can I return or exchange a product?",
-    a: "We accept returns and exchanges within 7 days of purchase for unused, undamaged products in original packaging. Contact us to initiate a return.",
+    q: 'Can I return or exchange a product?',
+    a: 'We accept returns and exchanges within 7 days of purchase for unused, undamaged products in original packaging. Contact us to initiate a return.',
   },
 ];
 
@@ -106,11 +106,11 @@ const FAQS = [
 
 function ContactForm() {
   const [form, setForm] = useState({
-    name: "",
-    email: "",
-    phone: "",
-    subject: "",
-    message: "",
+    name: '',
+    email: '',
+    phone: '',
+    subject: '',
+    message: '',
   });
   const [submitted, setSubmitted] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -168,9 +168,7 @@ function ContactForm() {
           />
         </div>
         <div>
-          <label className="block text-sm font-medium text-slate-300 mb-2">
-            Email Address
-          </label>
+          <label className="block text-sm font-medium text-slate-300 mb-2">Email Address</label>
           <input
             type="email"
             name="email"
@@ -273,7 +271,7 @@ function FAQItem({ q, a }) {
         <span className="font-medium text-sm text-white">{q}</span>
         <ChevronDown
           size={18}
-          className={`text-slate-400 flex-shrink-0 transition-transform duration-200 ${open ? "rotate-180" : ""}`}
+          className={`text-slate-400 flex-shrink-0 transition-transform duration-200 ${open ? 'rotate-180' : ''}`}
         />
       </button>
       {open && (
@@ -299,10 +297,7 @@ export default function ContactPage() {
           <nav className="text-sm text-slate-400 mb-8">
             <ol className="flex items-center gap-2">
               <li>
-                <Link
-                  href="/home"
-                  className="hover:text-white transition-colors"
-                >
+                <Link href="/home" className="hover:text-white transition-colors">
                   Home
                 </Link>
               </li>
@@ -312,13 +307,10 @@ export default function ContactPage() {
           </nav>
 
           <div className="max-w-2xl">
-            <h1 className="text-4xl sm:text-5xl font-extrabold mb-4">
-              Get in Touch
-            </h1>
+            <h1 className="text-4xl sm:text-5xl font-extrabold mb-4">Get in Touch</h1>
             <p className="text-slate-400 text-lg leading-relaxed">
-              We're here to help with your plumbing needs — from product
-              selection to technical advice. Reach out and our team will respond
-              promptly.
+              We're here to help with your plumbing needs — from product selection to technical
+              advice. Reach out and our team will respond promptly.
             </p>
           </div>
         </div>
@@ -330,13 +322,13 @@ export default function ContactPage() {
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-4">
             {CONTACT_INFO.map((item) => {
               const Icon = item.icon;
-              const Wrapper = item.href ? (item.external ? "a" : "a") : "div";
+              const Wrapper = item.href ? (item.external ? 'a' : 'a') : 'div';
               const extraProps = item.href
                 ? item.external
                   ? {
                       href: item.href,
-                      target: "_blank",
-                      rel: "noopener noreferrer",
+                      target: '_blank',
+                      rel: 'noopener noreferrer',
                     }
                   : { href: item.href }
                 : {};
@@ -345,7 +337,7 @@ export default function ContactPage() {
                 <Wrapper
                   key={item.label}
                   {...extraProps}
-                  className={`group bg-slate-800 border ${item.border} rounded-2xl p-5 flex flex-col gap-3 ${item.href ? "hover:border-opacity-60 hover:-translate-y-0.5 transition-all cursor-pointer" : ""}`}
+                  className={`group bg-slate-800 border ${item.border} rounded-2xl p-5 flex flex-col gap-3 ${item.href ? 'hover:border-opacity-60 hover:-translate-y-0.5 transition-all cursor-pointer' : ''}`}
                 >
                   <div
                     className={`w-10 h-10 ${item.bg} rounded-xl flex items-center justify-center`}
@@ -356,9 +348,7 @@ export default function ContactPage() {
                     <p className="text-xs text-slate-500 font-medium uppercase tracking-wider mb-1">
                       {item.label}
                     </p>
-                    <p
-                      className={`font-semibold text-sm ${item.href ? item.color : "text-white"}`}
-                    >
+                    <p className={`font-semibold text-sm ${item.href ? item.color : 'text-white'}`}>
                       {item.value}
                     </p>
                     <p className="text-slate-500 text-xs mt-0.5">{item.sub}</p>
@@ -392,7 +382,7 @@ export default function ContactPage() {
                   src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d13228.123456789!2d72.4697!3d34.1219!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x38d917b1234567%3A0xabcdef!2sSaddar%20Road%2C%20Swabi%2C%20KPK!5e0!3m2!1sen!2spk!4v1234567890"
                   width="100%"
                   height="100%"
-                  style={{ border: 0, minHeight: "300px" }}
+                  style={{ border: 0, minHeight: '300px' }}
                   allowFullScreen
                   loading="lazy"
                   referrerPolicy="no-referrer-when-downgrade"
@@ -430,9 +420,7 @@ export default function ContactPage() {
       <section className="py-20">
         <div className="container mx-auto px-4 max-w-3xl">
           <div className="text-center mb-12">
-            <h2 className="text-3xl font-bold mb-3">
-              Frequently Asked Questions
-            </h2>
+            <h2 className="text-3xl font-bold mb-3">Frequently Asked Questions</h2>
             <p className="text-slate-400">
               Quick answers to common questions — can't find yours? Just ask us!
             </p>

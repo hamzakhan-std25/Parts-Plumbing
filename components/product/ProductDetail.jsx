@@ -1,10 +1,10 @@
-"use client";
+'use client';
 
-import { useState } from "react";
-import { findMatchingVariant } from "@/utils/variation.utils";
-import VariationOptions from "./VariationOptions";
-import Description from "./Description";
-import { generateWhatsAppLink } from "@/lib/whatsapp.utils";
+import { useState } from 'react';
+import { findMatchingVariant } from '@/utils/variation.utils';
+import VariationOptions from './VariationOptions';
+import Description from './Description';
+import { generateWhatsAppLink } from '@/lib/whatsapp.utils';
 
 export default function ProductDetail({ product }) {
   const variations = product.variations.nodes;
@@ -40,7 +40,7 @@ export default function ProductDetail({ product }) {
       <div className="bg-[#1e293b] rounded-2xl overflow-hidden shadow-xl">
         {/* Image */}
         <img
-          src={product.image?.sourceUrl || "/placeholder-product.png"}
+          src={product.image?.sourceUrl || '/placeholder-product.png'}
           alt={product.name}
           className="w-full h-80 object-cover"
         />
@@ -61,16 +61,12 @@ export default function ProductDetail({ product }) {
           <Description htmlContent={product.description} />
 
           {/* Variation Selector */}
-          <VariationOptions
-            variations={variations}
-            selected={selected}
-            setSelected={setSelected}
-          />
+          <VariationOptions variations={variations} selected={selected} setSelected={setSelected} />
 
           {/* Price */}
           {matchedVariant && (
             <div className="text-2xl font-bold text-yellow-400 mt-4">
-              Rs : {parseInt(matchedVariant.price.replace(/[^0-9]/g, ""), 10)}
+              Rs : {parseInt(matchedVariant.price.replace(/[^0-9]/g, ''), 10)}
             </div>
           )}
 

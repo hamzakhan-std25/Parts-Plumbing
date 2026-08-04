@@ -1,8 +1,8 @@
-export default function Loader({ size = "md", label = "Loading..." }) {
+export default function Loader({ size = 'md', label = 'Loading...' }) {
   const sizeClasses = {
-    sm: "h-6 w-6 border-2",
-    md: "h-10 w-10 border-[3px]",
-    lg: "h-14 w-14 border-4",
+    sm: 'h-6 w-6 border-2',
+    md: 'h-10 w-10 border-[3px]',
+    lg: 'h-14 w-14 border-4',
   };
 
   const spinnerSize = sizeClasses[size] || sizeClasses.md;

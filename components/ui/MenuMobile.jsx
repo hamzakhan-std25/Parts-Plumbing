@@ -1,6 +1,6 @@
-import { useState } from "react";
-import { Menu, X } from "lucide-react"; // Import the icons
-import { useDebouncedClick } from "@/hooks/useDebouncedClick";
+import { useState } from 'react';
+import { Menu, X } from 'lucide-react'; // Import the icons
+import { useDebouncedClick } from '@/hooks/useDebouncedClick';
 
 const MobileNavbar = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -46,7 +46,7 @@ const MobileNavbar = () => {
       <div
         className={`
         fixed inset-0 bg-white z-50 transform transition-transform duration-300 ease-in-out md:hidden
-        ${isOpen ? "translate-x-0" : "translate-x-full"}
+        ${isOpen ? 'translate-x-0' : 'translate-x-full'}
       `}
       >
         <div className="p-6">

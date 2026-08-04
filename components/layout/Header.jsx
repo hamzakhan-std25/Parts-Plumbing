@@ -1,12 +1,12 @@
-"use client";
+'use client';
 
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef } from 'react';
 
-import SearchOverlay from "@/components/search/SearchOverlay";
-import Link from "next/link";
-import Image from "next/image";
-import { Menu, X, Phone, Search } from "lucide-react";
-import { useDebouncedClick } from "@/hooks/useDebouncedClick";
+import SearchOverlay from '@/components/search/SearchOverlay';
+import Link from 'next/link';
+import Image from 'next/image';
+import { Menu, X, Phone, Search } from 'lucide-react';
+import { useDebouncedClick } from '@/hooks/useDebouncedClick';
 
 export default function Header() {
   const [isSearchOpen, setIsSearchOpen] = useState(false);
@@ -33,15 +33,15 @@ export default function Header() {
       }
     };
 
-    window.addEventListener("scroll", handleScroll, { passive: true });
-    return () => window.removeEventListener("scroll", handleScroll);
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
   const navLinks = [
-    { name: "Home", href: "/" },
-    { name: "Products", href: "/products" },
-    { name: "Categories", href: "/categories" },
-    { name: "Contact", href: "/contact" },
+    { name: 'Home', href: '/' },
+    { name: 'Products', href: '/products' },
+    { name: 'Categories', href: '/categories' },
+    { name: 'Contact', href: '/contact' },
   ];
 
   const openSearch = () => setIsSearchOpen(true);
@@ -63,7 +63,7 @@ export default function Header() {
         className={`
           sticky top-2 z-40 mx-2 rounded-xl border border-gray-200/70 bg-white/80 
           backdrop-blur-md shadow-sm transition-transform duration-300
-          ${isVisible ? "translate-y-0" : "-translate-y-[calc(100%+0.5rem)]"}
+          ${isVisible ? 'translate-y-0' : '-translate-y-[calc(100%+0.5rem)]'}
         `}
       >
         <div className="container mx-auto px-4 h-16 flex items-center justify-between">
@@ -135,7 +135,7 @@ export default function Header() {
       {/* Mobile Drawer Overlay */}
       <div
         className={`fixed inset-0 z-50 bg-black/50 transition-opacity duration-300 ${
-          isMenuOpen ? "opacity-100 visible" : "opacity-0 invisible"
+          isMenuOpen ? 'opacity-100 visible' : 'opacity-0 invisible'
         }`}
         onClick={debouncedCloseMenu}
       />
@@ -145,7 +145,7 @@ export default function Header() {
         className={`
           fixed top-0 right-0 z-50 h-full w-[280px] bg-white shadow-2xl 
           transition-transform duration-300 ease-in-out transform
-          ${isMenuOpen ? "translate-x-0" : "translate-x-full"}
+          ${isMenuOpen ? 'translate-x-0' : 'translate-x-full'}
         `}
       >
         <div className="p-5 flex flex-col h-full">

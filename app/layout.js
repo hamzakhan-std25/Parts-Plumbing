@@ -1,29 +1,29 @@
-import "../styles/globals.css";
-import { Inter } from "next/font/google";
-import Header from "@/components/layout/Header";
-import WhatsAppFloat from "@/components/ui/WhatsAppFloat";
-import Footer from "@/components/layout/Footer";
-import AIChatButton from "@/components/chat/AIChatButton";
-import { SITE_URL } from "@/constants/config";
+import '../styles/globals.css';
+import { Inter } from 'next/font/google';
+import Header from '@/components/layout/Header';
+import WhatsAppFloat from '@/components/ui/WhatsAppFloat';
+import Footer from '@/components/layout/Footer';
+import AIChatButton from '@/components/chat/AIChatButton';
+import { SITE_URL } from '@/constants/config';
 
-const inter = Inter({ subsets: ["latin"] });
+const inter = Inter({ subsets: ['latin'] });
 
 export const metadata = {
   metadataBase: new URL(SITE_URL),
   title: {
-    default: "Parts Plumbing Store",
-    template: "%s | Parts Plumbing Store",
+    default: 'Parts Plumbing Store',
+    template: '%s | Parts Plumbing Store',
   },
   description:
-    "Parts Plumbing Store offers quality plumbing and sanitary products with reliable support and fast service.",
+    'Parts Plumbing Store offers quality plumbing and sanitary products with reliable support and fast service.',
   openGraph: {
-    title: "Parts Plumbing Store",
+    title: 'Parts Plumbing Store',
     description:
-      "Shop trusted plumbing and sanitary products, with expert guidance for homes and projects.",
-    type: "website",
+      'Shop trusted plumbing and sanitary products, with expert guidance for homes and projects.',
+    type: 'website',
     url: SITE_URL,
-    siteName: "Parts Plumbing Store",
-    locale: "en_US",
+    siteName: 'Parts Plumbing Store',
+    locale: 'en_US',
   },
 };
 

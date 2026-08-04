@@ -1,7 +1,7 @@
-import Link from "next/link";
-import { getProducts } from "@/services/product.service";
-import ProductCard from "@/components/product/ProductCard";
-import Footer from "@/components/layout/Footer";
+import Link from 'next/link';
+import { getProducts } from '@/services/product.service';
+import ProductCard from '@/components/product/ProductCard';
+import Footer from '@/components/layout/Footer';
 import {
   CheckCircle,
   Truck,
@@ -14,7 +14,7 @@ import {
   Star,
   ChevronRight,
   Search,
-} from "lucide-react";
+} from 'lucide-react';
 
 export const revalidate = 3600;
 
@@ -22,31 +22,31 @@ export const revalidate = 3600;
 
 const CATEGORIES = [
   {
-    name: "Pipes",
-    slug: "pipes",
+    name: 'Pipes',
+    slug: 'pipes',
     icon: Pipette,
-    description: "PPR, PVC & GI pipes for every application",
+    description: 'PPR, PVC & GI pipes for every application',
     image: null,
   },
   {
-    name: "Fittings",
-    slug: "fittings",
+    name: 'Fittings',
+    slug: 'fittings',
     icon: Wrench,
-    description: "Elbows, tees, couplings & more",
+    description: 'Elbows, tees, couplings & more',
     image: null,
   },
   {
-    name: "Valves",
-    slug: "valves",
+    name: 'Valves',
+    slug: 'valves',
     icon: Gauge,
-    description: "Ball valves, gate valves & pressure regulators",
+    description: 'Ball valves, gate valves & pressure regulators',
     image: null,
   },
   {
-    name: "Fixtures",
-    slug: "fixtures",
+    name: 'Fixtures',
+    slug: 'fixtures',
     icon: ShowerHead,
-    description: "Taps, showers, basins & sanitaryware",
+    description: 'Taps, showers, basins & sanitaryware',
     image: null,
   },
 ];
@@ -54,56 +54,56 @@ const CATEGORIES = [
 const WHY_CHOOSE_US = [
   {
     icon: CheckCircle,
-    color: "text-green-400",
-    bg: "bg-green-400/10",
-    title: "Genuine Products",
-    desc: "100% authentic brands — Alpha, Master, Supreme & more",
+    color: 'text-green-400',
+    bg: 'bg-green-400/10',
+    title: 'Genuine Products',
+    desc: '100% authentic brands — Alpha, Master, Supreme & more',
   },
   {
     icon: Truck,
-    color: "text-blue-400",
-    bg: "bg-blue-400/10",
-    title: "Fast Delivery Across KPK",
-    desc: "Peshawar, Mardan, Swat, Abbottabad & surrounding areas",
+    color: 'text-blue-400',
+    bg: 'bg-blue-400/10',
+    title: 'Fast Delivery Across KPK',
+    desc: 'Peshawar, Mardan, Swat, Abbottabad & surrounding areas',
   },
   {
     icon: MessageCircle,
-    color: "text-emerald-400",
-    bg: "bg-emerald-400/10",
-    title: "Expert Advice on WhatsApp",
-    desc: "Instant plumbing support from our experienced team",
+    color: 'text-emerald-400',
+    bg: 'bg-emerald-400/10',
+    title: 'Expert Advice on WhatsApp',
+    desc: 'Instant plumbing support from our experienced team',
   },
   {
     icon: BadgeDollarSign,
-    color: "text-yellow-400",
-    bg: "bg-yellow-400/10",
-    title: "Competitive Prices",
-    desc: "Direct from manufacturers — no middlemen",
+    color: 'text-yellow-400',
+    bg: 'bg-yellow-400/10',
+    title: 'Competitive Prices',
+    desc: 'Direct from manufacturers — no middlemen',
   },
 ];
 
 const TESTIMONIALS = [
   {
-    name: "Engineer Rizwan",
-    location: "Peshawar",
+    name: 'Engineer Rizwan',
+    location: 'Peshawar',
     rating: 5,
-    text: "Excellent quality pipes and very fast delivery. Habib Store is my go-to for all plumbing supplies on every project.",
+    text: 'Excellent quality pipes and very fast delivery. Habib Store is my go-to for all plumbing supplies on every project.',
   },
   {
-    name: "Contractor Bilal",
-    location: "Mardan",
+    name: 'Contractor Bilal',
+    location: 'Mardan',
     rating: 5,
-    text: "Bulk order was handled professionally. Got genuine Alpha fittings at the best price in the market. Highly recommended!",
+    text: 'Bulk order was handled professionally. Got genuine Alpha fittings at the best price in the market. Highly recommended!',
   },
   {
-    name: "Usman Khan",
-    location: "Abbottabad",
+    name: 'Usman Khan',
+    location: 'Abbottabad',
     rating: 5,
-    text: "WhatsApp support is amazing — they helped me choose the right valve size within minutes. Great service!",
+    text: 'WhatsApp support is amazing — they helped me choose the right valve size within minutes. Great service!',
   },
 ];
 
-const BRANDS = ["Alpha", "Master", "Supreme", "Pak Pipes", "Nayab"];
+const BRANDS = ['Alpha', 'Master', 'Supreme', 'Pak Pipes', 'Nayab'];
 
 // ─── Page Component ──────────────────────────────────────────────────────────
 
@@ -128,16 +128,16 @@ export default async function HomePage() {
           </span>
 
           <h1 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold leading-tight mb-6">
-            Your Trusted Partner for{" "}
+            Your Trusted Partner for{' '}
             <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-cyan-400">
               Plumbing Supplies
-            </span>{" "}
+            </span>{' '}
             in KPK
           </h1>
 
           <p className="text-lg sm:text-xl text-slate-300 max-w-2xl mx-auto mb-10">
-            Quality Pipes, Fittings &amp; Sanitaryware — Delivered to Your
-            Doorstep across Peshawar, Mardan, Swat &amp; beyond.
+            Quality Pipes, Fittings &amp; Sanitaryware — Delivered to Your Doorstep across Peshawar,
+            Mardan, Swat &amp; beyond.
           </p>
 
           {/* CTA Buttons */}
@@ -206,9 +206,7 @@ export default async function HomePage() {
                     <Icon size={32} className="text-blue-400" />
                   </div>
                   <h3 className="font-bold text-lg mb-2">{cat.name}</h3>
-                  <p className="text-slate-400 text-sm mb-4">
-                    {cat.description}
-                  </p>
+                  <p className="text-slate-400 text-sm mb-4">{cat.description}</p>
                   <span className="text-blue-400 text-sm font-medium flex items-center gap-1 group-hover:gap-2 transition-all">
                     View Products <ChevronRight size={14} />
                   </span>
@@ -226,9 +224,7 @@ export default async function HomePage() {
             <div className="flex items-center justify-between mb-12">
               <div>
                 <h2 className="text-3xl font-bold mb-2">Featured Products</h2>
-                <p className="text-slate-400">
-                  Top-selling items our customers love
-                </p>
+                <p className="text-slate-400">Top-selling items our customers love</p>
               </div>
               <Link
                 href="/products"
@@ -281,9 +277,7 @@ export default async function HomePage() {
                   </div>
                   <div>
                     <h3 className="font-bold text-base mb-1">{item.title}</h3>
-                    <p className="text-slate-400 text-sm leading-relaxed">
-                      {item.desc}
-                    </p>
+                    <p className="text-slate-400 text-sm leading-relaxed">{item.desc}</p>
                   </div>
                 </div>
               );
@@ -297,9 +291,7 @@ export default async function HomePage() {
         <div className="container mx-auto px-4">
           <div className="text-center mb-12">
             <h2 className="text-3xl font-bold mb-3">What Our Customers Say</h2>
-            <p className="text-slate-400">
-              Real feedback from real customers across KPK
-            </p>
+            <p className="text-slate-400">Real feedback from real customers across KPK</p>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
@@ -311,16 +303,10 @@ export default async function HomePage() {
                 {/* Stars */}
                 <div className="flex gap-1">
                   {Array.from({ length: t.rating }).map((_, i) => (
-                    <Star
-                      key={i}
-                      size={16}
-                      className="text-yellow-400 fill-yellow-400"
-                    />
+                    <Star key={i} size={16} className="text-yellow-400 fill-yellow-400" />
                   ))}
                 </div>
-                <p className="text-slate-300 text-sm leading-relaxed italic">
-                  "{t.text}"
-                </p>
+                <p className="text-slate-300 text-sm leading-relaxed italic">"{t.text}"</p>
                 <div className="mt-auto pt-4 border-t border-slate-700">
                   <p className="font-semibold text-sm">{t.name}</p>
                   <p className="text-slate-500 text-xs">{t.location}</p>
@@ -360,8 +346,8 @@ export default async function HomePage() {
           <div className="bg-gradient-to-br from-blue-900/60 to-slate-800 border border-blue-500/20 rounded-3xl p-10 md:p-16 text-center max-w-3xl mx-auto">
             <h2 className="text-3xl font-bold mb-3">Stay Updated</h2>
             <p className="text-slate-300 mb-8">
-              Subscribe for exclusive offers, new arrivals &amp; plumbing tips
-              delivered straight to your inbox.
+              Subscribe for exclusive offers, new arrivals &amp; plumbing tips delivered straight to
+              your inbox.
             </p>
 
             <form className="flex flex-col sm:flex-row gap-3 max-w-md mx-auto mb-8">
@@ -378,9 +364,7 @@ export default async function HomePage() {
               </button>
             </form>
 
-            <p className="text-slate-400 text-sm mb-6">
-              Or get instant help on WhatsApp
-            </p>
+            <p className="text-slate-400 text-sm mb-6">Or get instant help on WhatsApp</p>
             <a
               href="https://wa.me/923118688410?text=Hi%2C%20I%27d%20like%20to%20know%20about%20your%20latest%20offers"
               target="_blank"
