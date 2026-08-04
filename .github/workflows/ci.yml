@@ -51,6 +51,17 @@ jobs:
       - name: Install Playwright Browsers
         run: npx playwright install --with-deps
 
+      - name: Build Next.js Production App
+        run: npm run build
+
+      # Starts your Next.js server in the background so it doesn't block the terminal
+      - name: Start Next.js App in Background
+        run: npm run start &
+
+      # Wait up to 2 minutes for port 3000 to be completely ready in the cloud
+      - name: Wait for Next.js Server to be Ready
+        run: npx wait-on http://localhost:3000 --timeout 120000
+
       - name: Run Playwright E2E tests
         run: npx playwright test
 
