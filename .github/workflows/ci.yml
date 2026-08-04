@@ -52,6 +52,11 @@ jobs:
         run: npx playwright install --with-deps
 
       - name: Build Next.js Production App
+        env:
+          NEXT_PUBLIC_SUPABASE_URL: "https://supabase.co"
+          NEXT_PUBLIC_SUPABASE_ANON_KEY: "placeholder-anon-key"
+          # If your app checks for a private service role key, add it here too:
+          # SUPABASE_SERVICE_ROLE_KEY: "placeholder-service-key"
         run: npm run build
 
       # Starts your Next.js server in the background so it doesn't block the terminal
