@@ -1,7 +1,6 @@
 import Link from 'next/link';
 import { getProducts } from '@/services/product.service';
 import ProductCard from '@/components/product/ProductCard';
-import Footer from '@/components/layout/Footer';
 import {
   CheckCircle,
   Truck,
@@ -258,7 +257,7 @@ export default async function HomePage() {
           <div className="text-center mb-12">
             <h2 className="text-3xl font-bold mb-3">Why Choose Habib Store?</h2>
             <p className="text-slate-400 max-w-xl mx-auto">
-              We've been serving KPK's plumbing needs with quality and trust
+              We&apos;ve been serving KPK&apos;s plumbing needs with quality and trust
             </p>
           </div>
 
@@ -306,7 +305,9 @@ export default async function HomePage() {
                     <Star key={i} size={16} className="text-yellow-400 fill-yellow-400" />
                   ))}
                 </div>
-                <p className="text-slate-300 text-sm leading-relaxed italic">"{t.text}"</p>
+                <p className="text-slate-300 text-sm leading-relaxed italic">
+                  &quot;{t.text}&quot;
+                </p>
                 <div className="mt-auto pt-4 border-t border-slate-700">
                   <p className="font-semibold text-sm">{t.name}</p>
                   <p className="text-slate-500 text-xs">{t.location}</p>
@@ -323,7 +324,7 @@ export default async function HomePage() {
           <div className="text-center mb-10">
             <h2 className="text-2xl font-bold mb-2">Brands We Carry</h2>
             <p className="text-slate-400 text-sm">
-              Authorised dealer for Pakistan's leading plumbing brands
+              Authorised dealer for Pakistan&apos;s leading plumbing brands
             </p>
           </div>
 

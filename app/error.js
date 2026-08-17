@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 
-export default function Error({ error, reset }) {
+export default function Error({ reset }) {
   return (
     <main className="min-h-[60vh] flex items-center justify-center px-4 py-10">
       <div className="w-full max-w-lg rounded-2xl border border-red-400/30 bg-slate-900/80 p-8 text-center shadow-lg">

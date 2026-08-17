@@ -233,10 +233,10 @@ export default function CategoriesPage() {
       {/* ── BOTTOM CTA ──────────────────────────────────────────────────── */}
       <section className="py-16 bg-slate-800/50">
         <div className="container mx-auto px-4 text-center">
-          <h2 className="text-2xl font-bold mb-3">Can't find what you're looking for?</h2>
+          <h2 className="text-2xl font-bold mb-3">Can&apos;t find what you&apos;re looking for?</h2>
           <p className="text-slate-400 mb-8 max-w-lg mx-auto">
-            Our team can source any plumbing product for you. Get in touch and we'll help you find
-            exactly what you need.
+            Our team can source any plumbing product for you. Get in touch and we&apos;ll help you
+            find exactly what you need.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Link

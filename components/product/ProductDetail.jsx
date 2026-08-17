@@ -5,6 +5,8 @@ import { findMatchingVariant } from '@/utils/variation.utils';
 import VariationOptions from './VariationOptions';
 import Description from './Description';
 import { generateWhatsAppLink } from '@/lib/whatsapp.utils';
+import Link from 'next/link';
+import Image from 'next/image';
 
 export default function ProductDetail({ product }) {
   const variations = product.variations.nodes;
@@ -18,19 +20,19 @@ export default function ProductDetail({ product }) {
       <nav className="text-sm text-gray-500 mb-6">
         <ul className="flex flex-wrap items-center">
           <li>
-            <a
+            <Link
               href="/"
               className="hover:text-white
             "
             >
               Home
-            </a>
+            </Link>
           </li>
           <li className="mx-2">/</li>
           <li>
-            <a href="/products" className="hover:text-white">
+            <Link href="/products" className="hover:text-white">
               {product.productCategories.nodes[0].name}
-            </a>
+            </Link>
           </li>
           <li className="mx-2">/</li>
           <li className="text-gray-300 font-medium">{product.name}</li>
@@ -39,11 +41,17 @@ export default function ProductDetail({ product }) {
 
       <div className="bg-[#1e293b] rounded-2xl overflow-hidden shadow-xl">
         {/* Image */}
-        <img
+        <Image
+          src={product.image?.sourceUrl || '/placeholder-product.png'}
+          alt={product.name}
+          className="w-full h-80 object-cover "
+        />
+
+        {/* <img
           src={product.image?.sourceUrl || '/placeholder-product.png'}
           alt={product.name}
           className="w-full h-80 object-cover"
-        />
+        /> */}
 
         <div className="p-6">
           {/* Title */}
@@ -73,13 +81,13 @@ export default function ProductDetail({ product }) {
           {/* Buttons */}
           {matchedVariant && (
             <div className="flex gap-4 mt-6 flex-wrap">
-              <a
+              <Link
                 href={generateWhatsAppLink(product, matchedVariant)}
                 target="_blank"
                 className="bg-green-500 hover:bg-green-600 text-white px-6 py-3 rounded-full font-semibold"
               >
                 Ask Price on WhatsApp
-              </a>
+              </Link>
 
               <button className="border border-gray-500 px-6 py-3 rounded-full hover:bg-gray-700">
                 Check Availability

@@ -1,5 +1,6 @@
 'use Client';
 
+import Image from 'next/image';
 import Link from 'next/link';
 
 export default function ProductCard({ product, isFeatured = false }) {
@@ -13,11 +14,15 @@ export default function ProductCard({ product, isFeatured = false }) {
       >
         {/* Image container with aspect ratio */}
         <div className="relative overflow-hidden bg-gray-50" style={{ aspectRatio: '4/3' }}>
-          <img
-            src={imageUrl}
-            alt={product.name}
-            className="object-cover w-full h-full group-hover:scale-105 transition-transform duration-500"
-          />
+          <div className="relative w-full h-full overflow-hidden">
+            <Image
+              src={imageUrl}
+              alt={product.name}
+              fill // This replaces w-full h-full on the image itself
+              sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw" // Prevents loading massive images on mobile
+              className="object-cover group-hover:scale-105 transition-transform duration-500"
+            />
+          </div>
           {isFeatured && (
             <span className="absolute top-3 left-3 bg-yellow-400 text-xs font-bold px-2 py-1 rounded-full">
               Featured
@@ -35,7 +40,7 @@ export default function ProductCard({ product, isFeatured = false }) {
           )}
           <div className=" flex items-center justify-between">
             <span className="text-sm text-white opacity-0 group-hover:opacity-100 transition-opacity">
-              View →
+              View
             </span>
           </div>
         </div>

@@ -136,7 +136,7 @@ function ContactForm() {
         </div>
         <h3 className="text-xl font-bold">Message Sent!</h3>
         <p className="text-slate-400 max-w-sm">
-          Thank you for reaching out. We'll get back to you within 24 hours.
+          Thank you for reaching out. We&apos;ll get back to you within 24 hours.
         </p>
         <a
           href="https://wa.me/923359183182?text=Hi%2C%20I%20just%20sent%20a%20contact%20form%20message"
@@ -309,7 +309,7 @@ export default function ContactPage() {
           <div className="max-w-2xl">
             <h1 className="text-4xl sm:text-5xl font-extrabold mb-4">Get in Touch</h1>
             <p className="text-slate-400 text-lg leading-relaxed">
-              We're here to help with your plumbing needs — from product selection to technical
+              We&apos;re here to help with your plumbing needs — from product selection to technical
               advice. Reach out and our team will respond promptly.
             </p>
           </div>
@@ -368,7 +368,7 @@ export default function ContactPage() {
             <div>
               <h2 className="text-2xl font-bold mb-2">Send Us a Message</h2>
               <p className="text-slate-400 text-sm mb-8">
-                Fill in the form and we'll get back to you within 24 hours.
+                Fill in the form and we&apos;ll get back to you within 24 hours.
               </p>
               <ContactForm />
             </div>
@@ -422,7 +422,7 @@ export default function ContactPage() {
           <div className="text-center mb-12">
             <h2 className="text-3xl font-bold mb-3">Frequently Asked Questions</h2>
             <p className="text-slate-400">
-              Quick answers to common questions — can't find yours? Just ask us!
+              Quick answers to common questions — can&apos;t find yours? Just ask us!
             </p>
           </div>
 
