@@ -35,7 +35,7 @@ export default function TermsConditions() {
             </li>
             <li>
               We strive to display accurate colors and details, but we cannot guarantee that your
-              monitor's display is exact.
+              monitor&apos;s display is exact.
             </li>
             <li>
               Prices are in Pakistani Rupees (PKR) and include applicable taxes unless stated

@@ -7,6 +7,7 @@ import FilterSidebar from '@/components/filters/FilterSidebar';
 import { useAllProducts } from '@/hooks/useAllProducts';
 
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
+import Link from 'next/link';
 
 export default function ProductsPageContent() {
   // Use useSearchParams to get reactive URL params (works in client)
@@ -106,9 +107,9 @@ export default function ProductsPageContent() {
         <nav className="text-sm text-white mb-6">
           <ul className="flex flex-wrap items-center">
             <li>
-              <a href="/" className="hover:text-gray-900">
+              <Link href="/" className="hover:text-gray-500">
                 Home
-              </a>
+              </Link>
             </li>
             <li className="mx-2">/</li>
             <li className="text-gray-400 font-medium"> {hasFilters ? 'Products' : 'Products'}</li>

@@ -1,7 +1,6 @@
 import '../styles/globals.css';
 import { Inter } from 'next/font/google';
 import Header from '@/components/layout/Header';
-import WhatsAppFloat from '@/components/ui/WhatsAppFloat';
 import Footer from '@/components/layout/Footer';
 import AIChatButton from '@/components/chat/AIChatButton';
 import { SITE_URL } from '@/constants/config';

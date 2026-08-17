@@ -1,5 +1,3 @@
-import Loader from '@/components/ui/Loader';
-
 export default function Loading() {
   return (
     <main className="min-h-[50vh] flex items-center justify-center px-4">

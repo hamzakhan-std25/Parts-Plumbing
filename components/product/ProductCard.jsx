@@ -1,5 +1,6 @@
 'use Client';
 
+import Image from 'next/image';
 import Link from 'next/link';
 
 export default function ProductCard({ product, isFeatured = false }) {
@@ -13,7 +14,7 @@ export default function ProductCard({ product, isFeatured = false }) {
       >
         {/* Image container with aspect ratio */}
         <div className="relative overflow-hidden bg-gray-50" style={{ aspectRatio: '4/3' }}>
-          <img
+          <Image
             src={imageUrl}
             alt={product.name}
             className="object-cover w-full h-full group-hover:scale-105 transition-transform duration-500"
@@ -35,7 +36,7 @@ export default function ProductCard({ product, isFeatured = false }) {
           )}
           <div className=" flex items-center justify-between">
             <span className="text-sm text-white opacity-0 group-hover:opacity-100 transition-opacity">
-              View →
+              View
             </span>
           </div>
         </div>
