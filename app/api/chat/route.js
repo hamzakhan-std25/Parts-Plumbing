@@ -58,9 +58,8 @@ export async function POST(req) {
       `${PINECONE_HOST}/query`,
       {
         vector: queryVector,
-        topK: 3,
+        topK: 5,
         includeMetadata: true,
-        select: ['text', 'source'],
       },
       {
         headers: { 'Api-Key': PINECONE_API_KEY },
@@ -68,39 +67,41 @@ export async function POST(req) {
     );
 
     // 2. FILTER and JOIN the results
-    // Only keep matches with a score > 0.5
-    const relevantMatches = pineconeRes.data.matches.filter((match) => match.score > 0.4);
+    // Only keep matches with a score > 0.80
+    const relevantMatches = pineconeRes.data.matches.filter((match) => match.score > 0.70);
     // Format retrievedDocs for storage
     const retrievedDocs = relevantMatches.map((doc) => ({
       id: doc.id,
       score: doc.score,
-      text: doc.metadata.text,
-      source: doc.metadata.source || null,
+      text: doc.metadata?.text || '',
+      source: doc.metadata?.source || null,
     }));
 
-    // console.log("Relevant findings:", relevantMatches.length);
-    // console.log("Relevant documents:", relevantMatches);
+
     console.log('Retrieved documents:', retrievedDocs.length);
-    // console.log("Relevant documents:", retrievedDocs);
 
     const retrievedContext =
       relevantMatches.length > 0
         ? relevantMatches
-            .map((m) => {
-              // We combine the text and the URL into a single "fact" for the AI
-              const text = m.metadata.text;
-              const url = m.metadata.url || '';
-              return `CONTENT: ${text}\nSOURCE URL: ${url}`;
-            })
-            .join('\n\n---\n\n')
+          .map((m) => {
+            // We combine the text and the URL into a single "fact" for the AI
+            const text = m.metadata.text;
+            const source = m.metadata.source || '';
+            return `CONTENT: ${text}\nSOURCE URL: ${source}`;
+          })
+          .join('\n\n---\n\n')
         : 'No relevant information found in the knowledge base.';
+
+    console.log("--------------------retrieved context :", retrievedContext);
 
     // 1. Define your Static Context (or fetch from WordPress here)
     const systemPrompt = `You are the Parts Plumbing Support Bot.
                     RULES: 
                     1. Use this KNOWLEDGE to answer: "${retrievedContext}"
                     2. If the answer is not in the KNOWLEDGE, say you don't know. Do not try to fabricate an answer. If you're unsure, suggest the user contact support on whatsapp.
-                    3. Be polite and concise.`;
+                    3. Be polite, direct, and extremely brief.
+                    4. CRITICAL: Limit your entire response to a maximum of 4 sentences or under 100 words. Get straight to the point immediately without conversational filler.`;
+
 
     // 2. Build the messages array (System + History + New Question)
     const messages = [
@@ -117,7 +118,7 @@ export async function POST(req) {
         Authorization: `Bearer ${NEXT_PUBLIC_GEN_AI_API_KEY}`, // Keep key in .env
       },
       body: JSON.stringify({
-        model: 'llama-3.3-70b-versatile', // Use a valid Groq model name
+        model: 'openai/gpt-oss-120b', // Use a valid Groq model name
         messages: messages,
         temperature: 0.2,
         max_tokens: 150,
@@ -126,7 +127,7 @@ export async function POST(req) {
 
     const data = await response.json();
 
-    // console.log("AI response :", data);
+    console.log("AI response :", data);
     // console.log("AI response object: :", data?.choices?.[0]?.message);
 
     const assistantMessage = data?.choices?.[0]?.message || {

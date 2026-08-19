@@ -3,7 +3,7 @@ import { Sparkles, MessageCircle, ExternalLink, ThumbsUp, ThumbsDown } from 'luc
 import remarkGfm from 'remark-gfm';
 import { useDebouncedClick } from '@/hooks/useDebouncedClick';
 
-const ChatMessage = ({ message, onFeedback, showWhatsApp = false }) => {
+const ChatMessage = ({ message, conversationId, onFeedback, showWhatsApp = false }) => {
   const isBot = message.role === 'ai' || message.role === 'assistant';
   const isUser = message.role === 'user';
   const debouncedLike = useDebouncedClick(() => onFeedback?.(message.id, 'like'), 350);
@@ -28,11 +28,10 @@ const ChatMessage = ({ message, onFeedback, showWhatsApp = false }) => {
       >
         {/* Message Bubble */}
         <div
-          className={`px-4 py-3 rounded-2xl shadow-sm ${
-            isUser
-              ? 'bg-blue-600 text-white rounded-tr-none'
-              : 'bg-white border border-gray-100 text-gray-800 rounded-tl-none'
-          }`}
+          className={`px-4 py-3 rounded-2xl shadow-sm ${isUser
+            ? 'bg-blue-600 text-white rounded-tr-none'
+            : 'bg-white border border-gray-100 text-gray-800 rounded-tl-none'
+            }`}
         >
           <div className="text-sm prose prose-sm max-w-none break-words leading-relaxed">
             <ReactMarkdown
@@ -44,11 +43,10 @@ const ChatMessage = ({ message, onFeedback, showWhatsApp = false }) => {
                     {...props}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className={`inline-flex items-center gap-1 font-bold underline break-all decoration-2 underline-offset-2 ${
-                      isUser
-                        ? 'text-blue-100 hover:text-white'
-                        : 'text-blue-600 hover:text-blue-800'
-                    }`}
+                    className={`inline-flex items-center gap-1 font-bold underline break-all decoration-2 underline-offset-2 ${isUser
+                      ? 'text-blue-100 hover:text-white'
+                      : 'text-blue-600 hover:text-blue-800'
+                      }`}
                   >
                     {props.children}
                     <ExternalLink size={12} />
@@ -72,7 +70,9 @@ const ChatMessage = ({ message, onFeedback, showWhatsApp = false }) => {
         {/* WhatsApp Action Button */}
         {shouldShowWhatsApp && (
           <a
-            href="https://wa.me/+923118688410" // Your pre-configured number
+            href={`https://wa.me?text=${encodeURIComponent(
+              `Hello, I need assistance regarding Chat Session: ${conversationId || 'N/A'}\n\nMessage context:\n"${message?.content || 'N/A'}"`,
+            )}`}
             target="_blank"
             rel="noopener noreferrer"
             className="mt-3 flex items-center gap-2 bg-[#25D366] hover:bg-[#128C7E] text-white text-xs font-bold py-2.5 px-5 rounded-full transition-all shadow-md hover:shadow-lg active:scale-95"
@@ -87,11 +87,10 @@ const ChatMessage = ({ message, onFeedback, showWhatsApp = false }) => {
             <button
               type="button"
               onClick={debouncedLike}
-              className={`inline-flex items-center justify-center rounded-md p-1.5 transition-colors ${
-                message.feedback === 'like'
-                  ? 'text-green-600 bg-green-50'
-                  : 'text-gray-400 hover:text-gray-600 hover:bg-gray-100'
-              }`}
+              className={`inline-flex items-center justify-center rounded-md p-1.5 transition-colors ${message.feedback === 'like'
+                ? 'text-green-600 bg-green-50'
+                : 'text-gray-400 hover:text-gray-600 hover:bg-gray-100'
+                }`}
               aria-label="Like response"
               title="Like"
             >
@@ -100,11 +99,10 @@ const ChatMessage = ({ message, onFeedback, showWhatsApp = false }) => {
             <button
               type="button"
               onClick={debouncedDislike}
-              className={`inline-flex items-center justify-center rounded-md p-1.5 transition-colors ${
-                message.feedback === 'dislike'
-                  ? 'text-red-600 bg-red-50'
-                  : 'text-gray-400 hover:text-gray-600 hover:bg-gray-100'
-              }`}
+              className={`inline-flex items-center justify-center rounded-md p-1.5 transition-colors ${message.feedback === 'dislike'
+                ? 'text-red-600 bg-red-50'
+                : 'text-gray-400 hover:text-gray-600 hover:bg-gray-100'
+                }`}
               aria-label="Dislike response"
               title="Dislike"
             >
@@ -113,7 +111,7 @@ const ChatMessage = ({ message, onFeedback, showWhatsApp = false }) => {
           </div>
         )}
       </div>
-    </div>
+    </div >
   );
 };
 
