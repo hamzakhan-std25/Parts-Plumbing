@@ -160,10 +160,6 @@ export default function AIChatButton() {
       supportFormTimeoutRef.current = setTimeout(() => {
         setShowSupportForm(true);
       }, 2000);
-
-      if (!hasShownWhatsApp) {
-        setHasShownWhatsApp(true);
-      }
     }
 
     console.log('Feedback captured', {
@@ -256,7 +252,7 @@ export default function AIChatButton() {
       });
     }
 
-    console.log('---------------history for api :', historyForApi);
+    console.log('Chat History before API call:', historyForApi);
 
     try {
       const res = await fetch('/api/chat', {
@@ -419,7 +415,7 @@ export default function AIChatButton() {
             animate="visible"
             exit="exit"
             className={`relative bg-white shadow-lg border border-gray-200 flex flex-col overflow-hidden ${
-              isMobile ? 'w-full h-full rounded-none' : 'w-[360px] h-[70vh] rounded-xl'
+              isMobile ? 'w-full h-full rounded-none' : 'w-[360px] h-[85vh] rounded-xl'
             }`}
           >
             {/* Top Bar */}
@@ -507,23 +503,11 @@ export default function AIChatButton() {
                   </div>
                 </div>
               ) : (
-                // -------------------------
-                // (
-                // // Welcome message
-                // <div className="flex flex-col items-center justify-center h-full text-center space-y-3">
-                //   <div className="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center">
-                //     <Bot size={32} className="text-blue-600" />
-                //   </div>
-                //   <p className="text-gray-600 text-sm">
-                //     Hi! I'm your AI Assistant.<br />
-                //     Ask me about plumbing parts!
-                //   </p>
-                // </div>
-                // )
                 messages.map((msg) => (
                   <div key={msg.id}>
                     <ChatMessage
                       message={msg}
+                      conversationId={conversationId}
                       onFeedback={debouncedFeedback}
                       showWhatsApp={hasShownWhatsApp && supportTargetMessageId === msg.id}
                     />

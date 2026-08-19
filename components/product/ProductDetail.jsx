@@ -41,29 +41,31 @@ export default function ProductDetail({ product }) {
 
       <div className="bg-[#1e293b] rounded-2xl overflow-hidden shadow-xl">
         {/* Image */}
-        <Image
-          src={product.image?.sourceUrl || '/placeholder-product.png'}
-          alt={product.name}
-          className="w-full h-80 object-cover "
-        />
 
-        {/* <img
-          src={product.image?.sourceUrl || '/placeholder-product.png'}
-          alt={product.name}
-          className="w-full h-80 object-cover"
-        /> */}
+        <div className="relative w-full h-full overflow-hidden">
+          <Image
+            src={product.image?.sourceUrl || '/placeholder-product.png'}
+            alt={product.name}
+            fill // This replaces w-full h-full on the image itself
+            sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw" // Prevents loading massive images on mobile
+            className="object-cover"
+          />
+        </div>
+
+        <div className="relative w-full h-80">
+          <Image
+            src={product.image?.sourceUrl || '/placeholder-product.png'}
+            alt={product.name || 'Product Image'}
+            fill
+            sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+            className="object-cover"
+            priority={true}
+          />
+        </div>
 
         <div className="p-6">
           {/* Title */}
           <h1 className="text-2xl font-bold mb-3">{product.name}</h1>
-
-          {/* Short Description
-          <div
-            className="text-gray-300 mb-4"
-            dangerouslySetInnerHTML={{
-              __html: product.shortDescription,
-            }}
-          /> */}
 
           {/* Description with Read More */}
           <Description htmlContent={product.description} />

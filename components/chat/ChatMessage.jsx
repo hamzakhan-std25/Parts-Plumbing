@@ -3,7 +3,7 @@ import { Sparkles, MessageCircle, ExternalLink, ThumbsUp, ThumbsDown } from 'luc
 import remarkGfm from 'remark-gfm';
 import { useDebouncedClick } from '@/hooks/useDebouncedClick';
 
-const ChatMessage = ({ message, onFeedback, showWhatsApp = false }) => {
+const ChatMessage = ({ message, conversationId, onFeedback, showWhatsApp = false }) => {
   const isBot = message.role === 'ai' || message.role === 'assistant';
   const isUser = message.role === 'user';
   const debouncedLike = useDebouncedClick(() => onFeedback?.(message.id, 'like'), 350);
@@ -72,7 +72,9 @@ const ChatMessage = ({ message, onFeedback, showWhatsApp = false }) => {
         {/* WhatsApp Action Button */}
         {shouldShowWhatsApp && (
           <a
-            href="https://wa.me/+923118688410" // Your pre-configured number
+            href={`https://wa.me?text=${encodeURIComponent(
+              `Hello, I need assistance regarding Chat Session: ${conversationId || 'N/A'}\n\nMessage context:\n"${message?.content || 'N/A'}"`
+            )}`}
             target="_blank"
             rel="noopener noreferrer"
             className="mt-3 flex items-center gap-2 bg-[#25D366] hover:bg-[#128C7E] text-white text-xs font-bold py-2.5 px-5 rounded-full transition-all shadow-md hover:shadow-lg active:scale-95"

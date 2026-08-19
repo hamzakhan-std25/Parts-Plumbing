@@ -53,7 +53,7 @@ export default async function ProductPage({ params }) {
     notFound();
   }
 
-  console.log('[Product Page] -- product details: ', product);
+  // console.log('[Product Page] -- product details: ', product);
 
   return (
     <ViewTransition>
