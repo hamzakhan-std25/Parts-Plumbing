@@ -1,5 +1,6 @@
 import '../styles/globals.css';
 import { Inter } from 'next/font/google';
+import { Toaster } from 'sonner';
 import Header from '@/components/layout/Header';
 import Footer from '@/components/layout/Footer';
 import AIChatButton from '@/components/chat/AIChatButton';
@@ -37,6 +38,8 @@ export default function RootLayout({ children }) {
         {/* Floating Buttonsy */}
         {/* <WhatsAppFloat /> */}
         <AIChatButton />
+        {/* RichColors enables beautiful green/red backgrounds for success/error */}
+        <Toaster richColors position="top-right" />
       </body>
     </html>
   );

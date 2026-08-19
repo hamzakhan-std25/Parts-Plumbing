@@ -14,6 +14,7 @@ import {
   ChevronRight,
   Search,
 } from 'lucide-react';
+import Subscribe from '@/components/ui/Subscribe';
 
 export const revalidate = 3600;
 
@@ -351,19 +352,7 @@ export default async function HomePage() {
               your inbox.
             </p>
 
-            <form className="flex flex-col sm:flex-row gap-3 max-w-md mx-auto mb-8">
-              <input
-                type="email"
-                placeholder="Enter your email address"
-                className="flex-1 bg-slate-800 border border-slate-600 focus:border-blue-500 rounded-xl px-4 py-3 text-white placeholder-slate-500 outline-none transition-colors text-sm"
-              />
-              <button
-                type="submit"
-                className="bg-blue-600 hover:bg-blue-500 text-white font-semibold px-6 py-3 rounded-xl transition-all hover:scale-105 whitespace-nowrap"
-              >
-                Subscribe
-              </button>
-            </form>
+            <Subscribe />           
 
             <p className="text-slate-400 text-sm mb-6">Or get instant help on WhatsApp</p>
             <a

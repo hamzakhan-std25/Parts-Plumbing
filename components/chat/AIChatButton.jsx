@@ -415,7 +415,7 @@ export default function AIChatButton() {
             animate="visible"
             exit="exit"
             className={`relative bg-white shadow-lg border border-gray-200 flex flex-col overflow-hidden ${
-              isMobile ? 'w-full h-full rounded-none' : 'w-[360px] h-[70vh] rounded-xl'
+              isMobile ? 'w-full h-full rounded-none' : 'w-[360px] h-[85vh] rounded-xl'
             }`}
           >
             {/* Top Bar */}
