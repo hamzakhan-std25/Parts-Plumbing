@@ -352,7 +352,7 @@ export default async function HomePage() {
               your inbox.
             </p>
 
-            <Subscribe />           
+            <Subscribe />
 
             <p className="text-slate-400 text-sm mb-6">Or get instant help on WhatsApp</p>
             <a
