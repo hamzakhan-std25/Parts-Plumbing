@@ -160,8 +160,6 @@ export default function AIChatButton() {
       supportFormTimeoutRef.current = setTimeout(() => {
         setShowSupportForm(true);
       }, 2000);
-
-  
     }
 
     console.log('Feedback captured', {
@@ -505,7 +503,6 @@ export default function AIChatButton() {
                   </div>
                 </div>
               ) : (
-          
                 messages.map((msg) => (
                   <div key={msg.id}>
                     <ChatMessage
